@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "benchmarks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "submittedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "benchmarks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "recipeApproved", "order": "ASCENDING" },
+        { "fieldPath": "submittedAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-ink-950 text-zinc-200 antialiased;
+  background-image:
+    radial-gradient(60rem 60rem at 80% -10%, rgba(237, 28, 36, 0.08), transparent),
+    radial-gradient(50rem 50rem at -10% 10%, rgba(237, 28, 36, 0.05), transparent);
+}
+
+/* Thin scrollbars for data tables */
+.thin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  @apply bg-ink-600 rounded;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-ink-700 bg-ink-900/70 backdrop-blur;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-radeon-500 text-white hover:bg-radeon-600;
+  }
+  .btn-ghost {
+    @apply btn border border-ink-600 text-zinc-300 hover:bg-ink-800;
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full border border-ink-600 px-2 py-0.5 text-xs text-zinc-400;
+  }
+}
