@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.gitignore
+*.sample.json
+.env
+.env.local
+.env*.local
+npm-debug.log*
+.DS_Store
+README.md
+.firebase
+firebase-debug.log
+serviceAccount*.json
+service-account*.json
