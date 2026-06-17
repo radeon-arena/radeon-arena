@@ -127,8 +127,11 @@ export interface LeaderboardSnapshot {
 export interface CarouselItem {
   testName: string;
   runtime: Runtime;
+  backend?: string;
   modelName: string;
   org: string;
+  gpu?: string;
+  quantization?: string;
   tokensPerSec: number;
   clusterSize: number;
 }
