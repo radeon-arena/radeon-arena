@@ -1,14 +1,14 @@
-// Seed Firestore with the deterministic benchmark dataset.
+// Seed Firestore with the real InferStation RDNA benchmark dataset.
 //
 // Requires Firebase Admin credentials, provided via either:
 //   GOOGLE_APPLICATION_CREDENTIALS=/path/to/serviceAccount.json   pnpm seed
 //   FIREBASE_SERVICE_ACCOUNT='{"type":"service_account",...}'      pnpm seed
 //
-// Without credentials the script exits early — the site still works in
-// offline/seed mode straight from generateSeedBenchmarks().
+// Without credentials the site still serves the same real dataset directly
+// from loadInferStationBenchmarks() (no backend required).
 import { initializeApp, cert, applicationDefault, type Credential } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { generateSeedBenchmarks } from "../src/lib/seedData";
+import { loadInferStationBenchmarks } from "../src/lib/inferstationData";
 
 function credential(): Credential | null {
   const inline = process.env.FIREBASE_SERVICE_ACCOUNT;
@@ -34,7 +34,7 @@ async function main() {
   initializeApp({ credential: cred, projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID });
   const db = getFirestore();
 
-  const benchmarks = generateSeedBenchmarks();
+  const benchmarks = loadInferStationBenchmarks();
   console.log(`Seeding ${benchmarks.length} benchmarks into Firestore…`);
 
   let batch = db.batch();

@@ -31,21 +31,36 @@ export function estimateParamsB(modelName: string, modelFullPath = ""): number {
 
 /** Approximate bytes-per-parameter for a given quantization format. */
 export function bytesPerParam(q: Quantization): number {
+  const s = String(q).toLowerCase();
+  // GGUF formats (llama.cpp): Q8 ~1 B/param, Q6 ~0.8, Q5 ~0.7, Q4 ~0.5, Q3 ~0.4, Q2 ~0.3.
+  if (s.includes("q8")) return 1;
+  if (s.includes("q6")) return 0.8;
+  if (s.includes("q5")) return 0.7;
+  if (s.includes("q4")) return 0.5;
+  if (s.includes("q3")) return 0.4;
+  if (s.includes("q2")) return 0.3;
   switch (q) {
     case "BF16":
     case "FP16":
       return 2;
     case "FP8":
+    case "FP8-block":
     case "INT8":
     case "Q8_0":
+    case "Quark-W8A8-INT8":
       return 1;
     case "AWQ":
+    case "AWQ-4bit":
     case "GPTQ":
     case "INT4":
     case "MXFP4":
-    case "Q4_K_M":
+    case "FP4":
+    case "NVFP4":
       return 0.5;
     default:
+      // BF16/FP16-ish names default to 2 bytes.
+      if (s.includes("fp8") || s.includes("int8") || s.includes("w8")) return 1;
+      if (s.includes("fp4") || s.includes("int4") || s.includes("awq") || s.includes("4bit")) return 0.5;
       return 2;
   }
 }
@@ -77,6 +92,9 @@ export function orgDisplayName(ns: string): string {
     liquidai: "Liquid AI",
     zai: "Z.ai",
     "zai-org": "Z.ai",
+    xiaomi: "Xiaomi",
+    stepfun: "StepFun",
+    microsoft: "Microsoft",
   };
   return map[ns.toLowerCase()] ?? ns;
 }

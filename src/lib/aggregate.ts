@@ -29,6 +29,7 @@ function entryFromBenchmark(
     modelFullPath: b.modelFullPath,
     modelUrl: b.modelHuggingFaceUrl,
     runtime: b.runtime,
+    backend: b.backend,
     quantization: b.quantization,
     clusterSize: b.clusterSize,
     gpu: b.gpu,
@@ -50,6 +51,7 @@ export function buildSnapshot(benchmarks: Benchmark[]): LeaderboardSnapshot {
           ttfr: t.ttfr,
           estPpt: t.estPpt,
           e2eTtft: t.e2eTtft,
+          tpotMs: t.tpotMs,
         }),
       );
       byTest.set(t.testName, list);
