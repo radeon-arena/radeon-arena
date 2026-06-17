@@ -23,10 +23,10 @@ export default function HomePage() {
       <div className="border-b border-ink-800 bg-ink-950/50">
         <div className="mx-auto max-w-7xl px-4 py-2 text-center text-xs text-zinc-500 sm:px-6">
           Powered by:{" "}
-          <a href={PROJECTS.vllmDocker.url} className="text-zinc-400 hover:text-radeon-400">rocm-vllm-docker</a> ·{" "}
-          <a href={PROJECTS.benchy.url} className="text-zinc-400 hover:text-radeon-400">llama-benchy</a> ·{" "}
-          <a href={PROJECTS.radeonrun.url} className="text-zinc-400 hover:text-radeon-400">radeonrun</a> ·{" "}
-          <a href={SITE.blog} className="text-zinc-400 hover:text-radeon-400">Technical Blog</a>
+          <a href={PROJECTS.vllmDocker.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.vllmDocker.name}</a> ·{" "}
+          <a href={PROJECTS.benchy.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.benchy.name}</a> ·{" "}
+          <a href={PROJECTS.radeonrun.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.radeonrun.name}</a> ·{" "}
+          <a href={SITE.blog} className="text-zinc-400 hover:text-radeon-400">ROCm Blog</a>
         </div>
       </div>
 

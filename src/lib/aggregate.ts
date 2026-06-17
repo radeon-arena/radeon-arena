@@ -96,8 +96,11 @@ export function buildCarousel(
     items.push({
       testName: decode.testName,
       runtime: b.runtime,
+      backend: b.backend,
       modelName: b.modelName,
       org: orgDisplayName(orgKeyOf(b.modelFullPath)),
+      gpu: b.gpu,
+      quantization: b.quantization,
       tokensPerSec: decode.tokensPerSec,
       clusterSize: b.clusterSize,
     });

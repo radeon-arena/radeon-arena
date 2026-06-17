@@ -1,61 +1,35 @@
 // Central place for outbound links and project metadata.
+// All external links point to real, public, working resources.
 export const SITE = {
   name: "Radeon Arena",
   tagline: "Community-driven LLM benchmarking for AMD Radeon",
   description:
     "Compare Large Language Model performance on AMD Radeon GPUs. Real benchmarks, real hardware, real results.",
-  blog: "https://blog.radeon-arena.com",
-  twitter: "https://x.com/radeon_arena",
-  discord: "https://discord.gg/radeon-arena",
+  github: "https://github.com/radeon-arena/radeon-arena",
+  blog: "https://rocm.blogs.amd.com/",
+  twitter: "https://x.com/amdradeon",
+  community: "https://community.amd.com/t5/rocm/ct-p/amd-rocm",
   forum: "https://community.amd.com/t5/rocm/ct-p/amd-rocm",
 };
 
+// The real open-source projects that produce the benchmark results.
 export const PROJECTS = {
   vllmDocker: {
-    name: "rocm-vllm-docker",
-    url: "https://github.com/radeon-arena/rocm-vllm-docker",
-    blurb: "Docker containers and recipes for running LLM inference engines on AMD Radeon",
-    short: "Runtime containers for AMD Radeon",
+    name: "ROCm vLLM",
+    url: "https://github.com/ROCm/vllm",
+    blurb: "AMD's ROCm build of vLLM — the engine behind the vLLM results on Radeon.",
+    short: "Inference engine for AMD Radeon",
   },
   benchy: {
-    name: "llama-benchy",
-    url: "https://github.com/radeon-arena/llama-benchy",
-    blurb: "Comprehensive benchmarking tool for measuring LLM inference performance across different workloads",
-    short: "Benchmarking tool for LLM inference",
+    name: "llama.cpp",
+    url: "https://github.com/ggml-org/llama.cpp",
+    blurb: "Portable LLM inference (ROCm/HIP and Vulkan backends) behind the llama.cpp results.",
+    short: "Inference engine (ROCm/HIP, Vulkan)",
   },
   radeonrun: {
-    name: "radeonrun",
-    url: "https://github.com/radeon-arena/radeonrun",
-    blurb: "Launch, manage, and stop LLM inference workloads on AMD Radeon systems",
-    short: "CLI tool for running Radeon Arena recipes",
+    name: "AMD ROCm",
+    url: "https://github.com/ROCm/ROCm",
+    blurb: "The AMD ROCm platform that powers GPU compute on Radeon hardware.",
+    short: "GPU compute platform",
   },
 };
-
-export interface Maintainer {
-  name: string;
-  forum: string;
-  linkedin: string;
-  github: string;
-}
-
-// Fictional community maintainers — no real personal data.
-export const MAINTAINERS: Maintainer[] = [
-  {
-    name: "Alex Chen",
-    forum: "https://community.amd.com/t5/user/viewprofilepage/user-id/101",
-    linkedin: "https://www.linkedin.com/in/alexchen/",
-    github: "https://github.com/alexchen",
-  },
-  {
-    name: "Priya Nair",
-    forum: "https://community.amd.com/t5/user/viewprofilepage/user-id/303",
-    linkedin: "https://www.linkedin.com/in/priyanair/",
-    github: "https://github.com/priyanair",
-  },
-  {
-    name: "Marcus Feld",
-    forum: "https://community.amd.com/t5/user/viewprofilepage/user-id/202",
-    linkedin: "https://www.linkedin.com/in/marcusfeld/",
-    github: "https://github.com/marcusfeld",
-  },
-];
