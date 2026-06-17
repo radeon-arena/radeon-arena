@@ -1,28 +1,24 @@
 // Core domain types for Radeon Arena, modeled after the reverse-engineered
 // Spark Arena data shapes but adapted to the AMD Radeon ecosystem.
 
-/** Inference runtimes tracked by the leaderboard. */
-export type Runtime = "vLLM" | "SGLang" | "llama.cpp" | "MLC-LLM" | "vLLM-Ray";
+/**
+ * Inference runtime/engine name (e.g. "vLLM", "llama.cpp", "SGLang").
+ * Kept as a string because real benchmark data carries many engine variants.
+ */
+export type Runtime = string;
 
-/** Quantization formats commonly used on ROCm / Radeon. */
-export type Quantization =
-  | "BF16"
-  | "FP16"
-  | "FP8"
-  | "MXFP4"
-  | "AWQ"
-  | "GPTQ"
-  | "INT4"
-  | "INT8"
-  | "Q4_K_M"
-  | "Q8_0";
+/**
+ * Quantization format. Kept as a string because real data spans both
+ * GPU-native formats (BF16/FP8/AWQ) and GGUF formats (Q8_0/UD-Q4_K_M/...).
+ */
+export type Quantization = string;
 
 /** How the recipe was produced. */
 export type RecipeType = "rocm-vllm-docker" | "radeonrun" | "manual";
 
-/** A single llama-benchy test result within a submission. */
+/** A single benchmark test result within a submission. */
 export interface BenchTest {
-  testName: string; // e.g. "tg128 (c1)", "pp2048 (c1)", "ctx_pp @ d16384 (c2)"
+  testName: string; // e.g. "tg128 (c1)", "pp512 (c1)", "ctx_pp @ d16384 (c2)"
   tokensPerSec: number;
   tokensPerSecStdDev?: number;
   ttfr?: number; // time to first response (ms)
@@ -31,6 +27,7 @@ export interface BenchTest {
   e2eTtftStdDev?: number;
   estPpt?: number; // estimated prompt processing time
   estPptStdDev?: number;
+  tpotMs?: number; // time per output token (ms)
 }
 
 /** The reproducible recipe captured with each submission. */
@@ -64,9 +61,10 @@ export interface Benchmark {
   modelFullPath: string; // HF repo path, e.g. "Qwen/Qwen3-32B"
   modelHuggingFaceUrl?: string;
   runtime: Runtime;
+  backend?: string; // attention/compute backend, e.g. "ROCm/HIP", "Vulkan"
   quantization: Quantization;
   clusterSize: number; // 1, 2, 4, 8 ...
-  gpu: string; // e.g. "Radeon PRO W7900", "Radeon AI PRO R9700", "Instinct MI300X"
+  gpu: string; // e.g. "Radeon PRO W7900", "Radeon AI PRO R9700", "Radeon 8060S (Strix Halo)"
   benchmarkType?: string;
   recipeType: RecipeType;
   recipe?: Recipe;
@@ -76,10 +74,12 @@ export interface Benchmark {
   recipePermalinkId?: string;
   recipeCopyCount?: number;
   tests: BenchTest[];
+  tests_count?: number;
   promptProcessingSpeed?: number;
   aggregateScore?: number;
   shareCounts?: Record<string, number>;
   totalShares?: number;
+  dataSource?: string; // provenance, e.g. "InferStation"
   submittedAt: string;
   processedAt?: string;
 }
@@ -93,6 +93,7 @@ export interface SnapshotEntry {
   modelFullPath: string;
   modelUrl?: string;
   runtime: Runtime;
+  backend?: string;
   quantization: Quantization;
   clusterSize: number;
   gpu: string;
@@ -100,6 +101,7 @@ export interface SnapshotEntry {
   ttfr?: number;
   estPpt?: number;
   e2eTtft?: number;
+  tpotMs?: number;
   recipeType: RecipeType;
   submittedAt: string;
 }

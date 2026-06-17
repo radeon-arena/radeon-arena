@@ -22,7 +22,11 @@ function findTest(tests: BenchTest[], exact: string, prefix: string): BenchTest 
 export function calculateMetrics(b: Benchmark, concurrency = 1): ModelMetrics {
   const c = `(c${concurrency})`;
   const decode = findTest(b.tests, `tg128 ${c}`, "tg128");
-  const prefill = findTest(b.tests, `pp2048 ${c}`, "pp2048");
+  // Real data uses pp512; fall back to pp2048 / any prefill test.
+  const prefill =
+    findTest(b.tests, `pp512 ${c}`, "pp512") ??
+    findTest(b.tests, `pp2048 ${c}`, "pp2048") ??
+    b.tests.find((t) => t.testName.startsWith("pp"));
   const decodeToks = decode?.tokensPerSec ?? 0;
   const prefillToks = prefill?.tokensPerSec ?? 0;
   const ttftMs = decode?.e2eTtft ?? prefill?.e2eTtft ?? 0;

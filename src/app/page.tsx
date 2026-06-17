@@ -5,15 +5,15 @@ import { SITE, PROJECTS } from "@/lib/site";
 const FEATURES = [
   {
     title: "Real Performance",
-    body: "Benchmarks from actual llama-benchy runs on AMD Radeon hardware.",
+    body: "Measured benchmarks from InferStation automated runs on AMD RDNA hardware — Radeon 8060S (Strix Halo) and Radeon AI PRO R9700.",
   },
   {
     title: "Multiple Runtimes",
-    body: "Compare vLLM, SGLang, llama.cpp, and MLC-LLM implementations.",
+    body: "Compare vLLM and llama.cpp across ROCm/HIP and Vulkan backends.",
   },
   {
     title: "Full Transparency",
-    body: "View complete recipes, configurations, and detailed benchmark results.",
+    body: "View complete recipes, engine versions, quantization, and detailed benchmark results.",
   },
 ];
 

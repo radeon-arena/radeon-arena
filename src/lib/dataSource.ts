@@ -2,29 +2,29 @@ import "server-only";
 
 import type { Benchmark, LeaderboardSnapshot } from "./types";
 import { getAdminDb } from "./firebaseAdmin";
-import { generateSeedBenchmarks } from "./seedData";
+import { loadInferStationBenchmarks } from "./inferstationData";
 import { buildSnapshot, buildCarousel, snapshotIntervalHours } from "./aggregate";
 
 export { buildSnapshot, buildCarousel };
 
-/** Fetch every benchmark submission, from Firestore if configured, else seed. */
+/** Fetch every benchmark submission, from Firestore if configured, else the real InferStation dataset. */
 export async function getAllBenchmarks(): Promise<Benchmark[]> {
   const db = getAdminDb();
   if (db) {
     const snap = await db.collection("benchmarks").get();
     return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Benchmark, "id">) }));
   }
-  return generateSeedBenchmarks();
+  return loadInferStationBenchmarks();
 }
 
-/** Fetch one benchmark by id, from Firestore if configured, else seed. */
+/** Fetch one benchmark by id, from Firestore if configured, else the real dataset. */
 export async function getBenchmark(id: string): Promise<Benchmark | null> {
   const db = getAdminDb();
   if (db) {
     const doc = await db.collection("benchmarks").doc(id).get();
-    return doc.exists ? ({ id: doc.id, ...(doc.data() as Omit<Benchmark, "id">) }) : null;
+    return doc.exists ? { id: doc.id, ...(doc.data() as Omit<Benchmark, "id">) } : null;
   }
-  return generateSeedBenchmarks().find((b) => b.benchmarkId === id || b.id === id) ?? null;
+  return loadInferStationBenchmarks().find((b) => b.benchmarkId === id || b.id === id) ?? null;
 }
 
 // ── In-memory snapshot cache honoring the configured refresh interval. ───────

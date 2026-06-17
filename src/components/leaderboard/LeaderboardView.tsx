@@ -38,6 +38,17 @@ export function LeaderboardView() {
     [snap, family],
   );
 
+  // Only show test-family tabs that actually have data.
+  const families = useMemo(
+    () => (snap ? FAMILIES.filter((f) => snap.availableTests.some((t) => familyOf(t) === f.key)) : FAMILIES),
+    [snap],
+  );
+
+  useEffect(() => {
+    if (snap && families.length && !families.some((f) => f.key === family)) {
+      setFamily(families[0].key);
+    }
+  }, [snap, families, family]);
   useEffect(() => {
     if (testsInFamily.length && !testsInFamily.includes(test)) {
       const preferred = testsInFamily.find((t) => t.includes("(c1)")) ?? testsInFamily[0];
@@ -63,7 +74,7 @@ export function LeaderboardView() {
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        {FAMILIES.map((f) => (
+        {families.map((f) => (
           <button
             key={f.key}
             onClick={() => setFamily(f.key)}
@@ -106,7 +117,8 @@ export function LeaderboardView() {
               <th className="px-4 py-3">GPU</th>
               <th className="px-4 py-3 text-right">tok/s</th>
               <th className="px-4 py-3 text-right">TTFT</th>
-              <th className="px-4 py-3">Submitted</th>
+              <th className="px-4 py-3 text-right">TPOT</th>
+              <th className="px-4 py-3">Tested</th>
               <th className="px-4 py-3">Recipe</th>
             </tr>
           </thead>
@@ -117,11 +129,15 @@ export function LeaderboardView() {
                 <td className="px-4 py-2.5">
                   <a href={e.modelUrl} className="text-zinc-200 hover:text-radeon-400">{e.modelName}</a>
                 </td>
-                <td className="px-4 py-2.5 text-zinc-400">{e.runtime}</td>
+                <td className="px-4 py-2.5 text-zinc-400">
+                  {e.runtime}
+                  {e.backend ? <span className="block text-xs text-zinc-600">{e.backend}</span> : null}
+                </td>
                 <td className="px-4 py-2.5"><span className="chip">{e.quantization}</span></td>
                 <td className="px-4 py-2.5 text-zinc-400">{e.gpu}{e.clusterSize > 1 ? ` ×${e.clusterSize}` : ""}</td>
                 <td className="px-4 py-2.5 text-right font-mono text-radeon-300">{fmtTps(e.tokensPerSec)}</td>
                 <td className="px-4 py-2.5 text-right font-mono text-zinc-400">{fmtMs(e.e2eTtft)}</td>
+                <td className="px-4 py-2.5 text-right font-mono text-zinc-500">{e.tpotMs ? `${e.tpotMs.toFixed(1)} ms` : "—"}</td>
                 <td className="px-4 py-2.5 text-zinc-500">{fmtDate(e.submittedAt)}</td>
                 <td className="px-4 py-2.5">
                   <a href={`/api/recipes/${e.benchmarkId}/raw`} className="text-xs text-radeon-400 hover:text-radeon-300">YAML</a>
@@ -129,13 +145,14 @@ export function LeaderboardView() {
               </tr>
             ))}
             {rows.length === 0 && (
-              <tr><td colSpan={9} className="px-4 py-8 text-center text-zinc-600">No entries for this test.</td></tr>
+              <tr><td colSpan={10} className="px-4 py-8 text-center text-zinc-600">No entries for this test.</td></tr>
             )}
           </tbody>
         </table>
       </div>
       <p className="mt-3 text-xs text-zinc-600">
         {snap.metadata.totalEntries.toLocaleString()} entries across {snap.metadata.testCount} tests · snapshot {fmtDate(snap.generatedAt)} · refresh every {snap.metadata.snapshotIntervalHours}h
+        <span className="ml-1 text-zinc-500">· data: real InferStation benchmarks (AMD RDNA only)</span>
       </p>
     </div>
   );
