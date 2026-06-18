@@ -32,16 +32,17 @@ function parseCommand(command: string, body: GenerateBody): { recipe: Recipe; va
   const lower = command.toLowerCase();
 
   let runtime = "vLLM";
-  let container = "ghcr.io/radeon-arena/rocm-vllm:latest";
+  // Default to real, public ROCm container images.
+  let container = "rocm/vllm:latest";
   if (lower.includes("sglang")) {
     runtime = "SGLang";
-    container = "ghcr.io/radeon-arena/rocm-sglang:latest";
+    container = "lmsysorg/sglang:latest";
   } else if (lower.includes("llama-server") || lower.includes("llama.cpp") || lower.includes("llama-cli")) {
     runtime = "llama.cpp";
-    container = "ghcr.io/radeon-arena/rocm-llamacpp:latest";
+    container = "ghcr.io/ggml-org/llama.cpp:full-rocm";
   } else if (lower.includes("mlc")) {
     runtime = "MLC-LLM";
-    container = "ghcr.io/radeon-arena/rocm-mlc:latest";
+    container = "rocm/mlc:latest";
   }
 
   // model: token after `serve` / `--model-path` / `--model` / `-m`.

@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://radeon-arena.com"),
   title: "Radeon Arena - LLM Leaderboard",
   description:
-    "LLM benchmark leaderboard for models running on AMD Radeon GPUs. Built with rocm-vllm-docker and llama-benchy by the Radeon community.",
-  keywords: ["LLM", "benchmark", "AMD", "Radeon", "ROCm", "vLLM", "SGLang", "llama.cpp", "llama-benchy"],
+    "LLM inference benchmark leaderboard for AMD Radeon GPUs. Real measurements (vLLM and llama.cpp on ROCm) across RDNA hardware.",
+  keywords: ["LLM", "benchmark", "AMD", "Radeon", "ROCm", "RDNA", "vLLM", "llama.cpp"],
   applicationName: "Radeon Arena",
   icons: { icon: "/icon.svg" },
   openGraph: {

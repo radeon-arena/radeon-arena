@@ -37,7 +37,7 @@ function LeaderboardInner() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div className="mb-2 text-xs text-zinc-500">
-        Powered by: rocm-vllm-docker · llama-benchy · radeonrun
+        Benchmarks run with: ROCm vLLM · llama.cpp · AMD ROCm
       </div>
       <h1 className="text-2xl font-bold tracking-tight text-zinc-50">LLM Leaderboard</h1>
       <p className="mt-1 text-sm text-zinc-400">Performance rankings for LLMs running on AMD Radeon GPUs.</p>
