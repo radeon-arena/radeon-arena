@@ -6,7 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-zinc-200">Built With</h3>
+            <h3 className="mb-3 text-sm font-semibold text-zinc-200">Benchmark Engines</h3>
             <ul className="space-y-2 text-sm">
               {Object.values(PROJECTS).map((p) => (
                 <li key={p.name}>

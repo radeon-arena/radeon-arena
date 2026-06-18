@@ -22,7 +22,7 @@ export default function HomePage() {
     <div>
       <div className="border-b border-ink-800 bg-ink-950/50">
         <div className="mx-auto max-w-7xl px-4 py-2 text-center text-xs text-zinc-500 sm:px-6">
-          Powered by:{" "}
+          Benchmarks run with:{" "}
           <a href={PROJECTS.vllmDocker.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.vllmDocker.name}</a> ·{" "}
           <a href={PROJECTS.benchy.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.benchy.name}</a> ·{" "}
           <a href={PROJECTS.radeonrun.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.radeonrun.name}</a> ·{" "}
@@ -60,12 +60,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Built on open source */}
+      {/* Open-source engines that produced the data */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
         <div className="card p-8">
-          <h2 className="text-xl font-semibold text-zinc-100">Built on Open Source</h2>
+          <h2 className="text-xl font-semibold text-zinc-100">Benchmark Engines</h2>
           <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-            This leaderboard is powered by community-developed tools. Support the projects that make this possible!
+            The numbers on this leaderboard were produced by these open-source inference engines
+            running on AMD ROCm hardware. (This site itself is a static Next.js app — it just
+            collects and displays their results.)
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {Object.values(PROJECTS).map((p) => (
