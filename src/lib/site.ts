@@ -10,6 +10,8 @@ export const SITE = {
   twitter: "https://x.com/amdradeon",
   community: "https://community.amd.com/t5/rocm/ct-p/amd-rocm",
   forum: "https://community.amd.com/t5/rocm/ct-p/amd-rocm",
+  developer: "https://community.amd.com/t5/developers/ct-p/developers",
+  cloud: "https://radeon.anruicloud.com/",
 };
 
 // The real open-source projects that produce the benchmark results.
@@ -21,10 +23,10 @@ export const PROJECTS = {
     short: "Inference engine for AMD Radeon",
   },
   benchy: {
-    name: "llama.cpp",
-    url: "https://github.com/ggml-org/llama.cpp",
-    blurb: "Portable LLM inference (ROCm/HIP and Vulkan backends) behind the llama.cpp results.",
-    short: "Inference engine (ROCm/HIP, Vulkan)",
+    name: "radeon-docker",
+    url: "https://github.com/radeon-arena/radeon-docker",
+    blurb: "Docker images + recipes for running vLLM and llama.cpp on AMD Radeon GPUs (Strix Halo / W7900 / R9700, ROCm).",
+    short: "ROCm containers & recipes (Radeon)",
   },
   radeonrun: {
     name: "AMD ROCm",

@@ -2,13 +2,21 @@ import "server-only";
 
 import type { Benchmark, LeaderboardSnapshot } from "./types";
 import { getAdminDb } from "./firebaseAdmin";
+import { pgEnabled } from "./db";
+import { getAllBenchmarksPg, getBenchmarkPg } from "./pgSource";
 import { loadInferStationBenchmarks } from "./inferstationData";
 import { buildSnapshot, buildCarousel, snapshotIntervalHours } from "./aggregate";
 
 export { buildSnapshot, buildCarousel };
 
-/** Fetch every benchmark submission, from Firestore if configured, else the real InferStation dataset. */
+/**
+ * Fetch every benchmark submission. Source precedence:
+ *   1. Postgres        (DATABASE_URL configured) — the radeon-arena database
+ *   2. Firestore       (Firebase configured)
+ *   3. Bundled dataset (offline fallback so the site always renders)
+ */
 export async function getAllBenchmarks(): Promise<Benchmark[]> {
+  if (pgEnabled()) return getAllBenchmarksPg();
   const db = getAdminDb();
   if (db) {
     const snap = await db.collection("benchmarks").get();
@@ -17,8 +25,9 @@ export async function getAllBenchmarks(): Promise<Benchmark[]> {
   return loadInferStationBenchmarks();
 }
 
-/** Fetch one benchmark by id, from Firestore if configured, else the real dataset. */
+/** Fetch one benchmark by id, from Postgres, then Firestore, then the dataset. */
 export async function getBenchmark(id: string): Promise<Benchmark | null> {
+  if (pgEnabled()) return getBenchmarkPg(id);
   const db = getAdminDb();
   if (db) {
     const doc = await db.collection("benchmarks").doc(id).get();

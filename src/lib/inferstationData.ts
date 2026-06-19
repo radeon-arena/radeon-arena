@@ -21,6 +21,9 @@ interface RawRun {
   concurrency?: number | null;
   batch?: number | null;
   scenario?: string;
+  seq_test?: string | null;
+  command?: string;
+  harness?: string;
   image_tag?: string;
   notes?: string;
   id?: string;
@@ -109,26 +112,38 @@ export function loadInferStationBenchmarks(): Benchmark[] {
 
     const tests: BenchTest[] = [];
     let latestDate = sample.run_date;
-    // Keep only the most recent run for each concurrency level (a config may be
-    // re-benchmarked on multiple days; we show the latest real measurement).
-    const byConc = new Map<number, RawRun>();
+    // Keep only the most recent run for each (concurrency, input-length) level.
+    // A config may be re-benchmarked on multiple days, and the regression suite
+    // sweeps several input lengths at concurrency 1 — keying on both avoids one
+    // sequence length silently overwriting another.
+    const byTest = new Map<string, RawRun>();
     for (const r of g.runs) {
       const c = r.concurrency ?? r.batch ?? 1;
-      const prev = byConc.get(c);
-      if (!prev || r.run_date >= prev.run_date) byConc.set(c, r);
+      const tkey = `${c}|${r.seq_test ?? ""}`;
+      const prev = byTest.get(tkey);
+      if (!prev || r.run_date >= prev.run_date) byTest.set(tkey, r);
       if (r.run_date > latestDate) latestDate = r.run_date;
     }
-    for (const c of [...byConc.keys()].sort((a, b) => a - b)) {
-      const r = byConc.get(c)!;
+    const sortedKeys = [...byTest.keys()].sort((a, b) => {
+      const [ca, sa] = a.split("|");
+      const [cb, sb] = b.split("|");
+      return Number(ca) - Number(cb) || sa.localeCompare(sb);
+    });
+    for (const tkey of sortedKeys) {
+      const r = byTest.get(tkey)!;
+      const c = r.concurrency ?? r.batch ?? 1;
+      // input-length suffix for sweeps that vary it (regression suite); the
+      // InferStation daily fleet has no seq_test, so its labels are unchanged.
+      const seq = r.seq_test ? ` ${r.seq_test}` : "";
       const pp = num(r.pp_toks_per_s);
       const tg = num(r.tg_toks_per_s);
       const ttft = num(r.ttft_ms);
       if (pp !== undefined) {
-        tests.push({ testName: `pp512 (c${c})`, tokensPerSec: round(pp), e2eTtft: ttft, ttfr: ttft });
+        tests.push({ testName: `pp512 (c${c})${seq}`, tokensPerSec: round(pp), e2eTtft: ttft, ttfr: ttft });
       }
       if (tg !== undefined) {
         tests.push({
-          testName: `tg128 (c${c})`,
+          testName: `tg128 (c${c})${seq}`,
           tokensPerSec: round(tg),
           e2eTtft: ttft,
           ttfr: ttft,
@@ -138,16 +153,27 @@ export function loadInferStationBenchmarks(): Benchmark[] {
     }
     if (tests.length === 0) continue;
 
-    const decodeC1 = tests.find((t) => t.testName === "tg128 (c1)")?.tokensPerSec ?? 0;
-    const prefillC1 = tests.find((t) => t.testName === "pp512 (c1)")?.tokensPerSec ?? 0;
+    const decodeC1 =
+      tests.find((t) => t.testName === "tg128 (c1)")?.tokensPerSec ??
+      tests.find((t) => t.testName.startsWith("tg128 (c1)"))?.tokensPerSec ??
+      0;
+    const prefillC1 =
+      tests.find((t) => t.testName === "pp512 (c1)")?.tokensPerSec ??
+      tests.find((t) => t.testName.startsWith("pp512 (c1)"))?.tokensPerSec ??
+      0;
+
+    const isRegression = sample.host.slug === "amd-rocm-regression";
+    const provenance = isRegression
+      ? `Measured by the AMD ROCm Strix Halo regression suite (decode throughput).`
+      : `Measured by RadeonArena (in512/out128 streaming benchmark).`;
 
     const recipe: Recipe = {
       name: `${sample.model.name} · ${runtime}${backend ? ` (${backend})` : ""} · ${quant}`,
       version: 1,
-      command: "",
+      command: sample.command || "",
       container: sample.image_tag ? `inferstation/${sample.engine.slug}:${sample.image_tag}` : undefined,
       model: sample.model.source_url || undefined,
-      description: `${runtime}${backend ? ` / ${backend}` : ""} serving of ${sample.model.name} (${quant}) on ${gpu}. Measured by InferStation (in512/out128 streaming benchmark).`,
+      description: `${runtime}${backend ? ` / ${backend}` : ""} serving of ${sample.model.name} (${quant}) on ${gpu}. ${provenance}`,
       fullRecipe: {
         engine: runtime,
         engineVersion: sample.engine.version,
@@ -187,7 +213,7 @@ export function loadInferStationBenchmarks(): Benchmark[] {
       tests_count: tests.length,
       submittedAt: `${latestDate}T00:00:00.000Z`,
       processedAt: `${latestDate}T00:00:00.000Z`,
-      dataSource: "InferStation",
+      dataSource: "RadeonArena",
     } as Benchmark);
   }
 

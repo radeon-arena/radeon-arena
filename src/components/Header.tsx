@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import { HARDWARE, DEFAULT_HW } from "@/lib/hardware";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-ink-800 bg-ink-950/80 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center gap-2">
           <span className="grid h-7 w-7 place-items-center rounded-md bg-ink-900">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/icon.svg" alt="" width={20} height={20} />
@@ -16,13 +17,27 @@ export function Header() {
         </Link>
 
         <nav className="flex items-center gap-1 text-sm">
-          <Link href="/leaderboard" className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
+          {/* Hardware nav — each scopes the leaderboard to that GPU */}
+          <div className="hidden items-center gap-1 sm:flex">
+            {HARDWARE.map((h) => (
+              <Link
+                key={h.key}
+                href={`/${h.key}/leaderboard`}
+                title={h.label}
+                className="rounded-md px-2.5 py-1.5 text-zinc-300 hover:bg-ink-800 hover:text-radeon-200"
+              >
+                {h.short}
+              </Link>
+            ))}
+            <span className="mx-1 h-4 w-px bg-ink-700" aria-hidden />
+          </div>
+          <Link href={`/${DEFAULT_HW}/leaderboard`} className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
             Leaderboard
           </Link>
-          <Link href="/leaderboard?tab=compare" className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
+          <Link href={`/${DEFAULT_HW}/compare`} className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
             Compare
           </Link>
-          <a href={SITE.blog} className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
+          <a href={SITE.blog} className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
             Blog
           </a>
           <a

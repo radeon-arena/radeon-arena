@@ -26,6 +26,8 @@ export function Footer() {
             </p>
             <div className="flex flex-wrap gap-2 text-sm">
               <a href={SITE.community} className="btn-ghost">AMD ROCm Community</a>
+              <a href={SITE.developer} className="btn-ghost">AMD Developer Community</a>
+              <a href={SITE.cloud} className="btn-ghost">Radeon Cloud</a>
               <a href={SITE.blog} className="btn-ghost">ROCm Blog</a>
             </div>
           </div>
@@ -33,17 +35,20 @@ export function Footer() {
           <div>
             <h3 className="mb-3 text-sm font-semibold text-zinc-200">Data</h3>
             <p className="text-sm text-zinc-500">
-              Benchmarks measured by InferStation on AMD RDNA hardware—Radeon 8060S
+              Benchmarks measured by RadeonArena on AMD RDNA hardware—Radeon 8060S
               (Strix Halo) and Radeon AI PRO R9700. Real numbers, refreshed continuously.
             </p>
-            <a href="/leaderboard" className="mt-3 inline-block text-sm text-radeon-400 hover:text-radeon-300">
+            <a href="/strix/leaderboard" className="mt-3 inline-block text-sm text-radeon-400 hover:text-radeon-300">
               Browse the leaderboard →
             </a>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-2 border-t border-ink-800 pt-6 text-xs text-zinc-600 sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Radeon Arena. {SITE.tagline}.</p>
+          <p>
+            © {new Date().getFullYear()} Radeon Arena. {SITE.tagline}.
+            <span className="ml-2 text-zinc-700">build {process.env.NEXT_PUBLIC_BUILD_TIME ?? "dev"}</span>
+          </p>
           <a href={SITE.community} className="hover:text-radeon-400">AMD ROCm Community</a>
         </div>
       </div>

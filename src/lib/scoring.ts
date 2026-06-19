@@ -103,12 +103,16 @@ function maxesOf(aggs: Aggregate[]) {
 
 /** Build the Users leaderboard from raw benchmark submissions. */
 export function computeUserLeaderboard(benchmarks: Benchmark[]): UserLeaderboardEntry[] {
+  // All benchmarks come from RadeonArena's own measurement fleet, so they roll
+  // up into a single "RadeonArena" contributor rather than per-machine rows.
+  const CONTRIBUTOR_KEY = "radeon-arena";
+  const CONTRIBUTOR_NAME = "RadeonArena";
   const byUser = new Map<string, Aggregate>();
   for (const b of benchmarks) {
-    let agg = byUser.get(b.userId);
+    let agg = byUser.get(CONTRIBUTOR_KEY);
     if (!agg) {
-      agg = emptyAggregate(b.userId, b.creator?.name ?? b.userId, b);
-      byUser.set(b.userId, agg);
+      agg = emptyAggregate(CONTRIBUTOR_KEY, CONTRIBUTOR_NAME, b);
+      byUser.set(CONTRIBUTOR_KEY, agg);
     }
     accumulate(agg, b);
   }

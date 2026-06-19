@@ -5,7 +5,7 @@ import { SITE, PROJECTS } from "@/lib/site";
 const FEATURES = [
   {
     title: "Real Performance",
-    body: "Measured benchmarks from InferStation automated runs on AMD RDNA hardware — Radeon 8060S (Strix Halo) and Radeon AI PRO R9700.",
+    body: "Measured benchmarks from RadeonArena automated runs on AMD RDNA hardware — Radeon 8060S (Strix Halo) and Radeon AI PRO R9700.",
   },
   {
     title: "Multiple Runtimes",
@@ -40,9 +40,9 @@ export default function HomePage() {
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-zinc-400">{SITE.description}</p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/leaderboard" className="btn-primary">View Leaderboard</Link>
-          <Link href="/leaderboard?tab=compare" className="btn-ghost">Compare Models</Link>
-          <Link href="/leaderboard?tab=how" className="btn-ghost">Submit Benchmark</Link>
+          <Link href="/strix/leaderboard" className="btn-primary">View Leaderboard</Link>
+          <Link href="/strix/compare" className="btn-ghost">Compare Models</Link>
+          <Link href="/strix/how" className="btn-ghost">Submit Benchmark</Link>
         </div>
       </section>
 
