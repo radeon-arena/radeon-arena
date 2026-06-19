@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Benchmark, LeaderboardSnapshot, SnapshotEntry } from "@/lib/types";
 import { calculateMetrics } from "@/lib/metrics";
 import { fmtTps, fmtMs } from "@/lib/format";
+import { hwMatches, hwLabel } from "@/lib/hardware";
 
 interface Option {
   id: string;
@@ -25,7 +26,7 @@ function useBenchmark(id: string | null): Benchmark | null {
   return b;
 }
 
-export function CompareView() {
+export function CompareView({ hw }: { hw: string }) {
   const [options, setOptions] = useState<Option[]>([]);
   const [aId, setAId] = useState<string | null>(null);
   const [bId, setBId] = useState<string | null>(null);
@@ -35,22 +36,32 @@ export function CompareView() {
       .then((r) => (r.ok ? r.json() : null))
       .then((d: LeaderboardSnapshot | null) => {
         if (!d) return;
-        const list = (d.entriesByTest["tg128 (c1)"] ?? []) as SnapshotEntry[];
+        const list = ((d.entriesByTest["tg128 (c1)"] ?? []) as SnapshotEntry[]).filter((e) =>
+          hwMatches(hw, e.gpu),
+        );
         const opts = list.map((e) => ({
           id: e.benchmarkId,
           label: `${e.modelName} · ${e.runtime} · ${e.quantization} · ${e.gpu}${e.clusterSize > 1 ? ` ×${e.clusterSize}` : ""}`,
         }));
         setOptions(opts);
-        if (opts[0]) setAId(opts[0].id);
-        if (opts[1]) setBId(opts[1].id);
+        setAId(opts[0]?.id ?? null);
+        setBId(opts[1]?.id ?? null);
       })
       .catch(() => undefined);
-  }, []);
+  }, [hw]);
 
   const a = useBenchmark(aId);
   const b = useBenchmark(bId);
   const ma = useMemo(() => (a ? calculateMetrics(a, 1) : null), [a]);
   const mb = useMemo(() => (b ? calculateMetrics(b, 1) : null), [b]);
+
+  if (options.length === 0) {
+    return (
+      <div className="card p-10 text-center text-sm text-zinc-600">
+        No benchmarks yet for {hwLabel(hw)} to compare.
+      </div>
+    );
+  }
 
   return (
     <div>

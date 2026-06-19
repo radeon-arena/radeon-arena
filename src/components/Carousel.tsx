@@ -32,7 +32,7 @@ export function Carousel() {
         <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-400">
           Performance Highlights
         </h2>
-        <Link href="/leaderboard" className="text-sm text-radeon-400 hover:text-radeon-300">
+        <Link href="/strix/leaderboard" className="text-sm text-radeon-400 hover:text-radeon-300">
           View full leaderboard →
         </Link>
       </div>
@@ -71,7 +71,7 @@ export function Carousel() {
               </div>
 
               <Link
-                href="/leaderboard"
+                href="/strix/leaderboard"
                 className="text-xs text-radeon-400 hover:text-radeon-300"
               >
                 View on leaderboard →

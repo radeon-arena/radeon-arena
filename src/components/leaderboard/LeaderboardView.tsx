@@ -2,29 +2,99 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { LeaderboardSnapshot, SnapshotEntry } from "@/lib/types";
-import { fmtTps, fmtMs, fmtDate, rankBadge } from "@/lib/format";
+import { fmtTps, fmtMs } from "@/lib/format";
+import { hwMatches, hwLabel } from "@/lib/hardware";
+import { BenchmarkModal } from "./BenchmarkModal";
 
-const FAMILIES: { key: string; label: string }[] = [
-  { key: "tg", label: "Decode (tg)" },
-  { key: "pp", label: "Prefill (pp)" },
-  { key: "ctx_tg", label: "Long-ctx decode" },
-  { key: "ctx_pp", label: "Long-ctx prefill" },
-];
+// ── Test-name parsing ────────────────────────────────────────────────────────
+// Raw names look like "tg128 (c1)", "pp512 (c16)", "tg128 (c1) in4096".
+//   base        = tg128 / pp512        (test family + size)
+//   inVar       = in4096               (optional input-length variant)
+//   conc        = 1 / 2 / 4 / 16 ...   (concurrency, the (cN) part)
+//   typeLabel   = base [· inVar]       (what the "Test Type" dropdown shows)
+type ParsedTest = {
+  raw: string;
+  base: string;
+  inVar: string;
+  conc: number;
+  typeLabel: string;
+  family: "tg" | "pp" | "other";
+};
 
-function familyOf(test: string): string {
-  if (test.startsWith("ctx_pp")) return "ctx_pp";
-  if (test.startsWith("ctx_tg")) return "ctx_tg";
-  if (test.startsWith("pp")) return "pp";
-  if (test.startsWith("tg")) return "tg";
-  return "other";
+function parseTest(raw: string): ParsedTest {
+  const concMatch = raw.match(/\(c(\d+)\)/);
+  const conc = concMatch ? parseInt(concMatch[1], 10) : 1;
+  const inMatch = raw.match(/\b(in\d+)\b/);
+  const inVar = inMatch ? inMatch[1] : "";
+  const base = raw
+    .replace(/\s*\(c\d+\)/, "")
+    .replace(/\s*\bin\d+\b/, "")
+    .trim();
+  const typeLabel = inVar ? `${base} · ${inVar}` : base;
+  const family = base.startsWith("tg") ? "tg" : base.startsWith("pp") ? "pp" : "other";
+  return { raw, base, inVar, conc, typeLabel, family };
 }
 
-export function LeaderboardView() {
+function typeOrder(a: ParsedTest, b: ParsedTest): number {
+  const fam = (f: ParsedTest["family"]) => (f === "tg" ? 0 : f === "pp" ? 1 : 2);
+  if (fam(a.family) !== fam(b.family)) return fam(a.family) - fam(b.family);
+  if (!!a.inVar !== !!b.inVar) return a.inVar ? 1 : -1;
+  const ai = parseInt(a.inVar.replace("in", "") || "0", 10);
+  const bi = parseInt(b.inVar.replace("in", "") || "0", 10);
+  return ai - bi;
+}
+
+function runtimePill(rt: string): string {
+  const r = rt.toLowerCase();
+  if (r.includes("vllm")) return "border-emerald-700/50 bg-emerald-950/40 text-emerald-300";
+  if (r.includes("llama")) return "border-sky-700/50 bg-sky-950/40 text-sky-300";
+  if (r.includes("sglang")) return "border-violet-700/50 bg-violet-950/40 text-violet-300";
+  if (r.includes("mlc")) return "border-amber-700/50 bg-amber-950/40 text-amber-300";
+  return "border-ink-600 bg-ink-800 text-zinc-300";
+}
+
+function timeAgo(iso?: string): string {
+  if (!iso) return "—";
+  const t = new Date(iso).getTime();
+  if (Number.isNaN(t)) return "—";
+  const s = Math.max(0, Math.floor((Date.now() - t) / 1000));
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} minute${m > 1 ? "s" : ""} ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} hour${h > 1 ? "s" : ""} ago`;
+  const d = Math.floor(h / 24);
+  return `${d} day${d > 1 ? "s" : ""} ago`;
+}
+
+function fmtDateTime(iso?: string): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+const MEDALS: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
+
+export function LeaderboardView({ hw }: { hw: string }) {
   const [snap, setSnap] = useState<LeaderboardSnapshot | null>(null);
   const [error, setError] = useState(false);
-  const [family, setFamily] = useState("tg");
-  const [test, setTest] = useState<string>("");
-  const [cluster, setCluster] = useState<number | "all">("all");
+
+  const [testType, setTestType] = useState<string>("");
+  const [conc, setConc] = useState<number>(1);
+  const [search, setSearch] = useState("");
+  const [runtimeFilter, setRuntimeFilter] = useState("all");
+  const [clusterFilter, setClusterFilter] = useState<string>("all");
+  const [quantFilter, setQuantFilter] = useState("all");
+  const [sortKey, setSortKey] = useState<"rank" | "tps">("rank");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/static/snapshot", { cache: "no-store" })
@@ -33,127 +103,260 @@ export function LeaderboardView() {
       .catch(() => setError(true));
   }, []);
 
-  const testsInFamily = useMemo(
-    () => (snap ? snap.availableTests.filter((t) => familyOf(t) === family) : []),
-    [snap, family],
+  const parsed = useMemo(() => (snap ? snap.availableTests.map(parseTest) : []), [snap]);
+
+  const testTypes = useMemo(() => {
+    const byLabel = new Map<string, ParsedTest>();
+    for (const p of parsed) if (!byLabel.has(p.typeLabel)) byLabel.set(p.typeLabel, p);
+    return [...byLabel.values()].sort(typeOrder).map((p) => p.typeLabel);
+  }, [parsed]);
+
+  const concsForType = useMemo(
+    () =>
+      [...new Set(parsed.filter((p) => p.typeLabel === testType).map((p) => p.conc))].sort(
+        (a, b) => a - b,
+      ),
+    [parsed, testType],
   );
 
-  // Only show test-family tabs that actually have data.
-  const families = useMemo(
-    () => (snap ? FAMILIES.filter((f) => snap.availableTests.some((t) => familyOf(t) === f.key)) : FAMILIES),
-    [snap],
+  // Default the selection once data lands.
+  useEffect(() => {
+    if (!testTypes.length) return;
+    if (!testTypes.includes(testType)) {
+      const preferred = testTypes.find((t) => t.startsWith("tg") && !t.includes("·")) ?? testTypes[0];
+      setTestType(preferred);
+    }
+  }, [testTypes, testType]);
+
+  useEffect(() => {
+    if (concsForType.length && !concsForType.includes(conc)) setConc(concsForType[0]);
+  }, [concsForType, conc]);
+
+  const rawName = useMemo(
+    () => parsed.find((p) => p.typeLabel === testType && p.conc === conc)?.raw ?? "",
+    [parsed, testType, conc],
   );
 
-  useEffect(() => {
-    if (snap && families.length && !families.some((f) => f.key === family)) {
-      setFamily(families[0].key);
-    }
-  }, [snap, families, family]);
-  useEffect(() => {
-    if (testsInFamily.length && !testsInFamily.includes(test)) {
-      const preferred = testsInFamily.find((t) => t.includes("(c1)")) ?? testsInFamily[0];
-      setTest(preferred);
-    }
-  }, [testsInFamily, test]);
+  const family = useMemo(
+    () => parsed.find((p) => p.typeLabel === testType)?.family ?? "tg",
+    [parsed, testType],
+  );
 
-  const rows: SnapshotEntry[] = useMemo(() => {
-    if (!snap || !test) return [];
-    const list = snap.entriesByTest[test] ?? [];
-    return cluster === "all" ? list : list.filter((e) => e.clusterSize === cluster);
-  }, [snap, test, cluster]);
+  const list: SnapshotEntry[] = useMemo(
+    () => (snap && rawName ? snap.entriesByTest[rawName] ?? [] : []),
+    [snap, rawName],
+  );
 
-  const clusterOptions = useMemo(() => {
-    if (!snap || !test) return [];
-    const set = new Set((snap.entriesByTest[test] ?? []).map((e) => e.clusterSize));
-    return [...set].sort((a, b) => a - b);
-  }, [snap, test]);
+  const runtimeOptions = useMemo(() => [...new Set(list.map((e) => e.runtime))].sort(), [list]);
+  const clusterOptions = useMemo(
+    () => [...new Set(list.map((e) => e.clusterSize))].sort((a, b) => a - b),
+    [list],
+  );
+  const quantOptions = useMemo(() => [...new Set(list.map((e) => e.quantization))].sort(), [list]);
+
+  const rows = useMemo(() => {
+    let r = list.filter((e) => hwMatches(hw, e.gpu));
+    const q = search.trim().toLowerCase();
+    if (q) r = r.filter((e) => `${e.modelName} ${e.modelFullPath}`.toLowerCase().includes(q));
+    if (runtimeFilter !== "all") r = r.filter((e) => e.runtime === runtimeFilter);
+    if (clusterFilter !== "all") r = r.filter((e) => String(e.clusterSize) === clusterFilter);
+    if (quantFilter !== "all") r = r.filter((e) => e.quantization === quantFilter);
+    const sorted = [...r].sort((a, b) => {
+      const v = sortKey === "rank" ? a.rank - b.rank : (b.tokensPerSec ?? 0) - (a.tokensPerSec ?? 0);
+      return sortDir === "asc" ? v : -v;
+    });
+    return sorted;
+  }, [list, hw, search, runtimeFilter, clusterFilter, quantFilter, sortKey, sortDir]);
 
   if (error) return <p className="py-12 text-center text-zinc-500">Failed to load leaderboard snapshot.</p>;
   if (!snap) return <p className="py-12 text-center text-zinc-500">Loading leaderboard snapshot…</p>;
 
+  const intervalMin = Math.round((snap.metadata.snapshotIntervalHours ?? 0.5) * 60);
+
   return (
-    <div>
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        {families.map((f) => (
-          <button
-            key={f.key}
-            onClick={() => setFamily(f.key)}
-            className={`chip ${family === f.key ? "border-radeon-600 text-radeon-300" : ""}`}
-          >
-            {f.label}
-          </button>
-        ))}
-        <select
-          value={test}
-          onChange={(e) => setTest(e.target.value)}
-          className="ml-auto rounded-lg border border-ink-600 bg-ink-850 px-3 py-1.5 text-sm text-zinc-200"
-        >
-          {testsInFamily.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+    <div className="space-y-4">
+      {/* Test Type + Concurrency */}
+      <div className="card p-5">
+        <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
+          <div>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">Test Type</label>
+            <select
+              value={testType}
+              onChange={(e) => setTestType(e.target.value)}
+              className="w-full rounded-lg border border-ink-600 bg-ink-950 px-3 py-2.5 text-sm text-zinc-100"
+            >
+              {testTypes.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">Concurrency</label>
+            <select
+              value={conc}
+              onChange={(e) => setConc(Number(e.target.value))}
+              className="w-full rounded-lg border border-ink-600 bg-ink-950 px-3 py-2.5 text-sm text-zinc-100 sm:w-28"
+            >
+              {concsForType.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-zinc-500">Showing {rows.length} results</p>
       </div>
 
-      {clusterOptions.length > 1 && (
-        <div className="mb-3 flex items-center gap-2 text-xs">
-          <span className="text-zinc-500">Cluster:</span>
-          <button onClick={() => setCluster("all")} className={`chip ${cluster === "all" ? "border-radeon-600 text-radeon-300" : ""}`}>all</button>
-          {clusterOptions.map((c) => (
-            <button key={c} onClick={() => setCluster(c)} className={`chip ${cluster === c ? "border-radeon-600 text-radeon-300" : ""}`}>
-              c{c}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Status bar */}
+      <div className="card flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 text-xs text-zinc-400">
+        <span className="inline-flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-zinc-500" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" strokeLinecap="round" />
+          </svg>
+          Last updated: <span className="font-medium text-zinc-200">{timeAgo(snap.generatedAt)}</span>
+          <span className="text-zinc-600">({fmtDateTime(snap.generatedAt)})</span>
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-zinc-500" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <rect x="4" y="4" width="16" height="16" rx="2" />
+            <path d="M8 9h8M8 13h6" strokeLinecap="round" />
+          </svg>
+          Showing: <span className="font-medium text-radeon-300">{rows.length}</span> of {list.length} benchmarks
+        </span>
+        <span>
+          Update interval: <span className="font-medium text-zinc-200">Every {intervalMin} minutes</span>
+        </span>
+      </div>
 
+      {/* Search + filters */}
+      <div className="card flex flex-wrap items-center gap-2 p-3">
+        <div className="relative min-w-[180px] flex-1">
+          <svg viewBox="0 0 24 24" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3-3" strokeLinecap="round" />
+          </svg>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search models…"
+            className="w-full rounded-lg border border-ink-600 bg-ink-950 py-2 pl-9 pr-3 text-sm text-zinc-200 placeholder:text-zinc-600"
+          />
+        </div>
+        <select value={runtimeFilter} onChange={(e) => setRuntimeFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
+          <option value="all">All Runtimes</option>
+          {runtimeOptions.map((r) => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
+        <select value={clusterFilter} onChange={(e) => setClusterFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
+          <option value="all">All Cluster Sizes</option>
+          {clusterOptions.map((c) => (
+            <option key={c} value={String(c)}>{c === 1 ? "Single" : `${c} nodes`}</option>
+          ))}
+        </select>
+        <select value={quantFilter} onChange={(e) => setQuantFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
+          <option value="all">All Quantizations</option>
+          {quantOptions.map((qz) => (
+            <option key={qz} value={qz}>{qz}</option>
+          ))}
+        </select>
+        <select value={sortKey} onChange={(e) => setSortKey(e.target.value as "rank" | "tps")} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
+          <option value="rank">Rank</option>
+          <option value="tps">Tokens/sec</option>
+        </select>
+        <button
+          type="button"
+          onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
+          aria-label="Toggle sort direction"
+          className="rounded-lg border border-ink-600 bg-ink-850 px-2.5 py-2 text-sm text-zinc-300 hover:bg-ink-800"
+        >
+          {sortDir === "asc" ? "↑" : "↓"}
+        </button>
+      </div>
+
+      {/* Table */}
       <div className="card thin-scroll overflow-x-auto">
-        <table className="w-full min-w-[760px] text-sm">
+        <table className="w-full min-w-[820px] text-sm">
           <thead className="border-b border-ink-700 text-left text-xs uppercase tracking-wide text-zinc-500">
             <tr>
-              <th className="px-4 py-3">#</th>
+              <th className="px-4 py-3">Rank</th>
               <th className="px-4 py-3">Model</th>
               <th className="px-4 py-3">Runtime</th>
-              <th className="px-4 py-3">Quant</th>
-              <th className="px-4 py-3">GPU</th>
-              <th className="px-4 py-3 text-right">tok/s</th>
-              <th className="px-4 py-3 text-right">TTFT</th>
-              <th className="px-4 py-3 text-right">TPOT</th>
-              <th className="px-4 py-3">Tested</th>
-              <th className="px-4 py-3">Recipe</th>
+              <th className="px-4 py-3">Quant.</th>
+              <th className="px-4 py-3">Cluster</th>
+              <th className="px-4 py-3 text-right">Tokens/sec</th>
+              <th className="px-4 py-3">{family === "pp" ? "TTFT" : "Type"}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800">
             {rows.map((e) => (
               <tr key={`${e.benchmarkId}-${e.rank}`} className="hover:bg-ink-850/60">
-                <td className={`px-4 py-2.5 font-mono ${rankBadge(e.rank)}`}>{e.rank}</td>
                 <td className="px-4 py-2.5">
-                  <a href={e.modelUrl} className="text-zinc-200 hover:text-radeon-400">{e.modelName}</a>
+                  <span className="inline-flex items-center gap-1.5 font-mono text-zinc-300">
+                    {MEDALS[e.rank] ? <span className="text-base">{MEDALS[e.rank]}</span> : null}
+                    {e.rank}
+                  </span>
                 </td>
-                <td className="px-4 py-2.5 text-zinc-400">
-                  {e.runtime}
-                  {e.backend ? <span className="block text-xs text-zinc-600">{e.backend}</span> : null}
-                </td>
-                <td className="px-4 py-2.5"><span className="chip">{e.quantization}</span></td>
-                <td className="px-4 py-2.5 text-zinc-400">{e.gpu}{e.clusterSize > 1 ? ` ×${e.clusterSize}` : ""}</td>
-                <td className="px-4 py-2.5 text-right font-mono text-radeon-300">{fmtTps(e.tokensPerSec)}</td>
-                <td className="px-4 py-2.5 text-right font-mono text-zinc-400">{fmtMs(e.e2eTtft)}</td>
-                <td className="px-4 py-2.5 text-right font-mono text-zinc-500">{e.tpotMs ? `${e.tpotMs.toFixed(1)} ms` : "—"}</td>
-                <td className="px-4 py-2.5 text-zinc-500">{fmtDate(e.submittedAt)}</td>
                 <td className="px-4 py-2.5">
-                  <a href={`/api/recipes/${e.benchmarkId}/raw`} className="text-xs text-radeon-400 hover:text-radeon-300">YAML</a>
+                  <button
+                    type="button"
+                    onClick={() => setOpenId(e.benchmarkId)}
+                    className="inline-flex items-center gap-1 text-left font-medium text-radeon-300 hover:text-radeon-200 hover:underline"
+                  >
+                    {e.modelName}
+                    <svg viewBox="0 0 24 24" className="h-3 w-3 opacity-60" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 5h10v10M19 5 5 19" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </td>
+                <td className="px-4 py-2.5">
+                  <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs ${runtimePill(e.runtime)}`}>
+                    {e.runtime}
+                  </span>
+                  {e.backend ? <span className="ml-1 text-xs text-zinc-600">{e.backend}</span> : null}
+                </td>
+                <td className="px-4 py-2.5 text-zinc-400">{e.quantization}</td>
+                <td className="px-4 py-2.5 text-zinc-400">{e.clusterSize === 1 ? "Single" : `${e.clusterSize} nodes`}</td>
+                <td className="px-4 py-2.5 text-right font-mono font-semibold text-zinc-100">{fmtTps(e.tokensPerSec)}</td>
+                <td className="px-4 py-2.5">
+                  {family === "pp" ? (
+                    <span className="font-mono text-zinc-400">{fmtMs(e.e2eTtft)}</span>
+                  ) : (
+                    <span className="inline-flex items-center rounded-full border border-radeon-700/50 bg-radeon-900/30 px-2 py-0.5 text-xs text-radeon-300">
+                      Decode
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}
             {rows.length === 0 && (
-              <tr><td colSpan={10} className="px-4 py-8 text-center text-zinc-600">No entries for this test.</td></tr>
+              <tr>
+                <td colSpan={7} className="px-4 py-10 text-center text-zinc-600">
+                  {!list.some((e) => hwMatches(hw, e.gpu)) ? (
+                    <>
+                      No benchmarks yet for {hwLabel(hw)}.
+                      <span className="block text-xs text-zinc-700">Results will appear here once this GPU is benchmarked.</span>
+                    </>
+                  ) : (
+                    "No entries match these filters."
+                  )}
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-xs text-zinc-600">
-        {snap.metadata.totalEntries.toLocaleString()} entries across {snap.metadata.testCount} tests · snapshot {fmtDate(snap.generatedAt)} · refresh every {snap.metadata.snapshotIntervalHours}h
-        <span className="ml-1 text-zinc-500">· data: real InferStation benchmarks (AMD RDNA only)</span>
+
+      <p className="text-xs text-zinc-600">
+        {snap.metadata.totalEntries.toLocaleString()} entries across {snap.metadata.testCount} tests
+        <span className="ml-1 text-zinc-500">· data: real RadeonArena benchmarks (AMD RDNA only)</span>
       </p>
+
+      {openId && <BenchmarkModal id={openId} onClose={() => setOpenId(null)} />}
     </div>
   );
 }

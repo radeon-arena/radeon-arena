@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import type { UserLeaderboardEntry } from "@/lib/types";
 import { rankBadge } from "@/lib/format";
 
-export function UsersView() {
+export function UsersView({ hw }: { hw: string }) {
   const [entries, setEntries] = useState<UserLeaderboardEntry[] | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch("/api/leaderboard/users", { cache: "no-store" })
+    setEntries(null);
+    setError(false);
+    fetch(`/api/leaderboard/users?hw=${encodeURIComponent(hw)}`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => setEntries(d.entries ?? []))
       .catch(() => setError(true));
-  }, []);
+  }, [hw]);
 
   if (error) return <p className="py-12 text-center text-zinc-500">Failed to load contributors.</p>;
   if (!entries) return <p className="py-12 text-center text-zinc-500">Loading contributors…</p>;

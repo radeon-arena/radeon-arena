@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import type { OrgLeaderboardEntry } from "@/lib/types";
 import { rankBadge } from "@/lib/format";
 
-export function OrganizationsView() {
+export function OrganizationsView({ hw }: { hw: string }) {
   const [entries, setEntries] = useState<OrgLeaderboardEntry[] | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch("/api/leaderboard/organizations", { cache: "no-store" })
+    setEntries(null);
+    setError(false);
+    fetch(`/api/leaderboard/organizations?hw=${encodeURIComponent(hw)}`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => setEntries(d.entries ?? []))
       .catch(() => setError(true));
-  }, []);
+  }, [hw]);
 
   if (error) return <p className="py-12 text-center text-zinc-500">Failed to load organizations.</p>;
   if (!entries) return <p className="py-12 text-center text-zinc-500">Loading organizations…</p>;
