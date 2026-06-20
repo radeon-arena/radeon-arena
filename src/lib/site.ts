@@ -23,8 +23,8 @@ export const PROJECTS = {
     short: "Inference engine for AMD Radeon",
   },
   benchy: {
-    name: "radeon-docker",
-    url: "https://github.com/radeon-arena/radeon-docker",
+    name: "radeonrun",
+    url: "https://github.com/radeon-arena/radeonrun",
     blurb: "Docker images + recipes for running vLLM and llama.cpp on AMD Radeon GPUs (Strix Halo / W7900 / R9700, ROCm).",
     short: "ROCm containers & recipes (Radeon)",
   },

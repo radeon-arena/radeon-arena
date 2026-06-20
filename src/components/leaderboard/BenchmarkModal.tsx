@@ -6,7 +6,7 @@ import type { Benchmark } from "@/lib/types";
 import { fmtDate } from "@/lib/format";
 import { PROJECTS } from "@/lib/site";
 
-const HALO = PROJECTS.benchy; // radeon-docker
+const HALO = PROJECTS.benchy; // radeonrun
 
 function clusterLabel(n: number): string {
   return n <= 1 ? "Single Node" : `${n} Nodes`;
@@ -167,7 +167,7 @@ curl -L ${rawUrl} -o recipe.yaml
 
 # 2. Clone the toolkit
 git clone ${HALO.url}.git
-cd radeon-docker
+cd radeonrun
 
 # 3. Run it
 python run-recipe.py recipe.yaml`}
