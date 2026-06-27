@@ -35,6 +35,7 @@ function entryFromBenchmark(
     gpu: b.gpu,
     tokensPerSec,
     recipeType: b.recipeType,
+    verificationStatus: b.verificationStatus ?? "self",
     submittedAt: b.submittedAt,
     ...extra,
   };

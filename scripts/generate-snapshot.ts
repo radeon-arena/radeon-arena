@@ -1,10 +1,10 @@
-// Generate a sample leaderboard snapshot from the real InferStation RDNA dataset.
+// Generate a sample leaderboard snapshot from the real RadeonArena RDNA dataset.
 // Usage: pnpm snapshot   (writes snapshot.sample.json + carousel.sample.json)
 import { writeFileSync } from "node:fs";
-import { loadInferStationBenchmarks } from "../src/lib/inferstationData";
+import { loadBenchmarks } from "../src/lib/benchmarkData";
 import { buildSnapshot, buildCarousel } from "../src/lib/aggregate";
 
-const benchmarks = loadInferStationBenchmarks();
+const benchmarks = loadBenchmarks();
 const snapshot = buildSnapshot(benchmarks);
 const carousel = buildCarousel(benchmarks);
 

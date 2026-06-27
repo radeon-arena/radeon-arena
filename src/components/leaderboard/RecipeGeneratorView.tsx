@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import yaml from "js-yaml";
-import { firebaseEnabled } from "@/lib/firebase";
 
 const PLACEHOLDER = `vllm serve Qwen/Qwen3-8B \\
   --quantization fp8 \\
@@ -24,16 +23,9 @@ export function RecipeGeneratorView() {
     setYamlOut(null);
     setErrors([]);
     try {
-      // In offline/seed mode there is no real auth, so we pass a demo bearer so
-      // the gated endpoint can be exercised. With Firebase configured, a real
-      // ID token would be attached here instead.
-      const token = firebaseEnabled ? "" : "demo-offline";
       const res = await fetch("/api/generate-recipe", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ command, description: description || undefined }),
       });
       const data = await res.json();

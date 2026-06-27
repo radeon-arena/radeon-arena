@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getAdminAuth, adminEnabled } from "@/lib/firebaseAdmin";
 import type { Recipe } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -9,21 +8,6 @@ interface GenerateBody {
   description?: string;
   clusterOnly?: boolean;
   notes?: string;
-}
-
-/** Verify the caller is signed in. Mirrors the original gated endpoint. */
-async function requireUser(req: Request): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
-  const header = req.headers.get("authorization") ?? "";
-  const token = header.startsWith("Bearer ") ? header.slice(7).trim() : "";
-  if (!token) return { ok: false, status: 401, error: "Sign in to generate recipes" };
-  if (adminEnabled()) {
-    try {
-      await getAdminAuth()!.verifyIdToken(token);
-    } catch {
-      return { ok: false, status: 401, error: "Invalid or expired session" };
-    }
-  }
-  return { ok: true };
 }
 
 /** Best-effort structured recipe extraction from a raw serve command. */
@@ -78,11 +62,8 @@ function parseCommand(command: string, body: GenerateBody): { recipe: Recipe; va
   return { recipe, validationErrors: errors };
 }
 
-// POST /api/generate-recipe — gated: requires a signed-in user (Bearer token).
+// POST /api/generate-recipe — public recipe formatter (reads no data, no auth).
 export async function POST(req: Request) {
-  const auth = await requireUser(req);
-  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
-
   let body: GenerateBody;
   try {
     body = (await req.json()) as GenerateBody;

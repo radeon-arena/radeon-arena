@@ -1,5 +1,5 @@
-import { loadInferStationBenchmarks } from "../src/lib/inferstationData";
-const benchmarks = loadInferStationBenchmarks();
+import { loadBenchmarks } from "../src/lib/benchmarkData";
+const benchmarks = loadBenchmarks();
 const esc = (s: unknown) => s == null ? "\\N" : String(s).replace(/\\/g, "\\\\").replace(/\t/g, "\\t").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 const lines: string[] = [];
 for (const b of benchmarks) {

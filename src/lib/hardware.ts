@@ -10,13 +10,14 @@ export type Hardware = {
   label: string;
   short: string;
   sub: string;
+  disabled?: boolean;
   match: (gpu: string) => boolean;
 };
 
 export const HARDWARE: Hardware[] = [
   { key: "strix", label: "Strix Halo", short: "Strix Halo", sub: "Radeon 8060S · gfx1151", match: (g) => /strix|8060s|gfx1151/i.test(g) },
-  { key: "w7900", label: "Radeon PRO W7900", short: "W7900", sub: "RDNA3 · gfx1100", match: (g) => /w7900/i.test(g) },
-  { key: "r9700", label: "Radeon AI PRO R9700", short: "R9700", sub: "RDNA4 · gfx1200", match: (g) => /r9700/i.test(g) },
+  { key: "w7900", label: "Radeon PRO W7900", short: "W7900", sub: "RDNA3 · gfx1100", disabled: true, match: (g) => /w7900/i.test(g) },
+  { key: "r9700", label: "Radeon AI PRO R9700", short: "R9700", sub: "RDNA4 · gfx1200", disabled: true, match: (g) => /r9700/i.test(g) },
 ];
 
 export const DEFAULT_HW = HARDWARE[0].key;

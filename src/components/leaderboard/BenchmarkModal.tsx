@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import yaml from "js-yaml";
-import type { Benchmark } from "@/lib/types";
+import type { Benchmark, DiscussionPost } from "@/lib/types";
 import { fmtDate } from "@/lib/format";
 import { PROJECTS } from "@/lib/site";
+import { VerificationBadge } from "./VerificationBadge";
+import { authHeaders, getToken } from "@/lib/clientAuth";
 
 const HALO = PROJECTS.benchy; // radeonrun
 
@@ -92,7 +94,10 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
           <div className="space-y-6 px-6 py-5">
             {/* Measured by — automated source, not a person */}
             <section className="rounded-xl border border-ink-800 bg-ink-950/50 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Measured by</p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Measured by</p>
+                <VerificationBadge status={data.verificationStatus} />
+              </div>
               <div className="mt-2 flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink-700 text-zinc-300">
                   {/* automated/benchmark glyph, not an avatar */}
@@ -108,6 +113,23 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
                   </p>
                 </div>
               </div>
+              {data.verification && (
+                <div className="mt-3 rounded-lg border border-ink-700 bg-ink-950 p-3 text-xs text-zinc-400">
+                  <p>
+                    Verification: reported{" "}
+                    <span className="font-mono text-zinc-200">{data.verification.reportedTps ?? "—"}</span> vs measured{" "}
+                    <span className="font-mono text-zinc-200">{data.verification.measuredTps ?? "—"}</span> tok/s
+                    {typeof data.verification.deviationPct === "number" ? <> · Δ {data.verification.deviationPct}%</> : null}
+                  </p>
+                  {data.verification.runner && (
+                    <p className="mt-0.5 text-zinc-600">
+                      reran by {data.verification.runner}
+                      {data.verification.verifiedAt ? ` · ${fmtDate(data.verification.verifiedAt)}` : ""}
+                    </p>
+                  )}
+                  {data.verification.note && <p className="mt-0.5 text-zinc-500">{data.verification.note}</p>}
+                </div>
+              )}
             </section>
 
             {/* Model Information */}
@@ -122,6 +144,9 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
                 <Info label="Measured" value={fmtDate(data.submittedAt)} />
               </dl>
             </section>
+
+            {/* Reproducibility — the exact build that produced this number */}
+            <ReproducibilitySection benchmark={data} />
 
             {/* Actions */}
             <div className="flex flex-wrap gap-2">
@@ -173,6 +198,8 @@ cd radeonrun
 python run-recipe.py recipe.yaml`}
               </pre>
             </section>
+
+            <DiscussionSection benchmarkId={data.benchmarkId} />
           </div>
         )}
       </div>
@@ -189,5 +216,161 @@ function Info({ label, value, sub }: { label: string; value?: string; sub?: stri
         {sub ? <span className="block text-xs font-normal text-zinc-500">{sub}</span> : null}
       </dd>
     </div>
+  );
+}
+
+function pickStr(v: unknown): string | undefined {
+  return typeof v === "string" && v.trim() ? v.trim() : undefined;
+}
+
+/**
+ * Reproducibility provenance — surfaces the exact build (pinned container image,
+ * engine build commit, image digest, build flags) that produced this number.
+ * Radeon Arena is a performance leaderboard: each result is tied to the precise
+ * image that produced it, never a moving `:latest` tag. Renders only the fields
+ * present in the recipe, so older records degrade gracefully.
+ */
+function ReproducibilitySection({ benchmark }: { benchmark: Benchmark }) {
+  const fr = (benchmark.recipe?.fullRecipe ?? {}) as Record<string, unknown>;
+  const image = pickStr(fr.image) || pickStr(benchmark.recipe?.container);
+  const imageTag = pickStr(fr.imageTag);
+  const imageCommit = pickStr(fr.imageCommit);
+  const imageId = pickStr(fr.imageId);
+  const engineCommit = pickStr(fr.engineCommit);
+  const engineVersion = pickStr(fr.engineVersion);
+  const buildFlags = pickStr(fr.buildFlags);
+
+  const engineLine = [benchmark.runtime, engineVersion, engineCommit ? `@ ${engineCommit.slice(0, 12)}` : undefined]
+    .filter(Boolean)
+    .join(" ");
+
+  const rows: { label: string; value: string }[] = [];
+  if (image) rows.push({ label: "Container image", value: imageTag && !image.includes(":") ? `${image}:${imageTag}` : image });
+  if (imageCommit) rows.push({ label: "Image build commit", value: imageCommit });
+  if (imageId) rows.push({ label: "Image digest", value: imageId });
+  if (engineLine.trim()) rows.push({ label: "Engine", value: engineLine });
+  if (buildFlags) rows.push({ label: "Build flags", value: buildFlags });
+
+  if (rows.length === 0) return null;
+
+  return (
+    <section>
+      <h3 className="text-sm font-semibold text-radeon-300">Reproducibility</h3>
+      <p className="mt-1 text-xs text-zinc-500">
+        The exact build that produced this number — pinned image + engine commit, so the result reproduces from this recipe alone (never a moving <span className="font-mono">:latest</span> tag).
+      </p>
+      <dl className="mt-2 space-y-2 rounded-xl border border-ink-800 bg-ink-950/50 p-4">
+        {rows.map((r) => (
+          <Provenance key={r.label} label={r.label} value={r.value} />
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+function Provenance({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+      <dt className="shrink-0 text-xs text-zinc-500 sm:w-32">{label}</dt>
+      <dd className="flex min-w-0 flex-1 items-baseline gap-2">
+        <span className="break-all font-mono text-xs text-zinc-300">{value}</span>
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(value);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1200);
+            } catch {
+              /* clipboard unavailable */
+            }
+          }}
+          className="shrink-0 text-[11px] text-zinc-600 hover:text-radeon-300"
+          aria-label={`Copy ${label}`}
+        >
+          {copied ? "✓" : "copy"}
+        </button>
+      </dd>
+    </div>
+  );
+}
+
+function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
+  const [posts, setPosts] = useState<DiscussionPost[]>([]);
+  const [body, setBody] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetch(`/api/benchmarks/${encodeURIComponent(benchmarkId)}/discussion`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { posts: [] }))
+      .then((d: { posts: DiscussionPost[] }) => alive && setPosts(d.posts ?? []))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [benchmarkId]);
+
+  async function post() {
+    if (!body.trim()) return;
+    if (!getToken()) {
+      setErr("Sign in on the Submit tab to comment.");
+      return;
+    }
+    setBusy(true);
+    setErr(null);
+    try {
+      const res = await fetch(`/api/benchmarks/${encodeURIComponent(benchmarkId)}/discussion`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ body: body.trim() }),
+      });
+      const d = await res.json();
+      if (!res.ok) {
+        setErr(d.error ?? "Failed to post");
+        return;
+      }
+      setPosts((p) => [...p, d.post]);
+      setBody("");
+    } catch {
+      setErr("Network error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="border-t border-ink-800 pt-5">
+      <h3 className="text-sm font-semibold text-radeon-300">Discussion</h3>
+      <p className="mt-1 text-xs text-zinc-500">
+        Reproduction notes &amp; debate — especially for ⚠ repro-failed results, which stay on the board and are discussed, not removed.
+      </p>
+      <div className="mt-3 space-y-2">
+        {posts.length === 0 && <p className="text-xs text-zinc-600">No comments yet.</p>}
+        {posts.map((p) => (
+          <div key={p.id} className="rounded-lg border border-ink-800 bg-ink-950/50 p-3">
+            <p className="whitespace-pre-wrap text-xs text-zinc-300">{p.body}</p>
+            <p className="mt-1 text-[11px] text-zinc-600">
+              {p.author} · {fmtDate(p.createdAt)}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 flex gap-2">
+        <input
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && post()}
+          placeholder="Add a comment…"
+          className="flex-1 rounded-lg border border-ink-600 bg-ink-950 px-3 py-2 text-sm text-zinc-100"
+        />
+        <button onClick={post} disabled={busy || !body.trim()} className="btn-primary disabled:opacity-50">
+          Post
+        </button>
+      </div>
+      {err && <p className="mt-2 text-xs text-amber-400">{err}</p>}
+    </section>
   );
 }

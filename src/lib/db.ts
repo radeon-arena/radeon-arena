@@ -7,7 +7,7 @@ import { Pool, type PoolClient } from "pg";
  *
  * Returns null when DATABASE_URL is not configured, so callers transparently
  * fall back to the bundled dataset and the site still renders without a live
- * database. This mirrors the firebaseAdmin pattern.
+ * database.
  */
 let pool: Pool | null | undefined; // undefined = not yet initialised, null = disabled
 
