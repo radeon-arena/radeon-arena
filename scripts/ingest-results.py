@@ -42,6 +42,7 @@ WEB = os.path.dirname(HERE)
 RR = os.environ.get("RADEONRUN_DIR", os.path.join(os.path.dirname(WEB), "radeonrun"))
 RUNS_JSON = os.path.join(WEB, "src", "data", "runs.json")
 DAILY_FLEET_HOST = "ryzen-ai-max-395-03"
+RADEONRUN_HOST = "radeonrun-strix-halo"  # synthetic host slug for radeonrun-backed rows
 
 # logical engine -> ghcr image-name component (matches build.sh / run-recipe.py)
 ENGINE_IMAGE = {"llamacpp": "halo-llamacpp", "vllm": "halo-vllm", "vllm-main": "halo-vllm-main"}
@@ -148,7 +149,7 @@ def build_rows():
                 "schema_version": 0,
                 "run_date": run_date,
                 "host": {
-                    "slug": "radeonrun-strix-halo",
+                    "slug": RADEONRUN_HOST,
                     "name": "Strix Halo",
                     "vendor": "AMD",
                     "chip": "Strix Halo / Radeon 8060S (gfx1151)",
@@ -184,8 +185,13 @@ def main():
     fleet = web["runs"]
     new_rows, override_keys, skipped = build_rows()
 
-    kept, dropped = [], 0
+    kept, dropped, refreshed = [], 0, 0
     for r in fleet:
+        # Idempotent: drop rows from a previous ingest so re-running just
+        # regenerates them with the latest results.
+        if r["host"]["slug"] == RADEONRUN_HOST:
+            refreshed += 1
+            continue
         if r["host"]["slug"] == DAILY_FLEET_HOST:
             k = (norm_model(r["model"]["slug"]), norm_quant(r["model"]["quantization"]),
                  match_engine(r["engine"]["name"]))
@@ -198,6 +204,8 @@ def main():
     print(f"radeonrun configs ingested : {len(override_keys)}  (rows generated: {len(new_rows)})")
     if skipped:
         print(f"recipes without a result   : {skipped}")
+    if refreshed:
+        print(f"prior radeonrun rows dropped: {refreshed} (idempotent re-ingest)")
     print(f"daily-fleet rows overridden : {dropped}")
     print(f"fleet/regression rows kept  : {len(kept)}")
     print(f"merged total rows           : {len(merged)} (was {len(fleet)})")

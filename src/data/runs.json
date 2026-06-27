@@ -1,6 +1,6 @@
 {
   "source": "AMD Radeon (RDNA) real benchmarks on RadeonArena — public-weight models only + radeonrun results/strix (authoritative)",
-  "generated_at": "2026-06-27T13:19:18.077542+00:00",
+  "generated_at": "2026-06-27T14:24:13.762850+00:00",
   "runs": [
     {
       "schema_version": 0,
@@ -3800,7 +3800,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -3824,10 +3824,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffawq \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 6.69,
-      "ttft_ms": 19137.0,
+      "tg_toks_per_s": 9.2,
+      "ttft_ms": 13913.04,
       "tpot_ms": null,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
@@ -3835,11 +3835,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "a1dd422649",
-      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4"
+      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -3863,10 +3864,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffawq \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 12.12,
-      "ttft_ms": 42241.0,
+      "tg_toks_per_s": 12.29,
+      "ttft_ms": 41673.23,
       "tpot_ms": null,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
@@ -3874,11 +3875,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "377ab8857e",
-      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4"
+      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -3902,10 +3904,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffawq \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 12.3,
-      "ttft_ms": 104067.0,
+      "tg_toks_per_s": 12.2,
+      "ttft_ms": 104879.17,
       "tpot_ms": null,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
@@ -3913,11 +3915,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "3a47fa40b4",
-      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4"
+      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -3941,10 +3944,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\ --served-model-name diffawq \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 12.29,
-      "ttft_ms": 193515.0,
+      "tg_toks_per_s": 12.16,
+      "ttft_ms": 189348.36,
       "tpot_ms": null,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
@@ -3952,11 +3955,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "6d1432d9eb",
-      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4"
+      "source_url": "https://huggingface.co/cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -3980,10 +3984,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffusiongemma-26B-A4B-it \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffgemma \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 7.93,
-      "ttft_ms": 16134.0,
+      "tg_toks_per_s": 7.79,
+      "ttft_ms": 16440.41,
       "tpot_ms": null,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
@@ -3991,11 +3995,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "6c99cd8473",
-      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it"
+      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4019,10 +4024,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffusiongemma-26B-A4B-it \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffgemma \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 13.29,
-      "ttft_ms": 38529.0,
+      "tg_toks_per_s": 13.11,
+      "ttft_ms": 39044.49,
       "tpot_ms": null,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
@@ -4030,11 +4035,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "88d0ce6d2a",
-      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it"
+      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4058,10 +4064,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffusiongemma-26B-A4B-it \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffgemma \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 13.19,
-      "ttft_ms": 97046.0,
+      "tg_toks_per_s": 13.07,
+      "ttft_ms": 98017.89,
       "tpot_ms": null,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
@@ -4069,11 +4075,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "d0eb58afc9",
-      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it"
+      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4097,10 +4104,10 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffusiongemma-26B-A4B-it \\ --host 0.0.0.0 --port 8000 \\ --max-model-len 896 --max-num-seqs 4 \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
+      "command": "vllm serve /models/diffusiongemma-26B-A4B-it \\ --served-model-name diffgemma \\ --host {host} --port {port} \\ --max-model-len 896 --max-num-seqs {nseq} \\ --gpu-memory-utilization 0.6 \\ --generation-config vllm \\ --hf-overrides '{\"diffusion_sampler\":\"entropy_bound\",\"diffusion_entropy_bound\":0.1}' \\ --diffusion-config '{\"canvas_length\":256}'",
       "tg_test": "out128",
-      "tg_toks_per_s": 13.18,
-      "ttft_ms": 174968.0,
+      "tg_toks_per_s": 13.07,
+      "ttft_ms": 176346.31,
       "tpot_ms": null,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
@@ -4108,11 +4115,12 @@
       "image_tag": "92221485a",
       "image_commit": "92221485a",
       "id": "1686eec3ef",
-      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it"
+      "source_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "image_id": "sha256:1160b7a3cf7101c70f100b6352c1e61840774a3f6860d5f71af1d7dde98d7eca"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4136,22 +4144,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port {port} --served-model-name g26bawq --max-num-seqs {nseq} --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 23.16,
-      "ttft_ms": 125.36,
-      "tpot_ms": 42.52,
+      "tg_toks_per_s": 42.19,
+      "ttft_ms": 126.51,
+      "tpot_ms": 22.88,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "37bda50b56",
-      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit"
+      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4175,22 +4184,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port {port} --served-model-name g26bawq --max-num-seqs {nseq} --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 64.14,
-      "ttft_ms": 461.44,
-      "tpot_ms": 59.08,
+      "tg_toks_per_s": 97.37,
+      "ttft_ms": 257.98,
+      "tpot_ms": 39.18,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "6186f74ce3",
-      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit"
+      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4214,22 +4224,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port {port} --served-model-name g26bawq --max-num-seqs {nseq} --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 171.88,
-      "ttft_ms": 348.8,
-      "tpot_ms": 90.58,
+      "tg_toks_per_s": 207.9,
+      "ttft_ms": 295.27,
+      "tpot_ms": 74.9,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "55b8924cb8",
-      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit"
+      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4253,18 +4264,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port {port} --served-model-name g26bawq --max-num-seqs {nseq} --dtype float16 --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 236.91,
-      "ttft_ms": 676.36,
-      "tpot_ms": 130.54,
+      "tg_toks_per_s": 432.09,
+      "ttft_ms": 433.96,
+      "tpot_ms": 71.05,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "c36c17fa98",
-      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit"
+      "source_url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -4424,7 +4436,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4448,22 +4460,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port {port} --served-model-name g26b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 22.91,
-      "ttft_ms": 129.42,
-      "tpot_ms": 42.97,
+      "tg_toks_per_s": 24.68,
+      "ttft_ms": 134.27,
+      "tpot_ms": 39.78,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "3eb3c34eb6",
-      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it"
+      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4487,22 +4500,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port {port} --served-model-name g26b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 49.36,
-      "ttft_ms": 497.84,
-      "tpot_ms": 77.6,
+      "tg_toks_per_s": 50.65,
+      "ttft_ms": 482.54,
+      "tpot_ms": 75.58,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "816bc80098",
-      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it"
+      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4526,22 +4540,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port {port} --served-model-name g26b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 175.88,
-      "ttft_ms": 619.51,
-      "tpot_ms": 86.38,
+      "tg_toks_per_s": 194.69,
+      "ttft_ms": 346.84,
+      "tpot_ms": 79.86,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "25ec22a923",
-      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it"
+      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4565,18 +4580,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/gemma-4-26B-A4B-it --host 0.0.0.0 --port {port} --served-model-name g26b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 231.21,
-      "ttft_ms": 1019.62,
-      "tpot_ms": 131.28,
+      "tg_toks_per_s": 394.8,
+      "ttft_ms": 447.87,
+      "tpot_ms": 77.93,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "1936bd9527",
-      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it"
+      "source_url": "https://huggingface.co/google/gemma-4-26b-a4b-it",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -4892,7 +4908,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4916,22 +4932,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name g31q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 3.08,
-      "ttft_ms": 388.95,
-      "tpot_ms": 324.52,
+      "tg_toks_per_s": 6.63,
+      "ttft_ms": 285.12,
+      "tpot_ms": 149.8,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "c96e122d65",
-      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4955,22 +4972,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name g31q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 11.36,
-      "ttft_ms": 732.07,
-      "tpot_ms": 348.55,
+      "tg_toks_per_s": 19.45,
+      "ttft_ms": 602.91,
+      "tpot_ms": 202.08,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "d1ab51ef9a",
-      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -4994,22 +5012,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name g31q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 34.43,
-      "ttft_ms": 1600.06,
-      "tpot_ms": 454.04,
+      "tg_toks_per_s": 52.9,
+      "ttft_ms": 1174.88,
+      "tpot_ms": 294.22,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "bcdd861f80",
-      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -5033,18 +5052,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name g31q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 52.96,
-      "ttft_ms": 2489.19,
-      "tpot_ms": 587.23,
+      "tg_toks_per_s": 92.98,
+      "ttft_ms": 1768.24,
+      "tpot_ms": 331.71,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "19ff34c828",
-      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -6023,7 +6043,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -6047,22 +6067,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port {port} --served-model-name q30b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 14.46,
-      "ttft_ms": 180.87,
-      "tpot_ms": 68.27,
+      "tg_toks_per_s": 25.28,
+      "ttft_ms": 156.05,
+      "tpot_ms": 38.63,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "a5dd192479",
-      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -6086,22 +6107,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port {port} --served-model-name q30b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 29.19,
-      "ttft_ms": 438.65,
-      "tpot_ms": 134.4,
+      "tg_toks_per_s": 46.05,
+      "ttft_ms": 261.21,
+      "tpot_ms": 85.31,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "c515613559",
-      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -6125,22 +6147,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port {port} --served-model-name q30b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 138.66,
-      "ttft_ms": 779.86,
-      "tpot_ms": 109.59,
+      "tg_toks_per_s": 226.32,
+      "ttft_ms": 594.84,
+      "tpot_ms": 66.28,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "bdc9150872",
-      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -6164,18 +6187,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3-30B-A3B-bf16 --host 0.0.0.0 --port {port} --served-model-name q30b --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 253.21,
-      "ttft_ms": 662.53,
-      "tpot_ms": 121.64,
+      "tg_toks_per_s": 379.38,
+      "ttft_ms": 404.26,
+      "tpot_ms": 81.65,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "e6c49682f9",
-      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -8051,7 +8075,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8075,22 +8099,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port {port} --served-model-name q27b --max-num-seqs {nseq} --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.9",
       "tg_test": "out128",
-      "tg_toks_per_s": 4.3,
-      "ttft_ms": 946.91,
-      "tpot_ms": 226.73,
+      "tg_toks_per_s": 4.29,
+      "ttft_ms": 918.54,
+      "tpot_ms": 227.53,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "8fd55228ec",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8114,22 +8139,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port {port} --served-model-name q27b --max-num-seqs {nseq} --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.9",
       "tg_test": "out128",
-      "tg_toks_per_s": 14.84,
-      "ttft_ms": 3111.06,
-      "tpot_ms": 246.15,
+      "tg_toks_per_s": 14.87,
+      "ttft_ms": 3750.58,
+      "tpot_ms": 240.31,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "ea4ea1dc0a",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8153,22 +8179,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port {port} --served-model-name q27b --max-num-seqs {nseq} --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.9",
       "tg_test": "out128",
-      "tg_toks_per_s": 37.28,
-      "ttft_ms": 17452.91,
-      "tpot_ms": 293.35,
+      "tg_toks_per_s": 38.78,
+      "ttft_ms": 10165.26,
+      "tpot_ms": 331.04,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "f44e34744a",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8192,18 +8219,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B --host 0.0.0.0 --port {port} --served-model-name q27b --max-num-seqs {nseq} --dtype bfloat16 --max-model-len 2304 --gpu-memory-utilization 0.9",
       "tg_test": "out128",
-      "tg_toks_per_s": 51.57,
-      "ttft_ms": 26363.45,
-      "tpot_ms": 415.82,
+      "tg_toks_per_s": 52.85,
+      "ttft_ms": 18945.35,
+      "tpot_ms": 452.13,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "dab475b951",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-27B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -8519,7 +8547,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8543,22 +8571,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q27q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 4.05,
-      "ttft_ms": 1223.03,
-      "tpot_ms": 238.92,
+      "tg_toks_per_s": 7.64,
+      "ttft_ms": 1205.4,
+      "tpot_ms": 122.36,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "ce3f55efd6",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8582,22 +8611,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q27q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 14.16,
-      "ttft_ms": 4873.71,
-      "tpot_ms": 246.42,
+      "tg_toks_per_s": 20.93,
+      "ttft_ms": 3772.26,
+      "tpot_ms": 162.56,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "620c7c08d4",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8621,22 +8651,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q27q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 35.93,
-      "ttft_ms": 15392.0,
-      "tpot_ms": 326.53,
+      "tg_toks_per_s": 39.12,
+      "ttft_ms": 11464.45,
+      "tpot_ms": 318.2,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "e9f9fa45b3",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -8660,18 +8691,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-27B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q27q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 48.51,
-      "ttft_ms": 29247.11,
-      "tpot_ms": 432.75,
+      "tg_toks_per_s": 52.15,
+      "ttft_ms": 21024.67,
+      "tpot_ms": 445.03,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "99912a47fe",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-27B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -8987,7 +9019,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9011,22 +9043,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port {port} --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --served-model-name qwen36-35b",
       "tg_test": "out128",
-      "tg_toks_per_s": 14.76,
-      "ttft_ms": 530.65,
-      "tpot_ms": 64.11,
+      "tg_toks_per_s": 17.47,
+      "ttft_ms": 465.55,
+      "tpot_ms": 54.02,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "f24b5c0131",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9050,22 +9083,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port {port} --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --served-model-name qwen36-35b",
       "tg_test": "out128",
-      "tg_toks_per_s": 34.15,
-      "ttft_ms": 1676.67,
-      "tpot_ms": 104.52,
+      "tg_toks_per_s": 39.95,
+      "ttft_ms": 1171.87,
+      "tpot_ms": 91.48,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "45dc6586b8",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9089,22 +9123,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port {port} --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --served-model-name qwen36-35b",
       "tg_test": "out128",
-      "tg_toks_per_s": 83.27,
-      "ttft_ms": 5254.78,
-      "tpot_ms": 151.75,
+      "tg_toks_per_s": 90.3,
+      "ttft_ms": 3091.09,
+      "tpot_ms": 152.21,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "ced5d60395",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9128,18 +9163,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port 8000 --max-num-seqs 32 --dtype bfloat16 --attention-backend TRITON_ATTN",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B --host 0.0.0.0 --port {port} --max-num-seqs {nseq} --dtype bfloat16 --attention-backend TRITON_ATTN --served-model-name qwen36-35b",
       "tg_test": "out128",
-      "tg_toks_per_s": 122.01,
-      "ttft_ms": 7504.52,
-      "tpot_ms": 203.98,
+      "tg_toks_per_s": 123.16,
+      "ttft_ms": 5590.65,
+      "tpot_ms": 213.48,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "f823a104e8",
-      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B"
+      "source_url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
@@ -9299,7 +9335,7 @@
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9323,22 +9359,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q35q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 17.58,
-      "ttft_ms": 369.3,
-      "tpot_ms": 54.42,
+      "tg_toks_per_s": 30.87,
+      "ttft_ms": 374.18,
+      "tpot_ms": 29.7,
       "concurrency": 1,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "ff84f55a67",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9362,22 +9399,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q35q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 49.06,
-      "ttft_ms": 954.82,
-      "tpot_ms": 74.33,
+      "tg_toks_per_s": 68.62,
+      "ttft_ms": 936.7,
+      "tpot_ms": 51.26,
       "concurrency": 4,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "ff1e68ef97",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9401,22 +9439,23 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q35q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 106.62,
-      "ttft_ms": 4399.48,
-      "tpot_ms": 116.14,
+      "tg_toks_per_s": 112.79,
+      "ttft_ms": 2622.44,
+      "tpot_ms": 121.05,
       "concurrency": 16,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "557cf9199a",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
-      "run_date": "2026-06-20",
+      "run_date": "2026-06-27",
       "host": {
         "slug": "radeonrun-strix-halo",
         "name": "Strix Halo",
@@ -9440,18 +9479,19 @@
         "backend": "ROCm/HIP · TRITON_ATTN",
         "build_flags": null
       },
-      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port 8000 --max-num-seqs 32 --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
+      "command": "vllm serve /models/Qwen3.6-35B-A3B-Quark-W8A8-INT8 --host 0.0.0.0 --port {port} --served-model-name q35q --max-num-seqs {nseq} --quantization quark --max-model-len 2304 --gpu-memory-utilization 0.85",
       "tg_test": "out128",
-      "tg_toks_per_s": 149.46,
-      "ttft_ms": 6861.24,
-      "tpot_ms": 160.69,
+      "tg_toks_per_s": 154.52,
+      "ttft_ms": 4785.78,
+      "tpot_ms": 167.91,
       "concurrency": 32,
       "scenario": "serve-stream-in512-out128",
       "image": "ghcr.io/radeon-arena/halo-vllm:f5fa386fe",
       "image_tag": "f5fa386fe",
       "image_commit": "f5fa386fe",
       "id": "e5bafd7b0c",
-      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8"
+      "source_url": "https://huggingface.co/nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8",
+      "image_id": "sha256:dbb87b2120d10b65718ae2447ab1afb726f9d7fb1705ce7c5bb112ef4917da61"
     },
     {
       "schema_version": 0,
