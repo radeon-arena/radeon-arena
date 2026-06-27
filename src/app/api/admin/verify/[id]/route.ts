@@ -7,6 +7,18 @@ import type { Benchmark, VerificationRecord, VerificationStatus } from "@/lib/ty
 export const dynamic = "force-dynamic";
 
 const DEFAULT_TOLERANCE = Number(process.env.VERIFY_TOLERANCE_PCT ?? "5");
+const RUNNER_TIMEOUT_MS = 15_000;
+
+/** Only http(s) runner endpoints are honored (guards against a mistyped/garbage
+ * RUNNER_VERIFY_URL; the URL is operator-set env, not user input). */
+function isHttpUrl(u: string): boolean {
+  try {
+    const p = new URL(u).protocol;
+    return p === "http:" || p === "https:";
+  } catch {
+    return false;
+  }
+}
 
 /** Single-stream decode tok/s, the anchor metric used for verification. */
 function decodeTps(b: Benchmark): number {
@@ -58,10 +70,13 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 
   // Auto rerun via a configured runner service (radeonrun runner endpoint).
   const runnerUrl = process.env.RUNNER_VERIFY_URL;
-  if (measuredTps === undefined && !body.status && runnerUrl) {
+  if (measuredTps === undefined && !body.status && runnerUrl && isHttpUrl(runnerUrl)) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), RUNNER_TIMEOUT_MS);
     try {
       const r = await fetch(runnerUrl, {
         method: "POST",
+        signal: ctrl.signal,
         headers: {
           "content-type": "application/json",
           ...(process.env.RUNNER_TOKEN ? { authorization: `Bearer ${process.env.RUNNER_TOKEN}` } : {}),
@@ -79,7 +94,9 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         runner = out.runner ?? "radeonrun";
       }
     } catch {
-      /* runner unreachable → fall through to manual/pending */
+      /* runner unreachable / timed out → fall through to manual/pending */
+    } finally {
+      clearTimeout(timer);
     }
   }
 
