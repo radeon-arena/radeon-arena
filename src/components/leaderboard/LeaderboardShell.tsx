@@ -10,7 +10,7 @@ import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { HowToView } from "@/components/leaderboard/HowToView";
 import { PROJECTS } from "@/lib/site";
 import { HARDWARE } from "@/lib/hardware";
-import { TABS, type TabKey } from "@/lib/tabs";
+import { VISIBLE_TABS, type TabKey } from "@/lib/tabs";
 
 function TabIcon({ k }: { k: TabKey }) {
   const common = { viewBox: "0 0 24 24", className: "h-4 w-4", fill: "none", stroke: "currentColor", strokeWidth: 1.8 } as const;
@@ -89,7 +89,7 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
 
       {/* Tab nav */}
       <div className="thin-scroll mt-4 flex gap-2 overflow-x-auto border-t border-ink-800 pt-4 pb-1">
-        {TABS.map((t) => (
+        {VISIBLE_TABS.map((t) => (
           <Link
             key={t.key}
             href={`/${hw}/${t.key}`}

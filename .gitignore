@@ -35,6 +35,15 @@ service-account*.json
 *.tsbuildinfo
 next-env.d.ts
 
+# generated local snapshot previews (the live /static/snapshot is computed from
+# runs.json at runtime; these are only written by `pnpm snapshot` for local dev)
+/snapshot.sample.json
+/carousel.sample.json
+
+# python (scripts/ingest-results.py)
+__pycache__/
+*.pyc
+
 # editor
 .vscode/
 .idea/
