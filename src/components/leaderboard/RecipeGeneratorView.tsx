@@ -15,6 +15,7 @@ export function RecipeGeneratorView() {
   const [loading, setLoading] = useState(false);
   const [yamlOut, setYamlOut] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
   async function generate() {
@@ -70,10 +71,18 @@ export function RecipeGeneratorView() {
           <span className="text-xs text-zinc-500">recipe.yaml</span>
           {yamlOut && (
             <button
-              onClick={() => navigator.clipboard?.writeText(yamlOut)}
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(yamlOut);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1500);
+                } catch {
+                  setMessage("Clipboard unavailable — select the text and copy manually.");
+                }
+              }}
               className="text-xs text-radeon-400 hover:text-radeon-300"
             >
-              Copy
+              {copied ? "Copied ✓" : "Copy"}
             </button>
           )}
         </div>

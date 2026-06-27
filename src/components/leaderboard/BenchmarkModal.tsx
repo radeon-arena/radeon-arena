@@ -298,6 +298,7 @@ function Provenance({ label, value }: { label: string; value: string }) {
 
 function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
   const [posts, setPosts] = useState<DiscussionPost[]>([]);
+  const [enabled, setEnabled] = useState(true);
   const [body, setBody] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -305,8 +306,12 @@ function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
   useEffect(() => {
     let alive = true;
     fetch(`/api/benchmarks/${encodeURIComponent(benchmarkId)}/discussion`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : { posts: [] }))
-      .then((d: { posts: DiscussionPost[] }) => alive && setPosts(d.posts ?? []))
+      .then((r) => (r.ok ? r.json() : { posts: [], enabled: false }))
+      .then((d: { posts?: DiscussionPost[]; enabled?: boolean }) => {
+        if (!alive) return;
+        setPosts(d.posts ?? []);
+        if (typeof d.enabled === "boolean") setEnabled(d.enabled);
+      })
       .catch(() => {});
     return () => {
       alive = false;
@@ -348,7 +353,7 @@ function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
         Reproduction notes &amp; debate — especially for ⚠ repro-failed results, which stay on the board and are discussed, not removed.
       </p>
       <div className="mt-3 space-y-2">
-        {posts.length === 0 && <p className="text-xs text-zinc-600">No comments yet.</p>}
+        {posts.length === 0 && enabled && <p className="text-xs text-zinc-600">No comments yet.</p>}
         {posts.map((p) => (
           <div key={p.id} className="rounded-lg border border-ink-800 bg-ink-950/50 p-3">
             <p className="whitespace-pre-wrap text-xs text-zinc-300">{p.body}</p>
@@ -358,19 +363,27 @@ function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
           </div>
         ))}
       </div>
-      <div className="mt-3 flex gap-2">
-        <input
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && post()}
-          placeholder="Add a comment…"
-          className="flex-1 rounded-lg border border-ink-600 bg-ink-950 px-3 py-2 text-sm text-zinc-100"
-        />
-        <button onClick={post} disabled={busy || !body.trim()} className="btn-primary disabled:opacity-50">
-          Post
-        </button>
-      </div>
-      {err && <p className="mt-2 text-xs text-amber-400">{err}</p>}
+      {enabled ? (
+        <>
+          <div className="mt-3 flex gap-2">
+            <input
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && post()}
+              placeholder="Add a comment…"
+              className="flex-1 rounded-lg border border-ink-600 bg-ink-950 px-3 py-2 text-sm text-zinc-100"
+            />
+            <button onClick={post} disabled={busy || !body.trim()} className="btn-primary disabled:opacity-50">
+              Post
+            </button>
+          </div>
+          {err && <p className="mt-2 text-xs text-amber-400">{err}</p>}
+        </>
+      ) : (
+        <p className="mt-3 rounded-lg border border-ink-800 bg-ink-950/50 p-3 text-xs text-zinc-500">
+          Discussions require the database — this instance is running read-only on the bundled dataset, so commenting is disabled here.
+        </p>
+      )}
     </section>
   );
 }

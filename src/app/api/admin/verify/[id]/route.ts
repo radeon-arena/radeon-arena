@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { pgEnabled } from "@/lib/db";
 import { getBenchmarkPg, updateVerificationPg } from "@/lib/pgSource";
+import { invalidateSnapshot } from "@/lib/dataSource";
 import type { Benchmark, VerificationRecord, VerificationStatus } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -136,5 +137,6 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   }
 
   const updated = await updateVerificationPg(params.id, rec);
+  invalidateSnapshot();
   return NextResponse.json({ id: bm.id, verification: rec, benchmark: updated });
 }
