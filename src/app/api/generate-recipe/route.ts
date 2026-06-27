@@ -16,7 +16,7 @@ function parseCommand(command: string, body: GenerateBody): { recipe: Recipe; va
   const lower = command.toLowerCase();
 
   let runtime = "vLLM";
-  // Default to real, public ROCm container images.
+  // Default to real, public ROCm container images (pin a specific tag/commit for a reproducible recipe).
   let container = "rocm/vllm:latest";
   if (lower.includes("sglang")) {
     runtime = "SGLang";

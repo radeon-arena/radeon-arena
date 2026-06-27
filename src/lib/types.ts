@@ -81,7 +81,7 @@ export interface DiscussionPost {
   createdAt: string;
 }
 
-/** A full benchmark submission document (Firestore: `benchmarks/{id}`). */
+/** A full benchmark submission document. */
 export interface Benchmark {
   id: string;
   benchmarkId: string;

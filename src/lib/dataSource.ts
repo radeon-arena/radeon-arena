@@ -34,3 +34,10 @@ export async function getSnapshot(): Promise<LeaderboardSnapshot> {
   snapCache = { at: Date.now(), data };
   return data;
 }
+
+/** Drop the cached snapshot so the next read rebuilds it. Call after any write
+ * (submit / verify) so new or re-graded results appear without waiting out the
+ * refresh interval. */
+export function invalidateSnapshot(): void {
+  snapCache = null;
+}

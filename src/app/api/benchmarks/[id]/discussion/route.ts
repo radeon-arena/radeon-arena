@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 // and are opened for debate (DESIGN.md §4).
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
   const posts = await getDiscussions(params.id);
-  return NextResponse.json({ posts });
+  return NextResponse.json({ posts, enabled: pgEnabled() });
 }
 
 // POST /api/benchmarks/[id]/discussion — add a post (signed-in users only).

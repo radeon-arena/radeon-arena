@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 import { pgEnabled } from "@/lib/db";
 import { insertBenchmarkPg } from "@/lib/pgSource";
+import { invalidateSnapshot } from "@/lib/dataSource";
 import type { Benchmark, BenchTest, Recipe } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -152,5 +153,6 @@ export async function POST(req: Request) {
   };
 
   await insertBenchmarkPg(benchmark);
+  invalidateSnapshot();
   return NextResponse.json({ id, status: "pending" }, { status: 201 });
 }
