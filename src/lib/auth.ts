@@ -1,10 +1,23 @@
 import "server-only";
+import { createHash, timingSafeEqual } from "crypto";
 
 export interface AuthedUser {
   uid: string;
   email?: string;
   name?: string;
   isAdmin: boolean;
+}
+
+/**
+ * Constant-time token comparison. Both sides are SHA-256'd to a fixed 32-byte
+ * digest first, so neither the result nor the comparison time leaks the token
+ * length or a matching prefix (a plain `===` short-circuits on the first
+ * differing byte, which is a timing side-channel).
+ */
+function tokenMatches(provided: string, expected: string): boolean {
+  const a = createHash("sha256").update(provided).digest();
+  const b = createHash("sha256").update(expected).digest();
+  return timingSafeEqual(a, b);
 }
 
 function bearer(req: Request): string | null {
@@ -30,12 +43,12 @@ export async function authenticate(req: Request): Promise<AuthedUser | null> {
   const author = req.headers.get("x-author")?.slice(0, 80).trim() || undefined;
 
   const adminToken = process.env.ADMIN_TOKEN;
-  if (adminToken && token === adminToken) {
+  if (adminToken && tokenMatches(token, adminToken)) {
     return { uid: "admin", email: "admin@local", name: author ?? "Admin", isAdmin: true };
   }
 
   const submitToken = process.env.SUBMIT_TOKEN;
-  if (submitToken && token === submitToken) {
+  if (submitToken && tokenMatches(token, submitToken)) {
     return { uid: "community", name: author ?? "Community contributor", isAdmin: false };
   }
 

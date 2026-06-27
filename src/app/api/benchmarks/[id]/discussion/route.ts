@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
+import { rateLimit, clientIp } from "@/lib/rateLimit";
 import { pgEnabled } from "@/lib/db";
 import { getDiscussions, addDiscussion } from "@/lib/discussions";
 
@@ -17,6 +18,9 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
 export async function POST(req: Request, { params }: { params: { id: string } }) {
   const user = await requireUser(req);
   if (!user) return NextResponse.json({ error: "Sign in to comment" }, { status: 401 });
+  // 30 comments / 10 min / client.
+  if (!rateLimit(`discussion:${clientIp(req)}`, 30, 10 * 60 * 1000))
+    return NextResponse.json({ error: "Rate limit exceeded \u2014 try again later" }, { status: 429 });
   if (!pgEnabled())
     return NextResponse.json({ error: "Discussion requires a configured database" }, { status: 503 });
 

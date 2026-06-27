@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { requireUser } from "@/lib/auth";
+import { rateLimit, clientIp } from "@/lib/rateLimit";
 import { pgEnabled } from "@/lib/db";
 import { insertBenchmarkPg } from "@/lib/pgSource";
 import type { Benchmark, BenchTest, Recipe } from "@/lib/types";
@@ -46,6 +47,9 @@ interface SubmitBody {
 export async function POST(req: Request) {
   const user = await requireUser(req);
   if (!user) return NextResponse.json({ error: "Sign in to submit a benchmark" }, { status: 401 });
+  // 20 submissions / hour / client — a token is shared, so throttle the flood.
+  if (!rateLimit(`submit:${clientIp(req)}`, 20, 60 * 60 * 1000))
+    return NextResponse.json({ error: "Rate limit exceeded \u2014 try again later" }, { status: 429 });
   if (!pgEnabled())
     return NextResponse.json({ error: "Submissions require a configured database" }, { status: 503 });
 
@@ -70,8 +74,23 @@ export async function POST(req: Request) {
   if (missing.length)
     return NextResponse.json({ error: `Missing fields: ${missing.join(", ")}` }, { status: 400 });
 
+  // Cap string fields at the trust boundary (avoid oversized payloads / DB bloat).
+  const MAX_LEN: Record<string, number> = {
+    modelName: 200, modelFullPath: 300, modelHuggingFaceUrl: 500, runtime: 100,
+    backend: 100, quantization: 100, gpu: 200, dockerImage: 300,
+    frameworkVersion: 100, frameworkCommit: 100, buildFlags: 1000,
+    serveCommand: 8000, benchCommand: 8000, scenario: 200,
+  };
+  for (const [k, max] of Object.entries(MAX_LEN)) {
+    const v = (body as unknown as Record<string, unknown>)[k];
+    if (typeof v === "string" && v.length > max)
+      return NextResponse.json({ error: `${k} exceeds ${max} characters` }, { status: 400 });
+  }
+
   if (!Array.isArray(body.tests) || body.tests.length === 0)
     return NextResponse.json({ error: "At least one test result is required" }, { status: 400 });
+  if (body.tests.length > 64)
+    return NextResponse.json({ error: "Too many test results (max 64)" }, { status: 400 });
 
   const tests: BenchTest[] = body.tests
     .filter((t) => t && t.testName && Number.isFinite(t.tokensPerSec))
