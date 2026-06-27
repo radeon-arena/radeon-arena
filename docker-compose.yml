@@ -16,8 +16,9 @@ services:
       # radeon-arena Postgres (self-hosted). When set, the app reads benchmarks
       # from Postgres; unset, it falls back to the bundled dataset.
       - DATABASE_URL=postgres://radeon:${POSTGRES_PASSWORD:-radeon_arena_pw}@db:5432/radeon_arena
-      # Firebase is optional and now superseded by Postgres.
-      # - FIREBASE_SERVICE_ACCOUNT=
+      # Token auth (no Firebase): ADMIN_TOKEN gates /admin + verify; SUBMIT_TOKEN gates submit/comment.
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
+      - SUBMIT_TOKEN=${SUBMIT_TOKEN:-}
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s

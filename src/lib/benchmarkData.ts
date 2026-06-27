@@ -1,11 +1,11 @@
-// Loads REAL benchmark data from InferStation (RDNA-only export) and maps it to
-// the Radeon Arena Benchmark model. Every number here is a measured result —
-// there is no synthetic/seed data in this project.
+// Loads REAL benchmark data (RDNA-only) and maps it to the Radeon Arena
+// Benchmark model. Every number here is a measured result — there is no
+// synthetic/seed data in this project.
 //
-// Source: InferStation automated daily benchmarks (llama-benchy / stream client)
+// Source: RadeonArena automated benchmarks (in512/out128 streaming).
 // Filtered to AMD RDNA devices only (Strix Halo / Radeon 8060S gfx1151,
 // Radeon AI PRO R9700 gfx1200). NVIDIA and CDNA/Instinct rows are excluded.
-import rawData from "@/data/inferstation-runs.json";
+import rawData from "@/data/runs.json";
 import type { Benchmark, BenchTest, Recipe } from "./types";
 
 interface RawRun {
@@ -24,7 +24,10 @@ interface RawRun {
   seq_test?: string | null;
   command?: string;
   harness?: string;
+  image?: string;
   image_tag?: string;
+  image_commit?: string; // engine build commit baked into the image (/app/commit.txt)
+  image_id?: string; // immutable docker image digest (sha256:...)
   notes?: string;
   id?: string;
 }
@@ -53,7 +56,7 @@ function publisherOf(modelName: string): string {
   return modelName.split(/[-\s]/)[0];
 }
 
-/** A clean, human-readable GPU label from the InferStation host record. */
+/** A clean, human-readable GPU label from the host record. */
 function gpuLabel(host: RawRun["host"]): string {
   const chip = host.chip || host.name;
   if (/strix\s*halo/i.test(chip) || /8060s/i.test(chip)) return "Radeon 8060S (Strix Halo)";
@@ -83,8 +86,8 @@ function hashId(s: string): string {
 
 let cache: Benchmark[] | null = null;
 
-/** Build the Benchmark[] from the real InferStation RDNA dataset. */
-export function loadInferStationBenchmarks(): Benchmark[] {
+/** Build the Benchmark[] from the real RadeonArena RDNA dataset. */
+export function loadBenchmarks(): Benchmark[] {
   if (cache) return cache;
 
   // Group runs that belong to the same (device, model, engine+backend, quant)
@@ -133,7 +136,7 @@ export function loadInferStationBenchmarks(): Benchmark[] {
       const r = byTest.get(tkey)!;
       const c = r.concurrency ?? r.batch ?? 1;
       // input-length suffix for sweeps that vary it (regression suite); the
-      // InferStation daily fleet has no seq_test, so its labels are unchanged.
+      // daily fleet has no seq_test, so its labels are unchanged.
       const seq = r.seq_test ? ` ${r.seq_test}` : "";
       const pp = num(r.pp_toks_per_s);
       const tg = num(r.tg_toks_per_s);
@@ -171,7 +174,7 @@ export function loadInferStationBenchmarks(): Benchmark[] {
       name: `${sample.model.name} · ${runtime}${backend ? ` (${backend})` : ""} · ${quant}`,
       version: 1,
       command: sample.command || "",
-      container: sample.image_tag ? `inferstation/${sample.engine.slug}:${sample.image_tag}` : undefined,
+      container: sample.image || (sample.image_tag ? `radeon-arena/${sample.engine.slug}:${sample.image_tag}` : undefined),
       model: sample.model.source_url || undefined,
       description: `${runtime}${backend ? ` / ${backend}` : ""} serving of ${sample.model.name} (${quant}) on ${gpu}. ${provenance}`,
       fullRecipe: {
@@ -183,7 +186,10 @@ export function loadInferStationBenchmarks(): Benchmark[] {
         gpu,
         quantization: quant,
         scenario: sample.scenario,
-        image: sample.image_tag,
+        image: sample.image || sample.image_tag,
+        imageTag: sample.image_tag,
+        imageCommit: sample.image_commit,
+        imageId: sample.image_id,
       },
     };
 
@@ -201,7 +207,7 @@ export function loadInferStationBenchmarks(): Benchmark[] {
       quantization: quant,
       clusterSize: 1,
       gpu,
-      benchmarkType: "inferstation",
+      benchmarkType: "radeon-arena",
       recipeType: runtime.toLowerCase().includes("vllm") ? "rocm-vllm-docker" : "manual",
       recipe,
       recipeApproved: true,

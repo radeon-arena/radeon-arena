@@ -1,6 +1,6 @@
-// Import the current InferStation-derived benchmarks into Postgres.
+// Import the current RadeonArena benchmarks into Postgres.
 //
-// Reuses loadInferStationBenchmarks() so the rows in PG are byte-identical to
+// Reuses loadBenchmarks() so the rows in PG are byte-identical to
 // what the site renders today from the bundled JSON — this is the one-time
 // migration from "static JSON" to "live database".
 //
@@ -10,7 +10,7 @@
 // Idempotent: upserts by id, so re-running refreshes rows in place.
 
 import { Pool } from "pg";
-import { loadInferStationBenchmarks } from "../src/lib/inferstationData";
+import { loadBenchmarks } from "../src/lib/benchmarkData";
 
 async function main() {
   const url = process.env.DATABASE_URL;
@@ -19,7 +19,7 @@ async function main() {
     process.exit(1);
   }
 
-  const benchmarks = loadInferStationBenchmarks();
+  const benchmarks = loadBenchmarks();
   console.log(`Loaded ${benchmarks.length} benchmarks from the bundled dataset.`);
 
   const pool = new Pool({ connectionString: url });

@@ -5,6 +5,7 @@ import type { LeaderboardSnapshot, SnapshotEntry } from "@/lib/types";
 import { fmtTps, fmtMs } from "@/lib/format";
 import { hwMatches, hwLabel } from "@/lib/hardware";
 import { BenchmarkModal } from "./BenchmarkModal";
+import { VerificationBadge } from "./VerificationBadge";
 
 // ── Test-name parsing ────────────────────────────────────────────────────────
 // Raw names look like "tg128 (c1)", "pp512 (c16)", "tg128 (c1) in4096".
@@ -92,6 +93,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
   const [runtimeFilter, setRuntimeFilter] = useState("all");
   const [clusterFilter, setClusterFilter] = useState<string>("all");
   const [quantFilter, setQuantFilter] = useState("all");
+  const [verifyFilter, setVerifyFilter] = useState("all");
   const [sortKey, setSortKey] = useState<"rank" | "tps">("rank");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -161,12 +163,13 @@ export function LeaderboardView({ hw }: { hw: string }) {
     if (runtimeFilter !== "all") r = r.filter((e) => e.runtime === runtimeFilter);
     if (clusterFilter !== "all") r = r.filter((e) => String(e.clusterSize) === clusterFilter);
     if (quantFilter !== "all") r = r.filter((e) => e.quantization === quantFilter);
+    if (verifyFilter !== "all") r = r.filter((e) => (e.verificationStatus ?? "self") === verifyFilter);
     const sorted = [...r].sort((a, b) => {
       const v = sortKey === "rank" ? a.rank - b.rank : (b.tokensPerSec ?? 0) - (a.tokensPerSec ?? 0);
       return sortDir === "asc" ? v : -v;
     });
     return sorted;
-  }, [list, hw, search, runtimeFilter, clusterFilter, quantFilter, sortKey, sortDir]);
+  }, [list, hw, search, runtimeFilter, clusterFilter, quantFilter, verifyFilter, sortKey, sortDir]);
 
   if (error) return <p className="py-12 text-center text-zinc-500">Failed to load leaderboard snapshot.</p>;
   if (!snap) return <p className="py-12 text-center text-zinc-500">Loading leaderboard snapshot…</p>;
@@ -264,6 +267,13 @@ export function LeaderboardView({ hw }: { hw: string }) {
             <option key={qz} value={qz}>{qz}</option>
           ))}
         </select>
+        <select value={verifyFilter} onChange={(e) => setVerifyFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
+          <option value="all">All Status</option>
+          <option value="verified">✓ Verified</option>
+          <option value="self">★ First-party</option>
+          <option value="pending">… Pending</option>
+          <option value="failed">⚠ Repro-failed</option>
+        </select>
         <select value={sortKey} onChange={(e) => setSortKey(e.target.value as "rank" | "tps")} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
           <option value="rank">Rank</option>
           <option value="tps">Tokens/sec</option>
@@ -302,16 +312,19 @@ export function LeaderboardView({ hw }: { hw: string }) {
                   </span>
                 </td>
                 <td className="px-4 py-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setOpenId(e.benchmarkId)}
-                    className="inline-flex items-center gap-1 text-left font-medium text-radeon-300 hover:text-radeon-200 hover:underline"
-                  >
-                    {e.modelName}
-                    <svg viewBox="0 0 24 24" className="h-3 w-3 opacity-60" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 5h10v10M19 5 5 19" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setOpenId(e.benchmarkId)}
+                      className="inline-flex items-center gap-1 text-left font-medium text-radeon-300 hover:text-radeon-200 hover:underline"
+                    >
+                      {e.modelName}
+                      <svg viewBox="0 0 24 24" className="h-3 w-3 opacity-60" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M9 5h10v10M19 5 5 19" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <VerificationBadge status={e.verificationStatus} />
+                  </div>
                 </td>
                 <td className="px-4 py-2.5">
                   <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs ${runtimePill(e.runtime)}`}>

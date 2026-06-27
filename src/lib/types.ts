@@ -50,6 +50,37 @@ export interface Creator {
   githubProfile?: string;
 }
 
+/**
+ * Verification state of a benchmark (DESIGN.md §4):
+ *   self     — first-party RadeonArena runner result (trusted, not user-reported)
+ *   pending  — user-submitted, awaiting a verification rerun
+ *   verified — rerun matched the self-reported value within tolerance (✅)
+ *   failed   — rerun did not match; KEPT on the board and opened for discussion (⚠️)
+ */
+export type VerificationStatus = "self" | "pending" | "verified" | "failed";
+
+/** Record of a verification rerun performed by a radeonrun runner (or admin). */
+export interface VerificationRecord {
+  status: VerificationStatus;
+  verifiedAt?: string; // ISO timestamp of the rerun
+  runner?: string; // e.g. "radeonrun@halo3" or "manual"
+  reportedTps?: number; // user self-reported decode tok/s
+  measuredTps?: number; // value measured on the rerun
+  deviationPct?: number; // |measured - reported| / reported * 100
+  tolerancePct?: number; // pass threshold (default 5%)
+  note?: string;
+}
+
+/** A community discussion post attached to a benchmark. */
+export interface DiscussionPost {
+  id: string;
+  benchmarkId: string;
+  author: string;
+  authorAvatar?: string;
+  body: string;
+  createdAt: string;
+}
+
 /** A full benchmark submission document (Firestore: `benchmarks/{id}`). */
 export interface Benchmark {
   id: string;
@@ -79,7 +110,10 @@ export interface Benchmark {
   aggregateScore?: number;
   shareCounts?: Record<string, number>;
   totalShares?: number;
-  dataSource?: string; // provenance, e.g. "InferStation"
+  dataSource?: string; // provenance, e.g. "RadeonArena"
+  verificationStatus?: VerificationStatus; // DESIGN §4; defaults to "self"
+  selfReported?: boolean; // true when user-submitted (vs first-party runner)
+  verification?: VerificationRecord; // rerun record, set once verified/failed
   submittedAt: string;
   processedAt?: string;
 }
@@ -103,6 +137,7 @@ export interface SnapshotEntry {
   e2eTtft?: number;
   tpotMs?: number;
   recipeType: RecipeType;
+  verificationStatus?: VerificationStatus;
   submittedAt: string;
 }
 

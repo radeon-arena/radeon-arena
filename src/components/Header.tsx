@@ -19,16 +19,27 @@ export function Header() {
         <nav className="flex items-center gap-1 text-sm">
           {/* Hardware nav — each scopes the leaderboard to that GPU */}
           <div className="hidden items-center gap-1 sm:flex">
-            {HARDWARE.map((h) => (
-              <Link
-                key={h.key}
-                href={`/${h.key}/leaderboard`}
-                title={h.label}
-                className="rounded-md px-2.5 py-1.5 text-zinc-300 hover:bg-ink-800 hover:text-radeon-200"
-              >
-                {h.short}
-              </Link>
-            ))}
+            {HARDWARE.map((h) =>
+              h.disabled ? (
+                <span
+                  key={h.key}
+                  title={`${h.label} — coming soon`}
+                  aria-disabled="true"
+                  className="cursor-not-allowed rounded-md px-2.5 py-1.5 text-zinc-600"
+                >
+                  {h.short}
+                </span>
+              ) : (
+                <Link
+                  key={h.key}
+                  href={`/${h.key}/leaderboard`}
+                  title={h.label}
+                  className="rounded-md px-2.5 py-1.5 text-zinc-300 hover:bg-ink-800 hover:text-radeon-200"
+                >
+                  {h.short}
+                </Link>
+              ),
+            )}
             <span className="mx-1 h-4 w-px bg-ink-700" aria-hidden />
           </div>
           <Link href={`/${DEFAULT_HW}/leaderboard`} className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
