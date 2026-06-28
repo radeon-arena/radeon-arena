@@ -23,12 +23,27 @@ const config: Config = {
           900: "#310306",
         },
         ink: {
-          950: "#0A0A0B",
-          900: "#101012",
-          850: "#16161A",
-          800: "#1C1C21",
-          700: "#26262D",
-          600: "#34343D",
+          // Light theme: surfaces & borders (was a dark ramp)
+          950: "#F4F5F7", // page background
+          900: "#FFFFFF", // cards
+          850: "#F8F9FB", // raised blocks
+          800: "#EAECF0", // hover / faint divide
+          700: "#DEE1E6", // borders
+          600: "#CBCFD6", // strong borders / scrollbar
+        },
+        // Light theme: text ramp = mirror of Tailwind's default zinc
+        zinc: {
+          50: "#09090B",
+          100: "#18181B",
+          200: "#27272A",
+          300: "#3F3F46",
+          400: "#52525B",
+          500: "#71717A",
+          600: "#A1A1AA",
+          700: "#D4D4D8",
+          800: "#E4E4E7",
+          900: "#F4F4F5",
+          950: "#FAFAFA",
         },
       },
       fontFamily: {

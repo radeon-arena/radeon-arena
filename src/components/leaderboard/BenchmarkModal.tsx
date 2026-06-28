@@ -66,7 +66,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
       <div
@@ -377,7 +377,7 @@ function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
               Post
             </button>
           </div>
-          {err && <p className="mt-2 text-xs text-amber-400">{err}</p>}
+          {err && <p className="mt-2 text-xs text-amber-600">{err}</p>}
         </>
       ) : (
         <p className="mt-3 rounded-lg border border-ink-800 bg-ink-950/50 p-3 text-xs text-zinc-500">

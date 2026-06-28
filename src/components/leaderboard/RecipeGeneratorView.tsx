@@ -63,7 +63,7 @@ export function RecipeGeneratorView() {
         <button onClick={generate} disabled={loading || !command.trim()} className="btn-primary mt-4 disabled:opacity-50">
           {loading ? "Generating…" : "Generate Recipe"}
         </button>
-        {message && <p className="mt-3 text-sm text-amber-400">{message}</p>}
+        {message && <p className="mt-3 text-sm text-amber-600">{message}</p>}
       </div>
 
       <div className="card p-5">
@@ -87,7 +87,7 @@ export function RecipeGeneratorView() {
           )}
         </div>
         {errors.length > 0 && (
-          <ul className="mb-2 list-disc pl-5 text-xs text-amber-400">
+          <ul className="mb-2 list-disc pl-5 text-xs text-amber-600">
             {errors.map((e) => <li key={e}>{e}</li>)}
           </ul>
         )}

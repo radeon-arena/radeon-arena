@@ -17,8 +17,8 @@ export function fmtDate(iso: string | undefined): string {
 }
 
 export function rankBadge(rank: number): string {
-  if (rank === 1) return "text-amber-300";
-  if (rank === 2) return "text-zinc-300";
-  if (rank === 3) return "text-orange-400";
+  if (rank === 1) return "text-amber-500";
+  if (rank === 2) return "text-zinc-400";
+  if (rank === 3) return "text-orange-600";
   return "text-zinc-500";
 }

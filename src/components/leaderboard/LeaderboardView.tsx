@@ -47,10 +47,10 @@ function typeOrder(a: ParsedTest, b: ParsedTest): number {
 
 function runtimePill(rt: string): string {
   const r = rt.toLowerCase();
-  if (r.includes("vllm")) return "border-emerald-700/50 bg-emerald-950/40 text-emerald-300";
-  if (r.includes("llama")) return "border-sky-700/50 bg-sky-950/40 text-sky-300";
-  if (r.includes("sglang")) return "border-violet-700/50 bg-violet-950/40 text-violet-300";
-  if (r.includes("mlc")) return "border-amber-700/50 bg-amber-950/40 text-amber-300";
+  if (r.includes("vllm")) return "border-emerald-300 bg-emerald-50 text-emerald-700";
+  if (r.includes("llama")) return "border-sky-300 bg-sky-50 text-sky-700";
+  if (r.includes("sglang")) return "border-violet-300 bg-violet-50 text-violet-700";
+  if (r.includes("mlc")) return "border-amber-300 bg-amber-50 text-amber-700";
   return "border-ink-600 bg-ink-800 text-zinc-300";
 }
 
