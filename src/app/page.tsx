@@ -24,9 +24,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-2 text-center text-xs text-zinc-500 sm:px-6">
           Benchmarks run with:{" "}
           <a href={PROJECTS.vllmDocker.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.vllmDocker.name}</a> ·{" "}
-          <a href={PROJECTS.benchy.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.benchy.name}</a> ·{" "}
           <a href={PROJECTS.radeonrun.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.radeonrun.name}</a> ·{" "}
-          <a href={SITE.blog} className="text-zinc-400 hover:text-radeon-400">ROCm Blog</a>
+          <a href={SITE.blog} className="text-zinc-400 hover:text-radeon-400">ROCm Blog</a> ·{" "}
+          <a href={PROJECTS.benchy.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.benchy.name}</a>
         </div>
       </div>
 
