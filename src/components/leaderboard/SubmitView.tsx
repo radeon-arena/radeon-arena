@@ -147,8 +147,8 @@ export function SubmitView({ hw }: { hw: string }) {
           </button>
         </div>
         <p className="mt-1 text-sm text-zinc-400">
-          Your numbers are <span className="text-amber-300">self-reported</span> and enter the board as{" "}
-          <span className="text-amber-300">⚠ pending</span> — a runner reruns the recipe to verify before it’s marked ✓.
+          Your numbers are <span className="text-amber-600">self-reported</span> and enter the board as{" "}
+          <span className="text-amber-600">⚠ pending</span> — a runner reruns the recipe to verify before it’s marked ✓.
         </p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -197,7 +197,7 @@ export function SubmitView({ hw }: { hw: string }) {
               <input value={t.testName} onChange={(e) => setTest(i, "testName", e.target.value)} placeholder="tg128 (c1)" className={`${field} flex-1`} />
               <input value={t.tokensPerSec} onChange={(e) => setTest(i, "tokensPerSec", e.target.value)} type="number" placeholder="tokens/sec" className={`${field} w-36`} />
               {tests.length > 1 && (
-                <button onClick={() => setTests(tests.filter((_, idx) => idx !== i))} className="px-2 text-zinc-500 hover:text-rose-400">
+                <button onClick={() => setTests(tests.filter((_, idx) => idx !== i))} className="px-2 text-zinc-500 hover:text-rose-600">
                   ✕
                 </button>
               )}
@@ -209,7 +209,7 @@ export function SubmitView({ hw }: { hw: string }) {
         </p>
       </div>
 
-      {msg && <p className={`text-sm ${ok ? "text-emerald-400" : "text-amber-400"}`}>{msg}</p>}
+      {msg && <p className={`text-sm ${ok ? "text-emerald-600" : "text-amber-600"}`}>{msg}</p>}
       <button onClick={submit} disabled={busy} className="btn-primary w-full disabled:opacity-50">
         {busy ? "Submitting…" : "Submit result"}
       </button>

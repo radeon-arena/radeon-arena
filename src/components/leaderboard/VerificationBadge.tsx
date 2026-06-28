@@ -12,19 +12,19 @@ const STATUS: Record<
   },
   verified: {
     label: "Verified",
-    cls: "border-emerald-700/50 bg-emerald-950/40 text-emerald-300",
+    cls: "border-emerald-300 bg-emerald-50 text-emerald-700",
     icon: "✓",
     title: "A runner reran this recipe and matched the reported value",
   },
   pending: {
     label: "Pending",
-    cls: "border-amber-700/50 bg-amber-950/40 text-amber-300",
+    cls: "border-amber-300 bg-amber-50 text-amber-700",
     icon: "…",
     title: "User-submitted — awaiting a verification rerun",
   },
   failed: {
     label: "Repro failed",
-    cls: "border-rose-700/50 bg-rose-950/40 text-rose-300",
+    cls: "border-rose-300 bg-rose-50 text-rose-700",
     icon: "⚠",
     title:
       "A rerun did not match the reported value. Kept on the board and open for discussion (not removed).",

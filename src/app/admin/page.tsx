@@ -170,10 +170,10 @@ function PendingPanel() {
                   Verify (auto-judge)
                 </button>
                 <span className="text-zinc-600">or</span>
-                <button disabled={busyId === id} onClick={() => verify(id, { status: "verified" })} className="chip hover:border-emerald-600 hover:text-emerald-300">
+                <button disabled={busyId === id} onClick={() => verify(id, { status: "verified" })} className="chip hover:border-emerald-600 hover:text-emerald-700">
                   Mark ✓
                 </button>
-                <button disabled={busyId === id} onClick={() => verify(id, { status: "failed" })} className="chip hover:border-rose-600 hover:text-rose-300">
+                <button disabled={busyId === id} onClick={() => verify(id, { status: "failed" })} className="chip hover:border-rose-600 hover:text-rose-700">
                   Mark ⚠
                 </button>
               </div>
