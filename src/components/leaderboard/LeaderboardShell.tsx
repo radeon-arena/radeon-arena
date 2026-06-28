@@ -9,7 +9,6 @@ import { RecipeGeneratorView } from "@/components/leaderboard/RecipeGeneratorVie
 import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { HowToView } from "@/components/leaderboard/HowToView";
 import { PROJECTS } from "@/lib/site";
-import { HARDWARE } from "@/lib/hardware";
 import { VISIBLE_TABS, type TabKey } from "@/lib/tabs";
 
 function TabIcon({ k }: { k: TabKey }) {
@@ -54,41 +53,8 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
       <h1 className="text-3xl font-bold tracking-tight text-radeon-400">LLM Leaderboard</h1>
       <p className="mt-1 text-sm text-zinc-400">Performance rankings for LLMs running on AMD Radeon GPUs.</p>
 
-      {/* Hardware nav — scopes every tab below to the selected GPU */}
-      <div className="thin-scroll mt-5 flex gap-2 overflow-x-auto pb-1">
-        {HARDWARE.map((h) => {
-          const active = hw === h.key;
-          if (h.disabled) {
-            return (
-              <div
-                key={h.key}
-                aria-disabled="true"
-                title="No benchmarks yet — coming soon"
-                className="flex min-w-[150px] cursor-not-allowed flex-col rounded-xl border border-ink-800 bg-ink-900/40 px-4 py-2.5 text-left opacity-50"
-              >
-                <span className="text-sm font-semibold text-zinc-500">{h.label}</span>
-                <span className="text-[11px] text-zinc-600">{h.sub} · soon</span>
-              </div>
-            );
-          }
-          return (
-            <Link
-              key={h.key}
-              href={`/${h.key}/${tab}`}
-              scroll={false}
-              className={`flex min-w-[150px] flex-col rounded-xl border px-4 py-2.5 text-left transition-colors ${
-                active ? "border-radeon-600 bg-radeon-500/10" : "border-ink-700 hover:bg-ink-800"
-              }`}
-            >
-              <span className={`text-sm font-semibold ${active ? "text-radeon-200" : "text-zinc-200"}`}>{h.label}</span>
-              <span className="text-[11px] text-zinc-500">{h.sub}</span>
-            </Link>
-          );
-        })}
-      </div>
-
       {/* Tab nav */}
-      <div className="thin-scroll mt-4 flex gap-2 overflow-x-auto border-t border-ink-800 pt-4 pb-1">
+      <div className="thin-scroll mt-5 flex gap-2 overflow-x-auto pb-1">
         {VISIBLE_TABS.map((t) => (
           <Link
             key={t.key}
