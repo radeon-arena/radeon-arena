@@ -22,6 +22,17 @@ export default function BlogsPage() {
       </p>
 
       <div className="mt-10 space-y-4">
+        {posts.length === 0 && (
+          <div className="card p-8 text-center">
+            <p className="text-sm text-zinc-400">
+              No posts yet — write-ups land here only when their numbers come straight from this
+              board&apos;s own measurements.
+            </p>
+            <Link href="/strix/leaderboard" className="btn-ghost mt-4 inline-block">
+              Browse the leaderboard
+            </Link>
+          </div>
+        )}
         {posts.map((p) => (
           <Link
             key={p.slug}
