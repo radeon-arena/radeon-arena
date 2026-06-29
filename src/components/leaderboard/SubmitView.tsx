@@ -5,7 +5,7 @@ export function SubmitView({ hw }: { hw?: string }) {
   return (
     <div className="space-y-4">
       <div className="card p-7 text-sm leading-relaxed text-zinc-300">
-        <h2 className="text-xl font-semibold text-zinc-100">Submit a result</h2>
+        <h2 className="text-xl font-semibold text-zinc-100">Submit Recipe</h2>
         <p className="mt-3 text-zinc-400">
           Radeon Arena accepts benchmark updates through GitHub pull requests. The site does not accept
           numbers from a web form: every row should be tied to a reproducible recipe, a pinned image, and
