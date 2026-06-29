@@ -230,6 +230,14 @@ function pickStr(v: unknown): string | undefined {
   return typeof v === "string" && v.trim() ? v.trim() : undefined;
 }
 
+function imageHref(image: string): string | undefined {
+  if (/^https?:\/\//i.test(image)) return image;
+  const ref = image.replace(/^ghcr\.io\//, "");
+  const [name] = ref.split(":");
+  if (!name.includes("/")) return undefined;
+  return `https://github.com/${name}/pkgs/container/${encodeURIComponent(name.split("/").pop() ?? "")}`;
+}
+
 /**
  * Reproducibility provenance — surfaces the exact build (pinned container image,
  * engine build commit, image digest, build flags) that produced this number.
@@ -251,8 +259,11 @@ function ReproducibilitySection({ benchmark }: { benchmark: Benchmark }) {
     .filter(Boolean)
     .join(" ");
 
-  const rows: { label: string; value: string }[] = [];
-  if (image) rows.push({ label: "Container image", value: imageTag && !image.includes(":") ? `${image}:${imageTag}` : image });
+  const rows: { label: string; value: string; href?: string }[] = [];
+  if (image) {
+    const value = imageTag && !image.includes(":") ? `${image}:${imageTag}` : image;
+    rows.push({ label: "Container image", value, href: imageHref(value) });
+  }
   if (imageCommit) rows.push({ label: "Image build commit", value: imageCommit });
   if (imageId) rows.push({ label: "Image digest", value: imageId });
   if (engineLine.trim()) rows.push({ label: "Engine", value: engineLine });
@@ -268,20 +279,26 @@ function ReproducibilitySection({ benchmark }: { benchmark: Benchmark }) {
       </p>
       <dl className="mt-2 space-y-2 rounded-xl border border-ink-800 bg-ink-950/50 p-4">
         {rows.map((r) => (
-          <Provenance key={r.label} label={r.label} value={r.value} />
+          <Provenance key={r.label} label={r.label} value={r.value} href={r.href} />
         ))}
       </dl>
     </section>
   );
 }
 
-function Provenance({ label, value }: { label: string; value: string }) {
+function Provenance({ label, value, href }: { label: string; value: string; href?: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
       <dt className="shrink-0 text-xs text-zinc-500 sm:w-32">{label}</dt>
       <dd className="flex min-w-0 flex-1 items-baseline gap-2">
-        <span className="break-all font-mono text-xs text-zinc-300">{value}</span>
+        {href ? (
+          <a href={href} target="_blank" rel="noreferrer" className="break-all font-mono text-xs text-radeon-400 hover:text-radeon-300 hover:underline">
+            {value}
+          </a>
+        ) : (
+          <span className="break-all font-mono text-xs text-zinc-300">{value}</span>
+        )}
         <button
           type="button"
           onClick={async () => {
