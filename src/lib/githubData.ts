@@ -18,8 +18,27 @@ export type Bundle = {
 
 let promise: Promise<{ benchmarks: Benchmark[]; snapshot: LeaderboardSnapshot; carousel: { generatedAt: string; items: CarouselItem[] }; bundle: Bundle }> | null = null;
 
+const ENGINE_IMAGE: Record<string, string> = {
+  llamacpp: "halo-llamacpp",
+  vllm: "halo-vllm",
+  "vllm-main": "halo-vllm-main",
+};
+
 export function bundleUrl(): string {
   return process.env.NEXT_PUBLIC_RADEONRUN_BUNDLE_URL || DEFAULT_BUNDLE_URL;
+}
+
+function imageFromRecipe(
+  metaImage: string | undefined,
+  metaContainer: string | undefined,
+  recipeContainer: string | undefined,
+  tag: string | undefined,
+): string | undefined {
+  if (metaImage?.startsWith("ghcr.io/") || metaImage?.includes("/")) return tag && !metaImage.includes(":") ? `${metaImage}:${tag}` : metaImage;
+  const logical = (recipeContainer || metaContainer || metaImage || "").split(":")[0];
+  const imageName = ENGINE_IMAGE[logical];
+  if (!imageName) return metaImage || metaContainer || recipeContainer;
+  return `ghcr.io/radeon-arena/${imageName}:${tag || "latest"}`;
 }
 
 function rowsFromBundle(bundle: Bundle): RawRun[] {
@@ -30,9 +49,11 @@ function rowsFromBundle(bundle: Bundle): RawRun[] {
       const recipe = (rec.recipe ?? {}) as Record<string, any>;
       const meta = data.meta ?? {};
       const imageTag = typeof recipe.image_tag === "string" ? recipe.image_tag : undefined;
-      const image = typeof meta.image === "string" ? meta.image : typeof meta.container === "string" ? meta.container : undefined;
-      const tag = typeof meta.image_tag === "string" ? meta.image_tag : imageTag ?? image?.split(":").pop();
-      const runtimeRaw = String(meta.runtime ?? recipe.container ?? meta.container ?? "llamacpp").toLowerCase();
+      const recipeContainer = typeof recipe.container === "string" ? recipe.container : undefined;
+      const metaContainer = typeof meta.container === "string" ? meta.container : undefined;
+      const tag = typeof meta.image_tag === "string" ? meta.image_tag : imageTag ?? (typeof meta.image === "string" ? meta.image.split(":").pop() : undefined);
+      const image = imageFromRecipe(typeof meta.image === "string" ? meta.image : undefined, metaContainer, recipeContainer, tag);
+      const runtimeRaw = String(meta.runtime ?? recipeContainer ?? metaContainer ?? "llamacpp").toLowerCase();
       const engineName = runtimeRaw.includes("vllm") ? "vLLM" : "llama.cpp";
       const engineSlug = runtimeRaw.includes("vllm") ? "vllm" : "llamacpp-hip";
       const backend = runtimeRaw.includes("vllm") ? "ROCm/HIP · TRITON_ATTN" : "ROCm/HIP";
