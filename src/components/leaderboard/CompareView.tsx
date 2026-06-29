@@ -5,6 +5,7 @@ import type { Benchmark, LeaderboardSnapshot, SnapshotEntry } from "@/lib/types"
 import { calculateMetrics } from "@/lib/metrics";
 import { fmtTps, fmtMs } from "@/lib/format";
 import { hwMatches, hwLabel } from "@/lib/hardware";
+import { getGithubBenchmark, loadGithubData } from "@/lib/githubData";
 
 interface Option {
   id: string;
@@ -18,8 +19,7 @@ function useBenchmark(id: string | null): Benchmark | null {
       setB(null);
       return;
     }
-    fetch(`/api/benchmarks/${id}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
+    getGithubBenchmark(id)
       .then(setB)
       .catch(() => setB(null));
   }, [id]);
@@ -32,10 +32,8 @@ export function CompareView({ hw }: { hw: string }) {
   const [bId, setBId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/static/snapshot", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: LeaderboardSnapshot | null) => {
-        if (!d) return;
+    loadGithubData()
+      .then(({ snapshot: d }: { snapshot: LeaderboardSnapshot }) => {
         const list = ((d.entriesByTest["tg128 (c1)"] ?? []) as SnapshotEntry[]).filter((e) =>
           hwMatches(hw, e.gpu),
         );

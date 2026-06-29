@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HARDWARE, hwLabel } from "@/lib/hardware";
-import { isTab } from "@/lib/tabs";
+import { VISIBLE_TABS, isTab } from "@/lib/tabs";
 import { LeaderboardShell } from "@/components/leaderboard/LeaderboardShell";
 
 // Pre-render the known hardware roots; unknown first segments 404.
 export function generateStaticParams() {
-  return HARDWARE.map((h) => ({ hw: h.key }));
+  return HARDWARE.flatMap((h) => [
+    { hw: h.key, rest: [] },
+    ...VISIBLE_TABS.map((t) => ({ hw: h.key, rest: [t.key] })),
+  ]);
 }
 
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 export function generateMetadata({ params }: { params: { hw: string } }): Metadata {
   if (!HARDWARE.some((h) => h.key === params.hw)) return {};

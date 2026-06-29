@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { UserLeaderboardEntry } from "@/lib/types";
 import { rankBadge } from "@/lib/format";
+import { getGithubUsers } from "@/lib/githubData";
 
 export function UsersView({ hw }: { hw: string }) {
   const [entries, setEntries] = useState<UserLeaderboardEntry[] | null>(null);
@@ -11,9 +12,8 @@ export function UsersView({ hw }: { hw: string }) {
   useEffect(() => {
     setEntries(null);
     setError(false);
-    fetch(`/api/leaderboard/users?hw=${encodeURIComponent(hw)}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setEntries(d.entries ?? []))
+    getGithubUsers(hw)
+      .then((entries) => setEntries(entries))
       .catch(() => setError(true));
   }, [hw]);
 

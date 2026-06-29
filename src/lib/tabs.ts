@@ -20,8 +20,8 @@ export type TabKey = (typeof TABS)[number]["key"];
  * leaderboard is hidden until community submissions accumulate distinct
  * contributors — every current result is first-party RadeonArena-fleet data, so
  * the view would collapse to a single misleading row. Drop "users" from this
- * list to re-surface the tab once user-submitted results exist; the route, API
- * (/api/leaderboard/users) and UsersView stay intact regardless.
+ * list to re-surface the tab once user-submitted results exist; the route and
+ * UsersView stay intact regardless.
  */
 export const HIDDEN_TAB_KEYS: readonly TabKey[] = ["users"];
 

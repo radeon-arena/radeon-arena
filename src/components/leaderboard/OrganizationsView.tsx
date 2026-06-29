@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { OrgLeaderboardEntry } from "@/lib/types";
 import { rankBadge } from "@/lib/format";
+import { getGithubOrganizations } from "@/lib/githubData";
 
 export function OrganizationsView({ hw }: { hw: string }) {
   const [entries, setEntries] = useState<OrgLeaderboardEntry[] | null>(null);
@@ -11,9 +12,8 @@ export function OrganizationsView({ hw }: { hw: string }) {
   useEffect(() => {
     setEntries(null);
     setError(false);
-    fetch(`/api/leaderboard/organizations?hw=${encodeURIComponent(hw)}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setEntries(d.entries ?? []))
+    getGithubOrganizations(hw)
+      .then((entries) => setEntries(entries))
       .catch(() => setError(true));
   }, [hw]);
 
