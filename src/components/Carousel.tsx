@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { CarouselItem } from "@/lib/types";
+import { loadGithubData } from "@/lib/githubData";
 
 export function Carousel() {
   const [items, setItems] = useState<CarouselItem[]>([]);
 
   useEffect(() => {
     let alive = true;
-    fetch("/static/carousel", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
+    loadGithubData()
       .then((data) => {
-        if (alive && data && Array.isArray(data.items)) setItems(data.items);
+        if (alive) setItems(data.carousel.items);
       })
       .catch(() => {
         if (alive) setItems([]);

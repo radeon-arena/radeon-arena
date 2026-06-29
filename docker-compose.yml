@@ -6,42 +6,11 @@ services:
     image: radeon-arena:latest
     container_name: radeon-arena
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
     ports:
-      - "13000:3000"
-    environment:
-      - SNAPSHOT_INTERVAL_HOURS=0.5
-      # radeon-arena Postgres (self-hosted). When set, the app reads benchmarks
-      # from Postgres; unset, it falls back to the bundled dataset.
-      - DATABASE_URL=postgres://radeon:${POSTGRES_PASSWORD:-radeon_arena_pw}@db:5432/radeon_arena
-      # Token auth (no Firebase): ADMIN_TOKEN gates /admin + verify; SUBMIT_TOKEN gates submit/comment.
-      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
-      - SUBMIT_TOKEN=${SUBMIT_TOKEN:-}
+      - "13000:80"
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 20s
-
-  db:
-    image: postgres:16-alpine
-    container_name: radeon-arena-db
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=radeon
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-radeon_arena_pw}
-      - POSTGRES_DB=radeon_arena
-    volumes:
-      - radeon-arena-pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U radeon -d radeon_arena"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
-volumes:
-  radeon-arena-pgdata:

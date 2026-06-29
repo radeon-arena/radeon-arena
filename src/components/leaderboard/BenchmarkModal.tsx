@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import yaml from "js-yaml";
-import type { Benchmark, DiscussionPost } from "@/lib/types";
+import type { Benchmark } from "@/lib/types";
 import { fmtDate } from "@/lib/format";
 import { PROJECTS } from "@/lib/site";
 import { VerificationBadge } from "./VerificationBadge";
-import { authHeaders, getToken } from "@/lib/clientAuth";
+import { getGithubBenchmark } from "@/lib/githubData";
 
 const HALO = PROJECTS.benchy; // radeonrun
 
@@ -23,9 +23,11 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
     let alive = true;
     setData(null);
     setError(false);
-    fetch(`/api/benchmarks/${encodeURIComponent(id)}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d: Benchmark) => alive && setData(d))
+    getGithubBenchmark(id)
+      .then((d) => {
+        if (alive && d) setData(d);
+        else if (alive) setError(true);
+      })
       .catch(() => alive && setError(true));
     return () => {
       alive = false;
@@ -52,7 +54,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
   }, [data]);
 
   const permalinkId = data?.recipePermalinkId ?? data?.benchmarkId ?? id;
-  const rawUrl = `/api/recipes/${encodeURIComponent(permalinkId)}/raw`;
+  const rawUrl = "#recipe";
 
   async function copyRecipe() {
     try {
@@ -155,7 +157,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
                   View on Hugging Face ↗
                 </a>
               )}
-              <a href={rawUrl} className="btn-ghost">Download recipe (YAML)</a>
+              <button onClick={copyRecipe} className="btn-ghost">Download recipe (copy YAML)</button>
             </div>
 
             {/* Recipe */}
@@ -188,7 +190,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
               </p>
               <pre className="thin-scroll mt-2 overflow-auto rounded-lg border border-ink-700 bg-ink-950 p-3 font-mono text-xs leading-relaxed text-zinc-300">
 {`# 1. Get the recipe
-curl -L ${rawUrl} -o recipe.yaml
+# Copy the recipe YAML above into recipe.yaml
 
 # 2. Clone the toolkit
 git clone ${HALO.url}.git
@@ -199,7 +201,12 @@ python run-recipe.py recipe.yaml`}
               </pre>
             </section>
 
-            <DiscussionSection benchmarkId={data.benchmarkId} />
+            <section className="border-t border-ink-800 pt-5">
+              <h3 className="text-sm font-semibold text-radeon-300">Discussion</h3>
+              <p className="mt-1 text-xs text-zinc-500">
+                Radeon Arena is a static display site. Discuss result changes in the GitHub pull request that adds or updates the benchmark data.
+              </p>
+            </section>
           </div>
         )}
       </div>
@@ -296,94 +303,3 @@ function Provenance({ label, value }: { label: string; value: string }) {
   );
 }
 
-function DiscussionSection({ benchmarkId }: { benchmarkId: string }) {
-  const [posts, setPosts] = useState<DiscussionPost[]>([]);
-  const [enabled, setEnabled] = useState(true);
-  const [body, setBody] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => {
-    let alive = true;
-    fetch(`/api/benchmarks/${encodeURIComponent(benchmarkId)}/discussion`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : { posts: [], enabled: false }))
-      .then((d: { posts?: DiscussionPost[]; enabled?: boolean }) => {
-        if (!alive) return;
-        setPosts(d.posts ?? []);
-        if (typeof d.enabled === "boolean") setEnabled(d.enabled);
-      })
-      .catch(() => {});
-    return () => {
-      alive = false;
-    };
-  }, [benchmarkId]);
-
-  async function post() {
-    if (!body.trim()) return;
-    if (!getToken()) {
-      setErr("Sign in on the Submit tab to comment.");
-      return;
-    }
-    setBusy(true);
-    setErr(null);
-    try {
-      const res = await fetch(`/api/benchmarks/${encodeURIComponent(benchmarkId)}/discussion`, {
-        method: "POST",
-        headers: authHeaders(),
-        body: JSON.stringify({ body: body.trim() }),
-      });
-      const d = await res.json();
-      if (!res.ok) {
-        setErr(d.error ?? "Failed to post");
-        return;
-      }
-      setPosts((p) => [...p, d.post]);
-      setBody("");
-    } catch {
-      setErr("Network error");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  return (
-    <section className="border-t border-ink-800 pt-5">
-      <h3 className="text-sm font-semibold text-radeon-300">Discussion</h3>
-      <p className="mt-1 text-xs text-zinc-500">
-        Reproduction notes &amp; debate — especially for ⚠ repro-failed results, which stay on the board and are discussed, not removed.
-      </p>
-      <div className="mt-3 space-y-2">
-        {posts.length === 0 && enabled && <p className="text-xs text-zinc-600">No comments yet.</p>}
-        {posts.map((p) => (
-          <div key={p.id} className="rounded-lg border border-ink-800 bg-ink-950/50 p-3">
-            <p className="whitespace-pre-wrap text-xs text-zinc-300">{p.body}</p>
-            <p className="mt-1 text-[11px] text-zinc-600">
-              {p.author} · {fmtDate(p.createdAt)}
-            </p>
-          </div>
-        ))}
-      </div>
-      {enabled ? (
-        <>
-          <div className="mt-3 flex gap-2">
-            <input
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && post()}
-              placeholder="Add a comment…"
-              className="flex-1 rounded-lg border border-ink-600 bg-ink-950 px-3 py-2 text-sm text-zinc-100"
-            />
-            <button onClick={post} disabled={busy || !body.trim()} className="btn-primary disabled:opacity-50">
-              Post
-            </button>
-          </div>
-          {err && <p className="mt-2 text-xs text-amber-600">{err}</p>}
-        </>
-      ) : (
-        <p className="mt-3 rounded-lg border border-ink-800 bg-ink-950/50 p-3 text-xs text-zinc-500">
-          Discussions require the database — this instance is running read-only on the bundled dataset, so commenting is disabled here.
-        </p>
-      )}
-    </section>
-  );
-}

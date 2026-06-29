@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { LeaderboardSnapshot, SnapshotEntry } from "@/lib/types";
 import { fmtTps, fmtMs } from "@/lib/format";
 import { hwMatches, hwLabel } from "@/lib/hardware";
+import { loadGithubData } from "@/lib/githubData";
 import { BenchmarkModal } from "./BenchmarkModal";
 import { VerificationBadge } from "./VerificationBadge";
 
@@ -99,9 +100,8 @@ export function LeaderboardView({ hw }: { hw: string }) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/static/snapshot", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d: LeaderboardSnapshot) => setSnap(d))
+    loadGithubData()
+      .then((d) => setSnap(d.snapshot))
       .catch(() => setError(true));
   }, []);
 

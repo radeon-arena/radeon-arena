@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import yaml from "js-yaml";
+import type { Recipe } from "@/lib/types";
 
 const PLACEHOLDER = `vllm serve Qwen/Qwen3-8B \\
   --quantization fp8 \\
@@ -24,20 +25,11 @@ export function RecipeGeneratorView() {
     setYamlOut(null);
     setErrors([]);
     try {
-      const res = await fetch("/api/generate-recipe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command, description: description || undefined }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setMessage(data.error ?? "Failed to generate recipe");
-        return;
-      }
-      setErrors(data.validationErrors ?? []);
-      setYamlOut(yaml.dump(data.recipe?.fullRecipe ?? data.recipe, { indent: 2, lineWidth: -1, noRefs: true }));
+      const data = parseCommand(command, description || undefined);
+      setErrors(data.validationErrors);
+      setYamlOut(yaml.dump(data.recipe.fullRecipe ?? data.recipe, { indent: 2, lineWidth: -1, noRefs: true }));
     } catch {
-      setMessage("Network error");
+      setMessage("Failed to generate recipe");
     } finally {
       setLoading(false);
     }
@@ -97,4 +89,42 @@ export function RecipeGeneratorView() {
       </div>
     </div>
   );
+}
+
+function parseCommand(command: string, description?: string): { recipe: Recipe; validationErrors: string[] } {
+  const errors: string[] = [];
+  const lower = command.toLowerCase();
+  let runtime = "vLLM";
+  let container = "rocm/vllm:latest";
+  if (lower.includes("sglang")) {
+    runtime = "SGLang";
+    container = "lmsysorg/sglang:latest";
+  } else if (lower.includes("llama-server") || lower.includes("llama.cpp") || lower.includes("llama-cli")) {
+    runtime = "llama.cpp";
+    container = "ghcr.io/ggml-org/llama.cpp:full-rocm";
+  } else if (lower.includes("mlc")) {
+    runtime = "MLC-LLM";
+    container = "rocm/mlc:latest";
+  }
+  const serveMatch = command.match(/serve\s+([^\s\\]+)/);
+  const flagMatch = command.match(/--model(?:-path)?[ =]+([^\s\\]+)/) || command.match(/(?:^|\s)-m[ =]+([^\s\\]+)/);
+  const model = serveMatch?.[1] ?? flagMatch?.[1] ?? "";
+  if (!model) errors.push("Could not detect a model path in the command.");
+  const tpMatch = command.match(/--tensor-parallel-size[ =]+(\d+)/) || command.match(/--tp[ =]+(\d+)/);
+  const clusterSize = tpMatch ? parseInt(tpMatch[1], 10) : 1;
+  const quantMatch = command.match(/--quantization[ =]+([^\s\\]+)/);
+  const quantization = quantMatch?.[1];
+  return {
+    validationErrors: errors,
+    recipe: {
+      name: model ? `${model.split("/").pop()} · ${runtime}` : `${runtime} recipe`,
+      version: 1,
+      command: command.trim(),
+      container,
+      model: model || undefined,
+      description: description?.trim() || `${runtime} serving recipe${model ? ` for ${model}` : ""}.`,
+      clusterOnly: clusterSize > 1,
+      fullRecipe: { runtime, container, clusterSize, quantization, command: command.trim() },
+    },
+  };
 }
