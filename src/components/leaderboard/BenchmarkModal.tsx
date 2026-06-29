@@ -234,6 +234,9 @@ function imageHref(image: string): string | undefined {
   if (/^https?:\/\//i.test(image)) return image;
   const ref = image.replace(/^ghcr\.io\//, "");
   const [name] = ref.split(":");
+  if (name.toLowerCase() === "inferstation/vllm-rocm-halo") {
+    return "https://github.com/InferStation/InferStation/pkgs/container/vllm-rocm-halo";
+  }
   if (!name.includes("/")) return undefined;
   return `https://github.com/${name}/pkgs/container/${encodeURIComponent(name.split("/").pop() ?? "")}`;
 }
