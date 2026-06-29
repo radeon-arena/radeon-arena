@@ -9,7 +9,7 @@ export const TABS = [
   { key: "organizations", label: "Organizations" },
   { key: "compare", label: "Compare Models" },
   { key: "recipe", label: "Recipe Generator" },
-  { key: "submit", label: "Submit Result" },
+  { key: "submit", label: "Submit Recipe" },
   { key: "how", label: "How to Benchmark" },
 ] as const;
 
