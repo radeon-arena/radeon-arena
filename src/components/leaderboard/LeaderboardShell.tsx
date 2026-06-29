@@ -5,7 +5,6 @@ import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
 import { UsersView } from "@/components/leaderboard/UsersView";
 import { OrganizationsView } from "@/components/leaderboard/OrganizationsView";
 import { CompareView } from "@/components/leaderboard/CompareView";
-import { RecipeGeneratorView } from "@/components/leaderboard/RecipeGeneratorView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { HowToView } from "@/components/leaderboard/HowToView";
 import { PROJECTS } from "@/lib/site";
@@ -22,8 +21,6 @@ function TabIcon({ k }: { k: TabKey }) {
       return <svg {...common}><rect x="4" y="4" width="7" height="16" rx="1" /><rect x="13" y="9" width="7" height="11" rx="1" /></svg>;
     case "compare":
       return <svg {...common}><path d="M9 4v16M15 4v16M4 9h5M15 15h5" strokeLinecap="round" /></svg>;
-    case "recipe":
-      return <svg {...common}><path d="M12 3v6m0 0 3-3m-3 3L9 6M5 13h14l-1 8H6l-1-8Z" strokeLinecap="round" strokeLinejoin="round" /></svg>;
     case "submit":
       return <svg {...common}><path d="M12 19V5M5 12l7-7 7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>;
     case "how":
@@ -77,7 +74,6 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
         {tab === "users" && <UsersView hw={hw} />}
         {tab === "organizations" && <OrganizationsView hw={hw} />}
         {tab === "compare" && <CompareView hw={hw} />}
-        {tab === "recipe" && <RecipeGeneratorView />}
         {tab === "submit" && <SubmitView hw={hw} />}
         {tab === "how" && <HowToView />}
       </div>

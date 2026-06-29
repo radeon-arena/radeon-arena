@@ -1,3 +1,5 @@
+import { RecipeGeneratorView } from "./RecipeGeneratorView";
+
 const RADEONRUN = "https://github.com/radeon-arena/radeonrun";
 
 export function SubmitView({ hw }: { hw?: string }) {
@@ -31,6 +33,17 @@ export function SubmitView({ hw }: { hw?: string }) {
       <p className="text-xs text-zinc-500">
         Measurement uses <code>serve-stream-in512-out128</code> at concurrency 1 / 4 / 16 / 32.
       </p>
+
+      <div className="card p-7">
+        <h3 className="text-lg font-semibold text-zinc-100">Recipe draft helper</h3>
+        <p className="mt-2 text-sm text-zinc-400">
+          Paste a serve command to generate a starter YAML snippet for your radeonrun PR. Treat it as a
+          draft: before submitting, fill in the pinned image tag, model source, and measured result JSON.
+        </p>
+        <div className="mt-5">
+          <RecipeGeneratorView />
+        </div>
+      </div>
     </div>
   );
 }
