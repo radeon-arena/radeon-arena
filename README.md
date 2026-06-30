@@ -17,6 +17,7 @@ flowchart LR
 - Hosting: GitHub Pages at `https://radeon-arena.github.io/radeon-arena/` (custom domain `https://radeon-arena.com/` pending DNS)
 - No runtime API routes, no Postgres, no auth tokens, no admin UI
 - Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
+- Public policy pages: `/terms`, `/privacy`, and `/data-policy`
 
 ## Stack
 
@@ -62,6 +63,9 @@ src/
     page.tsx                  # homepage
     [hw]/[[...rest]]/page.tsx  # /{hw}/{tab}
     blogs/page.tsx             # static blog shell
+    terms/page.tsx             # terms of use
+    privacy/page.tsx           # privacy notice
+    data-policy/page.tsx        # benchmark data policy
     leaderboard/page.tsx       # legacy redirect to /strix/leaderboard
   components/
     Header, Footer, Carousel, leaderboard views

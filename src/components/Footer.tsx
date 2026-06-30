@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SITE, PROJECTS } from "@/lib/site";
 
 export function Footer() {
@@ -48,6 +49,11 @@ export function Footer() {
             © {new Date().getFullYear()} Radeon Arena. {SITE.tagline}.
             <span className="ml-2 text-zinc-700">build {process.env.NEXT_PUBLIC_BUILD_TIME ?? "dev"}</span>
           </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/terms" className="hover:text-radeon-400">Terms</Link>
+            <Link href="/privacy" className="hover:text-radeon-400">Privacy</Link>
+            <Link href="/data-policy" className="hover:text-radeon-400">Data Policy</Link>
+          </div>
         </div>
       </div>
     </footer>
