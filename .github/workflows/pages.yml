@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build static site
-        run: pnpm build
+        run: GITHUB_CUSTOM_DOMAIN=1 pnpm build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
