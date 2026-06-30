@@ -4,8 +4,7 @@ import { computeOrgLeaderboard, computeUserLeaderboard } from "./scoring";
 import { hwMatches } from "./hardware";
 import type { Benchmark, CarouselItem, LeaderboardSnapshot } from "./types";
 
-const DEFAULT_BUNDLE_URL =
-  "https://raw.githubusercontent.com/radeon-arena/radeonrun/main/results/bundle.json";
+const DEFAULT_BUNDLE_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/bundle.json`;
 
 export type Bundle = {
   version: number;
@@ -25,7 +24,7 @@ const ENGINE_IMAGE: Record<string, string> = {
 };
 
 export function bundleUrl(): string {
-  return process.env.NEXT_PUBLIC_RADEONRUN_BUNDLE_URL || DEFAULT_BUNDLE_URL;
+  return DEFAULT_BUNDLE_URL;
 }
 
 function imageFromRecipe(

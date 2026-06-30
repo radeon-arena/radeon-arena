@@ -13,7 +13,7 @@ flowchart LR
   RAW --> UI["Radeon Arena static site\nclient-side aggregation"]
 ```
 
-- Data source: `https://raw.githubusercontent.com/radeon-arena/radeonrun/main/results/bundle.json`
+- Data source: bundled static file `/data/bundle.json` (downloaded from `radeonrun/results/bundle.json` during `pnpm build`)
 - Hosting: GitHub Pages at `https://radeon-arena.com/`
 - No runtime API routes, no Postgres, no auth tokens, no admin UI
 - Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
@@ -78,7 +78,8 @@ src/
 1. A recipe is added to `radeonrun/recipes/*.yaml`.
 2. The radeonrun `reproduce.yml` workflow runs it on a self-hosted Radeon runner.
 3. The workflow commits `results/<device>/<recipe>.json` plus regenerated `results/index.json` and `results/bundle.json`.
-4. The static site reads `bundle.json` directly from GitHub raw and aggregates the leaderboard in the browser.
+4. The radeon-arena Pages workflow downloads that bundle into `public/data/bundle.json` during build.
+5. The static site reads `/data/bundle.json` and aggregates the leaderboard in the browser.
 
 ## License
 
