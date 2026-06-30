@@ -25,7 +25,6 @@ export function Footer() {
               Built on open-source inference engines and the AMD ROCm platform.
             </p>
             <div className="flex flex-wrap gap-2 text-sm">
-              <a href={SITE.community} className="btn-ghost">AMD ROCm Community</a>
               <a href={SITE.developer} className="btn-ghost">AMD Developer Community</a>
               <a href={SITE.cloud} className="btn-ghost">Radeon Cloud</a>
               <a href={SITE.blog} className="btn-ghost">ROCm Blog</a>
@@ -49,7 +48,6 @@ export function Footer() {
             © {new Date().getFullYear()} Radeon Arena. {SITE.tagline}.
             <span className="ml-2 text-zinc-700">build {process.env.NEXT_PUBLIC_BUILD_TIME ?? "dev"}</span>
           </p>
-          <a href={SITE.community} className="hover:text-radeon-400">AMD ROCm Community</a>
         </div>
       </div>
     </footer>
