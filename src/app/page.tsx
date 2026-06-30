@@ -32,9 +32,6 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6">
-        <div className="chip mx-auto mb-6 border-radeon-700/50 text-radeon-300">
-          LLM Performance Leaderboard
-        </div>
         <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight text-zinc-50 sm:text-5xl">
           Radeon <span className="text-radeon-500">Arena</span>
         </h1>
