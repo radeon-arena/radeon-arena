@@ -14,7 +14,7 @@ flowchart LR
 ```
 
 - Data source: bundled static file `/data/bundle.json` (downloaded from `radeonrun/results/bundle.json` during `pnpm build`)
-- Hosting: GitHub Pages at `https://radeon-arena.github.io/radeon-arena/` (custom domain `https://radeon-arena.github.io/radeon-arena/` pending DNS)
+- Hosting: GitHub Pages at `https://radeon-arena.github.io/radeon-arena/` (custom domain `https://radeon-arena.com/` pending DNS)
 - No runtime API routes, no Postgres, no auth tokens, no admin UI
 - Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
 
