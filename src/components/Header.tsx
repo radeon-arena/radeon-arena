@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HARDWARE, DEFAULT_HW } from "@/lib/hardware";
 
 export function Header() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   return (
     <header className="sticky top-0 z-40 border-b border-ink-800 bg-ink-950/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
@@ -10,7 +11,7 @@ export function Header() {
           <Link href="/" className="mr-2 flex shrink-0 items-center gap-2">
             <span className="grid h-7 w-7 place-items-center rounded-md bg-ink-900">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon.svg" alt="" width={20} height={20} />
+              <img src={`${basePath}/icon.svg`} alt="" width={20} height={20} />
             </span>
             <span className="font-semibold tracking-tight text-zinc-100">
               Radeon<span className="text-radeon-500">Arena</span>
