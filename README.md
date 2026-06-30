@@ -1,35 +1,33 @@
 # Radeon Arena
 
-A community-driven **LLM performance leaderboard for AMD Radeon GPUs**. Real
-recipes, multiple runtimes (vLLM / SGLang / llama.cpp / MLC-LLM), full
-reproducibility — every result carries the exact serve command, quantization,
-GPU and cluster topology used to produce it.
+A static **LLM performance leaderboard for AMD Radeon GPUs**.
 
-> **Disclaimer** — This is an **independent, community-built project** and is not
-> affiliated with or endorsed by AMD. It is a from-scratch reimplementation of
-> the architecture popularized by *Spark Arena* (NVIDIA DGX Spark), retargeted to
-> the AMD Radeon / ROCm ecosystem. The bundled dataset is **real benchmark data**
-> measured on AMD RDNA hardware (Strix Halo / R9700), RDNA-only. New results are
-> submitted via the **Submit** tab and **verified by re-running the recipe**
-> before they show as verified — self-reported numbers are never trusted blindly.
+Radeon Arena is now a pure display site: it does not run benchmarks, accept web-form submissions, host an admin console, or maintain a database. The benchmark source of truth lives in [`radeon-arena/radeonrun`](https://github.com/radeon-arena/radeonrun), where recipes and measured result JSON files are versioned in git.
+
+## Current Architecture
+
+```mermaid
+flowchart LR
+  RR["radeonrun\nrecipes/*.yaml + results/*.json"] --> B["results/bundle.json"]
+  B --> RAW["GitHub raw"]
+  RAW --> UI["Radeon Arena static site\nclient-side aggregation"]
+```
+
+- Data source: `https://raw.githubusercontent.com/radeon-arena/radeonrun/main/results/bundle.json`
+- Hosting: static Next export served by nginx (`docker compose`, port `13000 -> 80` on cicd)
+- No runtime API routes, no Postgres, no auth tokens, no admin UI
+- Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
 
 ## Stack
 
-| Layer        | Choice                                              |
-| ------------ | --------------------------------------------------- |
-| Framework    | Next.js 14 (App Router, route handlers)             |
-| Styling      | Tailwind CSS                                         |
-| Database     | Postgres (JSONB) → bundled JSON fallback (two-tier) |
-| Auth         | Token (`ADMIN_TOKEN` / `SUBMIT_TOKEN`) — gates `/admin`, verify & submit |
-| Hosting      | Docker Compose (app + Postgres) — see `docker-compose.yml` |
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 14 App Router, `output: "export"` |
+| Styling | Tailwind CSS |
+| Data | GitHub raw `radeonrun/results/bundle.json` |
+| Hosting | nginx static container |
 
-The leaderboard is served from a periodically-regenerated **snapshot** (cached
-in-memory, refresh interval `SNAPSHOT_INTERVAL_HOURS`) rather than aggregating on
-every request.
-
-## Quick start (offline / fallback mode)
-
-No database required — the app falls back to the bundled JSON dataset:
+## Development
 
 ```bash
 pnpm install
@@ -37,74 +35,53 @@ pnpm dev
 # open http://localhost:3000
 ```
 
-## With Postgres (full: submit + verify + discussion)
+Build the static export:
 
 ```bash
-# 1. bring up app + Postgres
-docker compose up -d --build
-
-# 2. apply schema + import the bundled dataset
-docker exec -i radeon-arena-db psql -U radeon -d radeon_arena < scripts/schema.sql
-DATABASE_URL=postgres://radeon:radeon_arena_pw@localhost:5432/radeon_arena pnpm db:import
+pnpm build
+# output is written to ./out
 ```
 
-Set `ADMIN_TOKEN` (admin + verify) and `SUBMIT_TOKEN` (submit + comment) in `.env`
-to enable the admin console and result submission — no external auth provider.
-
-## API
-
-| Endpoint                              | Description                                  |
-| ------------------------------------- | -------------------------------------------- |
-| `GET /static/snapshot`                | Full per-test leaderboard aggregate          |
-| `GET /static/carousel`                | Homepage highlight reel                       |
-| `GET /api/leaderboard/users`          | Contributor ranking (no PII / emails exposed) |
-| `GET /api/leaderboard/organizations`  | Model-publisher ranking                       |
-| `GET /api/benchmarks/:id`             | Full submission detail incl. recipe + tests   |
-| `GET /api/recipes/:id/raw`            | Download a recipe as YAML                      |
-| `POST /api/generate-recipe`           | Structure a serve command (public)            |
-| `POST /api/submit`                    | Submit a result (`SUBMIT_TOKEN`) → pending     |
-| `GET/POST /api/benchmarks/:id/discussion` | Read / add discussion posts               |
-| `GET /api/admin/pending`              | Verification queue (`ADMIN_TOKEN`)            |
-| `POST /api/admin/verify/:id`          | Verify a submission (`ADMIN_TOKEN`)           |
-
-## Scripts
+## Deployment
 
 ```bash
-pnpm dev        # local dev server
-pnpm build      # production build
-pnpm db:schema  # apply Postgres schema
-pnpm db:import  # import the bundled dataset into Postgres
-pnpm snapshot   # emit snapshot.sample.json + carousel.sample.json
+cd /home/lkang/codes/radeon-arena
+SSHC='ssh -F /home/lkang/.ssh/config -i /home/lkang/.ssh/id_rsa -o IdentitiesOnly=yes -o BatchMode=yes'
+rsync -az --delete --exclude node_modules --exclude .next --exclude out --exclude .git --exclude .pnpm-store -e "$SSHC" ./ cicd:~/radeon-arena/
+$SSHC cicd 'cd ~/radeon-arena && sudo docker compose up -d --build --remove-orphans'
 ```
 
-## Project layout
+Verify on cicd:
 
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' http://localhost:13000/strix/leaderboard
 ```
+
+## Project Layout
+
+```text
 src/
   app/
-    page.tsx                 # homepage
-    [hw]/[[...rest]]/page.tsx # /{hw}/{tab} — leaderboard + 7 tabs
-    admin/page.tsx           # moderation console (token-gated)
-    static/{snapshot,carousel}/route.ts
-    api/{submit,admin/verify,admin/pending,benchmarks,recipes,generate-recipe}/...
-  components/                # Header, Footer, Carousel, leaderboard views (SubmitView, VerificationBadge, ...)
+    page.tsx                  # homepage
+    [hw]/[[...rest]]/page.tsx  # /{hw}/{tab}
+    blogs/page.tsx             # static blog shell
+    leaderboard/page.tsx       # legacy redirect to /strix/leaderboard
+  components/
+    Header, Footer, Carousel, leaderboard views
   lib/
-    types.ts                 # domain model (Benchmark, VerificationStatus, ...)
-    benchmarkData.ts         # real RDNA dataset → Benchmark mapping
-    aggregate.ts             # pure snapshot/carousel builders
-    dataSource.ts            # Postgres-or-JSON IO layer
-    pgSource.ts              # Postgres read/write
-    auth.ts, clientAuth.ts   # token auth (server / client)
-    discussions.ts           # discussion CRUD
-    scoring.ts               # contributor/org score model
-scripts/                     # schema.sql + import-to-pg + snapshot
-```
+    githubData.ts              # fetches radeonrun bundle from GitHub raw
+    benchmarkMapping.ts         # maps raw radeonrun rows -> Benchmark[]
+    aggregate.ts                # snapshot/carousel aggregation
+    scoring.ts                  # users/orgs leaderboard scoring
+    types.ts                    # domain model
 ```
 
-## Notes on data hygiene
+## Data Flow
 
-Unlike some leaderboards, `GET /api/leaderboard/users` here **does not** return
-contributor email addresses. Keep PII out of public aggregates.
+1. A recipe is added to `radeonrun/recipes/*.yaml`.
+2. The radeonrun `reproduce.yml` workflow runs it on a self-hosted Radeon runner.
+3. The workflow commits `results/<device>/<recipe>.json` plus regenerated `results/index.json` and `results/bundle.json`.
+4. The static site reads `bundle.json` directly from GitHub raw and aggregates the leaderboard in the browser.
 
 ## License
 
