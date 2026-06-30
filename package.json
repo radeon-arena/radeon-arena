@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "next lint",
-    "snapshot": "tsx scripts/generate-snapshot.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",
