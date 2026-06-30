@@ -14,7 +14,7 @@ flowchart LR
 ```
 
 - Data source: `https://raw.githubusercontent.com/radeon-arena/radeonrun/main/results/bundle.json`
-- Hosting: static Next export served by nginx (`docker compose`, port `13000 -> 80` on cicd)
+- Hosting: GitHub Pages at `https://radeon-arena.github.io/radeon-arena/`
 - No runtime API routes, no Postgres, no auth tokens, no admin UI
 - Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
 
@@ -44,18 +44,15 @@ pnpm build
 
 ## Deployment
 
-```bash
-cd /home/lkang/codes/radeon-arena
-SSHC='ssh -F /home/lkang/.ssh/config -i /home/lkang/.ssh/id_rsa -o IdentitiesOnly=yes -o BatchMode=yes'
-rsync -az --delete --exclude node_modules --exclude .next --exclude out --exclude .git --exclude .pnpm-store -e "$SSHC" ./ cicd:~/radeon-arena/
-$SSHC cicd 'cd ~/radeon-arena && sudo docker compose up -d --build --remove-orphans'
+GitHub Pages deploys automatically on every push to `main` using `.github/workflows/pages.yml`.
+
+Production URL:
+
+```text
+https://radeon-arena.github.io/radeon-arena/
 ```
 
-Verify on cicd:
-
-```bash
-curl -s -o /dev/null -w '%{http_code}\n' http://localhost:13000/strix/leaderboard
-```
+Local cicd hosting on `10.161.176.38:13000` has been stopped; use GitHub Pages as the canonical deployment.
 
 ## Project Layout
 
