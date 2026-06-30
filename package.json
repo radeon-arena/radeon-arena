@@ -6,6 +6,7 @@
   "packageManager": "pnpm@10.33.4",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/fetch-bundle.mjs",
     "build": "next build",
     "lint": "next lint"
   },
