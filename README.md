@@ -14,7 +14,7 @@ flowchart LR
 ```
 
 - Data source: bundled static file `/data/bundle.json` (downloaded from `radeonrun/results/bundle.json` during `pnpm build`)
-- Hosting: GitHub Pages at `https://radeon-arena.com/`
+- Hosting: GitHub Pages at `https://radeon-arena.github.io/radeon-arena/` (custom domain `https://radeon-arena.github.io/radeon-arena/` pending DNS)
 - No runtime API routes, no Postgres, no auth tokens, no admin UI
 - Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
 
@@ -49,10 +49,10 @@ GitHub Pages deploys automatically on every push to `main` using `.github/workfl
 Production URL:
 
 ```text
-https://radeon-arena.com/
+https://radeon-arena.github.io/radeon-arena/
 ```
 
-Local cicd hosting on `10.161.176.38:13000` has been stopped; use the custom-domain GitHub Pages site as the canonical deployment. DNS must point `radeon-arena.com` to GitHub Pages.
+Local cicd hosting on `10.161.176.38:13000` has been stopped; use GitHub Pages as the canonical deployment. Custom domain `radeon-arena.com` is configured only after Cloudflare DNS points to GitHub Pages.
 
 ## Project Layout
 
