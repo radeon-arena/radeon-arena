@@ -5,13 +5,16 @@ export interface RawRun {
   host: { slug: string; name: string; vendor: string; chip: string; vram_gb?: number | null };
   model: { slug: string; name: string; params_b?: number | null; quantization: string; source_url?: string | null };
   engine: { slug: string; name: string; version?: string; commit?: string; backend?: string; build_flags?: string | null };
+  pp?: number | null;
   pp_toks_per_s?: number | null;
+  tg?: number | null;
   tg_toks_per_s?: number | null;
   ttft_ms?: number | null;
   tpot_ms?: number | null;
   combined_toks_per_s?: number | null;
   concurrency?: number | null;
   batch?: number | null;
+  depth?: number | null;
   scenario?: string;
   seq_test?: string | null;
   command?: string;
@@ -90,7 +93,7 @@ export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
     const byTest = new Map<string, RawRun>();
     for (const r of group) {
       const c = r.concurrency ?? r.batch ?? 1;
-      const tkey = `${c}|${r.seq_test ?? ""}`;
+      const tkey = `${c}|${r.depth ?? 0}|${r.pp ?? ""}|${r.tg ?? ""}|${r.seq_test ?? ""}`;
       const prev = byTest.get(tkey);
       if (!prev || r.run_date >= prev.run_date) byTest.set(tkey, r);
       if (r.run_date > latestDate) latestDate = r.run_date;
@@ -104,14 +107,17 @@ export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
     for (const tkey of sortedKeys) {
       const r = byTest.get(tkey)!;
       const c = r.concurrency ?? r.batch ?? 1;
+      const depth = r.depth && r.depth > 0 ? ` @ d${r.depth}` : "";
       const seq = r.seq_test ? ` ${r.seq_test}` : "";
+      const ppSize = r.pp ?? 512;
+      const tgSize = r.tg ?? 128;
       const pp = num(r.pp_toks_per_s);
       const tg = num(r.tg_toks_per_s);
       const ttft = num(r.ttft_ms);
-      if (pp !== undefined) tests.push({ testName: `pp512 (c${c})${seq}`, tokensPerSec: round(pp), e2eTtft: ttft, ttfr: ttft });
+      if (pp !== undefined) tests.push({ testName: `pp${ppSize}${depth} (c${c})${seq}`, tokensPerSec: round(pp), e2eTtft: ttft, ttfr: ttft });
       if (tg !== undefined) {
         tests.push({
-          testName: `tg128 (c${c})${seq}`,
+          testName: `tg${tgSize}${depth} (c${c})${seq}`,
           tokensPerSec: round(tg),
           e2eTtft: ttft,
           ttfr: ttft,

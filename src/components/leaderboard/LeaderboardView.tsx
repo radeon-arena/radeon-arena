@@ -9,9 +9,9 @@ import { BenchmarkModal } from "./BenchmarkModal";
 import { VerificationBadge } from "./VerificationBadge";
 
 // ── Test-name parsing ────────────────────────────────────────────────────────
-// Raw names look like "tg128 (c1)", "pp512 (c16)", "tg128 (c1) in4096".
+// Raw names look like "tg128 (c1)", "pp2048 @ d4096 (c5)", "tg128 (c1) in4096".
 //   base        = tg128 / pp512        (test family + size)
-//   inVar       = in4096               (optional input-length variant)
+//   inVar       = @ d4096 / in4096     (optional context/input-length variant)
 //   conc        = 1 / 2 / 4 / 16 ...   (concurrency, the (cN) part)
 //   typeLabel   = base [· inVar]       (what the "Test Type" dropdown shows)
 type ParsedTest = {
@@ -26,13 +26,15 @@ type ParsedTest = {
 function parseTest(raw: string): ParsedTest {
   const concMatch = raw.match(/\(c(\d+)\)/);
   const conc = concMatch ? parseInt(concMatch[1], 10) : 1;
+  const depthMatch = raw.match(/@\s*d(\d+)/);
   const inMatch = raw.match(/\b(in\d+)\b/);
-  const inVar = inMatch ? inMatch[1] : "";
+  const inVar = depthMatch ? `d${depthMatch[1]}` : inMatch ? inMatch[1] : "";
   const base = raw
     .replace(/\s*\(c\d+\)/, "")
+    .replace(/\s*@\s*d\d+/, "")
     .replace(/\s*\bin\d+\b/, "")
     .trim();
-  const typeLabel = inVar ? `${base} · ${inVar}` : base;
+  const typeLabel = inVar ? `${base} @ ${inVar}` : base;
   const family = base.startsWith("tg") ? "tg" : base.startsWith("pp") ? "pp" : "other";
   return { raw, base, inVar, conc, typeLabel, family };
 }
@@ -41,8 +43,8 @@ function typeOrder(a: ParsedTest, b: ParsedTest): number {
   const fam = (f: ParsedTest["family"]) => (f === "tg" ? 0 : f === "pp" ? 1 : 2);
   if (fam(a.family) !== fam(b.family)) return fam(a.family) - fam(b.family);
   if (!!a.inVar !== !!b.inVar) return a.inVar ? 1 : -1;
-  const ai = parseInt(a.inVar.replace("in", "") || "0", 10);
-  const bi = parseInt(b.inVar.replace("in", "") || "0", 10);
+  const ai = parseInt(a.inVar.replace(/^(in|d)/, "") || "0", 10);
+  const bi = parseInt(b.inVar.replace(/^(in|d)/, "") || "0", 10);
   return ai - bi;
 }
 

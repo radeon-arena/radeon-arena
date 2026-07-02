@@ -65,18 +65,23 @@ function rowsFromBundle(bundle: Bundle): RawRun[] {
 
       for (const m of data.measurements ?? []) {
         const mm = m as any;
-        if (typeof mm.decode_toks_per_s !== "number") continue;
+        if (typeof mm.decode_toks_per_s !== "number" && typeof mm.prefill_toks_per_s !== "number") continue;
+        const depth = typeof mm.depth === "number" ? mm.depth : 0;
         rows.push({
           run_date: runDate,
           host: { slug: `radeonrun-${device}`, name: device === "strix" ? "Strix Halo" : gpu, vendor: "AMD", chip: gpu, vram_gb: device === "strix" ? 128 : undefined },
           model: { slug: String(recipe.name ?? modelName).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), name: String(recipe.name ?? modelName), params_b: null, quantization: quant, source_url: modelPath && !modelPath.startsWith("/models/") ? `https://huggingface.co/${modelPath}` : undefined },
           engine: { slug: engineSlug, name: engineName, version: tag, commit: String(meta.image_commit ?? tag ?? ""), backend, build_flags: engineName === "llama.cpp" ? "-DGGML_HIP=ON (gfx1151)" : undefined },
           command: typeof meta.command === "string" ? meta.command : typeof recipe.command === "string" ? recipe.command : "",
+          pp: mm.pp,
+          pp_toks_per_s: mm.prefill_toks_per_s,
+          tg: mm.tg,
           tg_test: `out${mm.tg ?? 128}`,
           tg_toks_per_s: mm.decode_toks_per_s,
           ttft_ms: mm.ttft_ms,
           tpot_ms: mm.tpot_ms,
           concurrency: mm.concurrency ?? 1,
+          depth,
           scenario: String(data.profile ?? "halo-arena-v1"),
           image,
           image_tag: tag,
