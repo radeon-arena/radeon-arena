@@ -83,6 +83,20 @@ function fmtDateTime(iso?: string): string {
 }
 
 const MEDALS: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
+const PAGE_SIZE = 10;
+
+function paginationRange(page: number, totalPages: number): number[] {
+  const maxButtons = 10;
+  if (totalPages <= maxButtons) return Array.from({ length: totalPages }, (_, i) => i + 1);
+  const half = Math.floor(maxButtons / 2);
+  let start = Math.max(1, page - half);
+  let end = start + maxButtons - 1;
+  if (end > totalPages) {
+    end = totalPages;
+    start = end - maxButtons + 1;
+  }
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}
 
 export function LeaderboardView({ hw }: { hw: string }) {
   const [snap, setSnap] = useState<LeaderboardSnapshot | null>(null);
@@ -98,6 +112,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
   const [sortKey, setSortKey] = useState<"rank" | "tps">("rank");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     loadGithubData()
@@ -170,6 +185,25 @@ export function LeaderboardView({ hw }: { hw: string }) {
     });
     return sorted;
   }, [list, hw, search, runtimeFilter, clusterFilter, quantFilter, verifyFilter, sortKey, sortDir]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [rawName, hw, search, runtimeFilter, clusterFilter, quantFilter, verifyFilter, sortKey, sortDir]);
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  const pageRows = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return rows.slice(start, start + PAGE_SIZE);
+  }, [rows, page]);
+
+  const showingStart = rows.length ? (page - 1) * PAGE_SIZE + 1 : 0;
+  const showingEnd = rows.length ? Math.min(page * PAGE_SIZE, rows.length) : 0;
+  const pageNumbers = paginationRange(page, totalPages);
 
   if (error) return <p className="py-12 text-center text-zinc-500">Failed to load leaderboard snapshot.</p>;
   if (!snap) return <p className="py-12 text-center text-zinc-500">Loading leaderboard snapshot…</p>;
@@ -303,7 +337,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800">
-            {rows.map((e) => (
+            {pageRows.map((e) => (
               <tr key={`${e.benchmarkId}-${e.rank}`} className="hover:bg-ink-850/60">
                 <td className="px-4 py-2.5">
                   <span className="inline-flex items-center gap-1.5 font-mono text-zinc-300">
@@ -362,6 +396,49 @@ export function LeaderboardView({ hw }: { hw: string }) {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="card flex flex-col gap-3 px-5 py-4 text-sm text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
+        <span>
+          Showing <span className="font-medium text-zinc-200">{showingStart}</span> to{" "}
+          <span className="font-medium text-zinc-200">{showingEnd}</span> of{" "}
+          <span className="font-medium text-zinc-200">{rows.length}</span> entries
+        </span>
+        <div className="flex items-center gap-1 self-end sm:self-auto" aria-label="Leaderboard pagination">
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page <= 1}
+            aria-label="Previous page"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-ink-700 text-zinc-400 transition-colors hover:border-radeon-700 hover:text-radeon-300 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-ink-700 disabled:hover:text-zinc-400"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+          {pageNumbers.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => setPage(p)}
+              aria-current={p === page ? "page" : undefined}
+              className={`h-8 min-w-8 rounded-md px-2 text-sm font-medium transition-colors ${
+                p === page
+                  ? "bg-radeon-500 text-ink-950"
+                  : "text-zinc-400 hover:bg-ink-800 hover:text-zinc-100"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page >= totalPages}
+            aria-label="Next page"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-ink-700 text-zinc-400 transition-colors hover:border-radeon-700 hover:text-radeon-300 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-ink-700 disabled:hover:text-zinc-400"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+        </div>
       </div>
 
       <p className="text-xs text-zinc-600">
