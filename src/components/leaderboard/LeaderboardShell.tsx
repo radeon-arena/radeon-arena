@@ -7,6 +7,7 @@ import { OrganizationsView } from "@/components/leaderboard/OrganizationsView";
 import { CompareView } from "@/components/leaderboard/CompareView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { HowToView } from "@/components/leaderboard/HowToView";
+import { RecipesView } from "@/components/leaderboard/RecipesView";
 import { PROJECTS } from "@/lib/site";
 import { VISIBLE_TABS, type TabKey } from "@/lib/tabs";
 
@@ -15,6 +16,8 @@ function TabIcon({ k }: { k: TabKey }) {
   switch (k) {
     case "leaderboard":
       return <svg {...common}><path d="M5 21V10M12 21V4M19 21v-7" strokeLinecap="round" /></svg>;
+    case "recipes":
+      return <svg {...common}><path d="M6 4h9l3 3v13H6z" /><path d="M14 4v4h4M9 12h6M9 16h6" strokeLinecap="round" /></svg>;
     case "users":
       return <svg {...common}><circle cx="9" cy="8" r="3" /><path d="M3 20a6 6 0 0 1 12 0M16 6a3 3 0 0 1 0 6M21 20a6 6 0 0 0-4-5.6" strokeLinecap="round" /></svg>;
     case "organizations":
@@ -71,6 +74,7 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
 
       <div className="mt-6">
         {tab === "leaderboard" && <LeaderboardView hw={hw} />}
+        {tab === "recipes" && <RecipesView hw={hw} />}
         {tab === "users" && <UsersView hw={hw} />}
         {tab === "organizations" && <OrganizationsView hw={hw} />}
         {tab === "compare" && <CompareView hw={hw} />}
