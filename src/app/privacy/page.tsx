@@ -25,8 +25,8 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-lg font-semibold text-zinc-100">Static hosting and third-party requests</h2>
           <p className="mt-2 text-zinc-400">
-            The site is hosted on GitHub Pages and may be served through Cloudflare DNS/CDN. Your browser
-            also loads static benchmark data from this site&apos;s <code>/data/bundle.json</code>, which is
+            The site is served as a static website through Cloudflare and an nginx origin. Your browser
+            loads static benchmark data from this site&apos;s <code>/data/bundle.json</code>, which is
             generated from the public radeonrun repository. External links, including GitHub, Hugging
             Face, ROCm, and other community resources, are governed by those services&apos; own policies.
           </p>
