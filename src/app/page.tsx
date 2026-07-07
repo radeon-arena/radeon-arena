@@ -39,7 +39,6 @@ export default function HomePage() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="/strix/leaderboard" className="btn-primary">View Leaderboard</Link>
           <Link href="/strix/recipes" className="btn-ghost">Browse Recipes</Link>
-          <Link href="/strix/compare" className="btn-ghost">Compare Models</Link>
           <Link href="/strix/submit" className="btn-ghost">Submit Benchmark</Link>
         </div>
       </section>
