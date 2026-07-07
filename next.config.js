@@ -1,14 +1,15 @@
 /** @type {import('next').NextConfig} */
 const BUILD_TIME = new Date().toISOString();
-const useBasePath = process.env.GITHUB_CUSTOM_DOMAIN !== "1";
+const useBasePath = process.env.GITHUB_PROJECT_PAGE === "1";
 
 const nextConfig = {
   reactStrictMode: true,
   // Pure static export. The browser reads benchmark data directly from the
   // public radeonrun GitHub raw bundle at runtime.
   output: "export",
-  // Default build targets the GitHub project page. Set GITHUB_CUSTOM_DOMAIN=1
-  // only after radeon-arena.com DNS points at GitHub Pages and Pages CNAME is enabled.
+  // Default build targets the custom domain root (radeon-arena.com). Set
+  // GITHUB_PROJECT_PAGE=1 only when intentionally building the old GitHub
+  // project page under /radeon-arena.
   basePath: useBasePath ? "/radeon-arena" : "",
   assetPrefix: useBasePath ? "/radeon-arena/" : "",
   trailingSlash: true,
