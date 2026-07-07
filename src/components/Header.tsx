@@ -3,11 +3,22 @@ import { HARDWARE, DEFAULT_HW } from "@/lib/hardware";
 
 export function Header() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: `/${DEFAULT_HW}/leaderboard`, label: "Leaderboard" },
+    { href: `/${DEFAULT_HW}/recipes`, label: "Recipes" },
+    { href: `/${DEFAULT_HW}/organizations`, label: "Organizations" },
+    { href: `/${DEFAULT_HW}/compare`, label: "Compare" },
+    { href: `/${DEFAULT_HW}/submit`, label: "Submit" },
+    { href: `/${DEFAULT_HW}/how`, label: "How" },
+    { href: "/blogs", label: "Blog" },
+  ];
+
   return (
     <header className="sticky top-0 z-40 border-b border-ink-800 bg-ink-950/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
         {/* Left: logo + primary navigation */}
-        <div className="flex items-center gap-1">
+        <div className="flex min-w-0 items-center gap-1">
           <Link href="/" className="mr-2 flex shrink-0 items-center gap-2">
             <span className="grid h-7 w-7 place-items-center rounded-md bg-ink-900">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -17,19 +28,12 @@ export function Header() {
               Radeon<span className="text-radeon-500">Arena</span>
             </span>
           </Link>
-          <nav className="flex items-center gap-1 text-sm">
-            <Link href={`/${DEFAULT_HW}/leaderboard`} className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
-              Leaderboard
-            </Link>
-            <Link href={`/${DEFAULT_HW}/recipes`} className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
-              Recipes
-            </Link>
-            <Link href={`/${DEFAULT_HW}/compare`} className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
-              Compare
-            </Link>
-            <Link href="/blogs" className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
-              Blog
-            </Link>
+          <nav className="thin-scroll flex min-w-0 items-center gap-1 overflow-x-auto text-sm">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="shrink-0 rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
