@@ -7,7 +7,6 @@ import { CompareView } from "@/components/leaderboard/CompareView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { HowToView } from "@/components/leaderboard/HowToView";
 import { RecipesView } from "@/components/leaderboard/RecipesView";
-import { PROJECTS } from "@/lib/site";
 import type { TabKey } from "@/lib/tabs";
 
 const PAGE_COPY: Record<TabKey, { title: string; subtitle: string }> = {
@@ -46,19 +45,6 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      {/* Powered-by bar */}
-      <div className="mb-6 flex flex-wrap justify-end gap-2 text-xs">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-zinc-500">
-          <span>Powered by:</span>
-          {Object.values(PROJECTS).map((p) => (
-            <a key={p.name} href={p.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-radeon-300 hover:text-radeon-200">
-              {p.name}
-              <svg viewBox="0 0 24 24" className="h-3 w-3 opacity-70" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 5h10v10M19 5 5 19" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </a>
-          ))}
-        </div>
-      </div>
-
       <h1 className="text-3xl font-bold tracking-tight text-radeon-400">{copy.title}</h1>
       <p className="mt-1 text-sm text-zinc-400">{copy.subtitle}</p>
 
