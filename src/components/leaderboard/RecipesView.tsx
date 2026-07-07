@@ -112,22 +112,14 @@ export function RecipesView({ hw }: { hw: string }) {
               Serve commands, pinned images, model sources, and measured result links from radeonrun. Benchmark workload settings stay in the profile files; this view shows how each model is launched.
             </p>
           </div>
-          <div className="space-y-3 sm:min-w-80">
-            <div className="grid grid-cols-3 gap-2 text-center text-xs text-zinc-400">
-              <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
+          <div className="flex flex-col gap-3 sm:min-w-80 sm:flex-row sm:items-stretch">
+            <div className="text-center text-xs text-zinc-400 sm:w-28">
+              <div className="h-full rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
                 <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
                 <div>recipes</div>
               </div>
-              <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
-                <div className="text-lg font-semibold text-zinc-100">{facets.runtimes.length}</div>
-                <div>runtimes</div>
-              </div>
-              <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
-                <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
-                <div>results</div>
-              </div>
             </div>
-            <Link href={`/${hw}/submit`} className="btn-primary w-full">
+            <Link href={`/${hw}/submit`} className="btn-primary flex-1">
               Submit Recipe
             </Link>
           </div>
