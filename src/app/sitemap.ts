@@ -1,18 +1,22 @@
 import type { MetadataRoute } from "next";
-import { HARDWARE } from "@/lib/hardware";
-import { TABS } from "@/lib/tabs";
 
 const BASE_URL = "https://radeon-arena.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticRoutes = ["", "/blogs", "/terms", "/privacy", "/data-policy"];
-  const hardwareRoutes = HARDWARE.flatMap((hardware) => [
-    `/${hardware.key}`,
-    ...TABS.map((tab) => `/${hardware.key}/${tab.key}`),
-  ]);
+  const routes = [
+    "",
+    "/blogs",
+    "/terms",
+    "/privacy",
+    "/data-policy",
+    "/strix",
+    "/strix/leaderboard",
+    "/strix/recipes",
+    "/strix/submit",
+  ];
 
-  return [...staticRoutes, ...hardwareRoutes].map((route) => ({
+  return routes.map((route) => ({
     url: `${BASE_URL}${route}`,
     lastModified: now,
   }));
