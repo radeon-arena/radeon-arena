@@ -113,9 +113,6 @@ export function RecipesView({ hw }: { hw: string }) {
             </p>
           </div>
           <div className="space-y-3 sm:min-w-80">
-            <Link href={`/${hw}/submit`} className="btn-primary w-full">
-              Submit Recipe
-            </Link>
             <div className="grid grid-cols-3 gap-2 text-center text-xs text-zinc-400">
               <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
                 <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
@@ -126,10 +123,13 @@ export function RecipesView({ hw }: { hw: string }) {
                 <div>runtimes</div>
               </div>
               <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
-                <div className="text-lg font-semibold text-zinc-100">{bundle?.short_commit ?? "-"}</div>
-                <div>bundle</div>
+                <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
+                <div>results</div>
               </div>
             </div>
+            <Link href={`/${hw}/submit`} className="btn-primary w-full">
+              Submit Recipe
+            </Link>
           </div>
         </div>
 
