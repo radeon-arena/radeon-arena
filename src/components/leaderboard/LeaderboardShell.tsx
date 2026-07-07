@@ -3,7 +3,6 @@
 import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
 import { UsersView } from "@/components/leaderboard/UsersView";
 import { OrganizationsView } from "@/components/leaderboard/OrganizationsView";
-import { CompareView } from "@/components/leaderboard/CompareView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { RecipesView } from "@/components/leaderboard/RecipesView";
 import type { TabKey } from "@/lib/tabs";
@@ -25,10 +24,6 @@ const PAGE_COPY: Record<TabKey, { title: string; subtitle: string }> = {
     title: "Organizations",
     subtitle: "Organization-level benchmark contributions and verified result coverage.",
   },
-  compare: {
-    title: "Compare Models",
-    subtitle: "Compare model and runtime performance across available benchmark points.",
-  },
   submit: {
     title: "Submit Recipe",
     subtitle: "Prepare a reproducible radeonrun recipe and measured result update.",
@@ -48,7 +43,6 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
         {tab === "recipes" && <RecipesView hw={hw} />}
         {tab === "users" && <UsersView hw={hw} />}
         {tab === "organizations" && <OrganizationsView hw={hw} />}
-        {tab === "compare" && <CompareView hw={hw} />}
         {tab === "submit" && <SubmitView hw={hw} />}
       </div>
     </div>

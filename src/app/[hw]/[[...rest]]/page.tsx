@@ -22,7 +22,7 @@ export function generateMetadata({ params }: { params: { hw: string } }): Metada
   };
 }
 
-// Routes: /strix, /strix/leaderboard, /strix/users, /r9700/compare, /w7900/...
+// Routes: /strix, /strix/leaderboard, /strix/recipes, /strix/submit, /w7900/...
 export default function HardwarePage({ params }: { params: { hw: string; rest?: string[] } }) {
   if (!HARDWARE.some((h) => h.key === params.hw)) notFound();
   const tabKey = params.rest?.[0];
