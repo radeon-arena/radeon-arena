@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { hwLabel } from "@/lib/hardware";
 import { loadGithubData, type Bundle } from "@/lib/githubData";
@@ -100,14 +101,6 @@ export function RecipesView({ hw }: { hw: string }) {
     });
   }, [records, query, runtime, quant]);
 
-  if (error) {
-    return <div className="card p-7 text-sm text-red-200">Failed to load recipe data.</div>;
-  }
-
-  if (!bundle) {
-    return <div className="card p-7 text-sm text-zinc-400">Loading recipes...</div>;
-  }
-
   return (
     <div className="space-y-5">
       <div className="card p-6">
@@ -119,18 +112,23 @@ export function RecipesView({ hw }: { hw: string }) {
               Serve commands, pinned images, model sources, and measured result links from radeonrun. Benchmark workload settings stay in the profile files; this view shows how each model is launched.
             </p>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs text-zinc-400 sm:min-w-80">
-            <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
-              <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
-              <div>recipes</div>
-            </div>
-            <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
-              <div className="text-lg font-semibold text-zinc-100">{facets.runtimes.length}</div>
-              <div>runtimes</div>
-            </div>
-            <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
-              <div className="text-lg font-semibold text-zinc-100">{bundle.short_commit}</div>
-              <div>bundle</div>
+          <div className="space-y-3 sm:min-w-80">
+            <Link href={`/${hw}/submit`} className="btn-primary w-full">
+              Submit Recipe
+            </Link>
+            <div className="grid grid-cols-3 gap-2 text-center text-xs text-zinc-400">
+              <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
+                <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
+                <div>recipes</div>
+              </div>
+              <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
+                <div className="text-lg font-semibold text-zinc-100">{facets.runtimes.length}</div>
+                <div>runtimes</div>
+              </div>
+              <div className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
+                <div className="text-lg font-semibold text-zinc-100">{bundle?.short_commit ?? "-"}</div>
+                <div>bundle</div>
+              </div>
             </div>
           </div>
         </div>
@@ -153,7 +151,11 @@ export function RecipesView({ hw }: { hw: string }) {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {error ? (
+        <div className="card p-7 text-sm text-red-200">Failed to load recipe data.</div>
+      ) : !bundle ? (
+        <div className="card p-7 text-sm text-zinc-400">Loading recipes...</div>
+      ) : filtered.length === 0 ? (
         <div className="card p-7 text-sm text-zinc-400">No recipes match the current filters.</div>
       ) : (
         <div className="grid gap-4">
