@@ -21,6 +21,9 @@ export function Header() {
             <Link href={`/${DEFAULT_HW}/leaderboard`} className="rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
               Leaderboard
             </Link>
+            <Link href={`/${DEFAULT_HW}/recipes`} className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
+              Recipes
+            </Link>
             <Link href={`/${DEFAULT_HW}/compare`} className="hidden rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800 sm:block">
               Compare
             </Link>
