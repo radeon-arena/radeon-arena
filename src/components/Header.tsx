@@ -10,7 +10,6 @@ export function Header() {
     { href: `/${DEFAULT_HW}/organizations`, label: "Organizations" },
     { href: `/${DEFAULT_HW}/compare`, label: "Compare" },
     { href: `/${DEFAULT_HW}/submit`, label: "Submit" },
-    { href: `/${DEFAULT_HW}/how`, label: "How" },
     { href: "/blogs", label: "Blog" },
   ];
 
