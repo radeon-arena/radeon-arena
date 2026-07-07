@@ -4,7 +4,6 @@ import { HARDWARE, DEFAULT_HW } from "@/lib/hardware";
 export function Header() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const navItems = [
-    { href: "/", label: "Home" },
     { href: `/${DEFAULT_HW}/leaderboard`, label: "Leaderboard" },
     { href: `/${DEFAULT_HW}/recipes`, label: "Recipes" },
     { href: `/${DEFAULT_HW}/organizations`, label: "Organizations" },
