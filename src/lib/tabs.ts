@@ -7,7 +7,6 @@ export const TABS = [
   { key: "leaderboard", label: "LLM Leaderboard" },
   { key: "recipes", label: "Recipes" },
   { key: "users", label: "Users" },
-  { key: "organizations", label: "Organizations" },
   { key: "submit", label: "Submit Recipe" },
 ] as const;
 

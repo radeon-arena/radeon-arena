@@ -2,7 +2,6 @@
 
 import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
 import { UsersView } from "@/components/leaderboard/UsersView";
-import { OrganizationsView } from "@/components/leaderboard/OrganizationsView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
 import { RecipesView } from "@/components/leaderboard/RecipesView";
 import type { TabKey } from "@/lib/tabs";
@@ -19,10 +18,6 @@ const PAGE_COPY: Record<TabKey, { title: string; subtitle: string }> = {
   users: {
     title: "Users",
     subtitle: "Contributor rankings for submitted and verified benchmark runs.",
-  },
-  organizations: {
-    title: "Organizations",
-    subtitle: "Organization-level benchmark contributions and verified result coverage.",
   },
   submit: {
     title: "Submit Recipe",
@@ -42,7 +37,6 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
         {tab === "leaderboard" && <LeaderboardView hw={hw} />}
         {tab === "recipes" && <RecipesView hw={hw} />}
         {tab === "users" && <UsersView hw={hw} />}
-        {tab === "organizations" && <OrganizationsView hw={hw} />}
         {tab === "submit" && <SubmitView hw={hw} />}
       </div>
     </div>

@@ -6,7 +6,6 @@ export function Header() {
   const navItems = [
     { href: `/${DEFAULT_HW}/leaderboard`, label: "Leaderboard" },
     { href: `/${DEFAULT_HW}/recipes`, label: "Recipes" },
-    { href: `/${DEFAULT_HW}/organizations`, label: "Organizations" },
     { href: `/${DEFAULT_HW}/submit`, label: "Submit" },
     { href: "/blogs", label: "Blog" },
   ];
