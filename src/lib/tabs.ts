@@ -10,7 +10,6 @@ export const TABS = [
   { key: "organizations", label: "Organizations" },
   { key: "compare", label: "Compare Models" },
   { key: "submit", label: "Submit Recipe" },
-  { key: "how", label: "How to Benchmark" },
 ] as const;
 
 export type TabKey = (typeof TABS)[number]["key"];

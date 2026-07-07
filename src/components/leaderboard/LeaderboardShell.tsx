@@ -5,7 +5,6 @@ import { UsersView } from "@/components/leaderboard/UsersView";
 import { OrganizationsView } from "@/components/leaderboard/OrganizationsView";
 import { CompareView } from "@/components/leaderboard/CompareView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
-import { HowToView } from "@/components/leaderboard/HowToView";
 import { RecipesView } from "@/components/leaderboard/RecipesView";
 import type { TabKey } from "@/lib/tabs";
 
@@ -34,10 +33,6 @@ const PAGE_COPY: Record<TabKey, { title: string; subtitle: string }> = {
     title: "Submit Recipe",
     subtitle: "Prepare a reproducible radeonrun recipe and measured result update.",
   },
-  how: {
-    title: "How to Benchmark",
-    subtitle: "Reproduce the Radeon Arena benchmark methodology on AMD Radeon hardware.",
-  },
 };
 
 export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
@@ -55,7 +50,6 @@ export function LeaderboardShell({ hw, tab }: { hw: string; tab: TabKey }) {
         {tab === "organizations" && <OrganizationsView hw={hw} />}
         {tab === "compare" && <CompareView hw={hw} />}
         {tab === "submit" && <SubmitView hw={hw} />}
-        {tab === "how" && <HowToView />}
       </div>
     </div>
   );
