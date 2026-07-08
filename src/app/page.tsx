@@ -86,7 +86,7 @@ export default function HomePage() {
           <div>
             <h2 className="text-xl font-semibold text-zinc-100">Technical Blog</h2>
             <p className="mt-1 max-w-2xl text-sm text-zinc-400">
-              Deep dives, runbooks, and benchmarking notes covering reproducibility, runtime tuning, and practical
+              Articles and benchmarking notes covering reproducibility, runtime tuning, and practical
               performance investigations from the community.
             </p>
           </div>

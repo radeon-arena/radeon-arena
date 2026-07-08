@@ -14,7 +14,7 @@ flowchart LR
 ```
 
 - Data source: bundled static file `/data/bundle.json` (downloaded from `radeonrun/results/bundle.json` during `pnpm build`)
-- Hosting: `https://radeon-arena.com/` via Cloudflare → `latex-tools` nginx static origin (`/var/www/radeon-arena/`)
+- Website: `https://radeon-arena.com/`
 - No runtime API routes, no Postgres, no auth tokens, no admin UI
 - Submit flow: users open a pull request in `radeon-arena/radeonrun` with a recipe and measured result file
 - Public policy pages: `/terms`, `/privacy`, and `/data-policy`
@@ -26,7 +26,7 @@ flowchart LR
 | Framework | Next.js 14 App Router, `output: "export"` |
 | Styling | Tailwind CSS |
 | Data | GitHub raw `radeonrun/results/bundle.json` |
-| Hosting | nginx static container |
+| Hosting | Static web hosting |
 
 ## Development
 
@@ -43,23 +43,22 @@ pnpm build
 # output is written to ./out
 ```
 
-## Deployment
+## Production
 
-Production deploy is a static export synced to the US `latex-tools` server:
-
-```bash
-pnpm build
-rsync -az --delete out/ latex-tools:/tmp/radeon-arena-out/
-ssh latex-tools 'sudo rsync -a --delete /tmp/radeon-arena-out/ /var/www/radeon-arena/'
-```
-
-Production URL:
+Production serves the static export at:
 
 ```text
 https://radeon-arena.com/
 ```
 
-The nginx vhost is on `latex-tools` at `/etc/nginx/sites-available/radeon-arena.com`, with access logs in `/var/log/nginx/radeon-arena.com.access.log`. The legacy cicd Docker deployment on `10.161.176.38:13000` is not the production path.
+Deployment is a static-file publish of the generated `out/` directory.
+
+## Static Export
+
+```bash
+pnpm build
+# output is written to ./out
+```
 
 ## Project Layout
 
