@@ -1,6 +1,6 @@
 // Hardware axis shared by the leaderboard page, its sub-views, and the
-// per-hardware API routes. A hardware tab scopes every view (leaderboard,
-// users, organizations, compare) to the GPUs whose `gpu` string it matches.
+// per-hardware API routes. A hardware tab scopes every active view (leaderboard,
+// recipes, submit) to the GPUs whose `gpu` string it matches.
 //
 // W7900 is a real Radeon PRO card with no measured runs yet, so its views
 // render an honest empty state rather than fabricated numbers.
