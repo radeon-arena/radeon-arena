@@ -31,7 +31,7 @@ const STATUS: Record<
   },
 };
 
-/** Verification-status pill shown on the leaderboard and in the detail modal (DESIGN.md §4). */
+/** Verification-status pill shown on the leaderboard and in the detail modal. */
 export function VerificationBadge({
   status,
   className = "",

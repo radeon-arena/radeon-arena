@@ -51,7 +51,7 @@ export interface Creator {
 }
 
 /**
- * Verification state of a benchmark (DESIGN.md §4):
+ * Verification state of a benchmark result.
  *   self     — first-party RadeonArena runner result (trusted, not user-reported)
  *   pending  — user-submitted, awaiting a verification rerun
  *   verified — rerun matched the self-reported value within tolerance (✅)
@@ -111,7 +111,7 @@ export interface Benchmark {
   shareCounts?: Record<string, number>;
   totalShares?: number;
   dataSource?: string; // provenance, e.g. "RadeonArena"
-  verificationStatus?: VerificationStatus; // DESIGN §4; defaults to "self"
+  verificationStatus?: VerificationStatus; // defaults to "self"
   selfReported?: boolean; // true when user-submitted (vs first-party runner)
   verification?: VerificationRecord; // rerun record, set once verified/failed
   submittedAt: string;
