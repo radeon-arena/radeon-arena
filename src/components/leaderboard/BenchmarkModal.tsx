@@ -11,7 +11,7 @@ import { getGithubBenchmark } from "@/lib/githubData";
 const HALO = PROJECTS.benchy; // radeonrun
 
 function clusterLabel(n: number): string {
-  return n <= 1 ? "Single Node" : `${n} Nodes`;
+  return n <= 1 ? "1 GPU" : `${n} GPUs`;
 }
 
 export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => void }) {
@@ -141,7 +141,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
               <h3 className="text-sm font-semibold text-radeon-300">Model Information</h3>
               <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 rounded-xl border border-ink-800 bg-ink-950/50 p-4 text-sm">
                 <Info label="Runtime" value={data.runtime} sub={data.backend} />
-                <Info label="Cluster Size" value={clusterLabel(data.clusterSize)} />
+                <Info label="GPU Count" value={clusterLabel(data.clusterSize)} />
                 <Info label="GPU" value={data.gpu} />
                 <Info label="Quantization" value={data.quantization} />
                 <Info label="Tests" value={`${data.tests_count ?? data.tests?.length ?? 0} tests`} />

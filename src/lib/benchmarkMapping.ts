@@ -77,6 +77,13 @@ function round(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
+function gpuCount(run: RawRun): number {
+  const topology = run.launchAxis?.topology;
+  if (!topology || typeof topology !== "object") return 1;
+  const value = (topology as Record<string, unknown>).gpu_count;
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? Math.floor(value) : 1;
+}
+
 export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
   const groups = new Map<string, RawRun[]>();
   for (const r of runs) {
@@ -96,6 +103,7 @@ export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
     const backend = sample.engine.backend || "";
     const runtime = sample.engine.name;
     const quant = sample.model.quantization;
+    const clusterSize = gpuCount(sample);
     const id = hashId(key);
 
     const tests: BenchTest[] = [];
@@ -155,7 +163,7 @@ export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
         config: sample.configAxis ?? {},
         device: sample.deviceAxis ?? {
           gpu,
-          clusterSize: 1,
+          gpu_count: clusterSize,
         },
         model: sample.modelAxis ?? {
           name: sample.model.name,
@@ -193,7 +201,7 @@ export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
       runtime,
       backend,
       quantization: quant,
-      clusterSize: 1,
+      clusterSize,
       gpu,
       benchmarkType: "radeon-arena",
       recipeType: runtime.toLowerCase().includes("vllm") ? "rocm-vllm-docker" : "manual",

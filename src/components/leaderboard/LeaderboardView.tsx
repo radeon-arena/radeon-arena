@@ -292,9 +292,9 @@ export function LeaderboardView({ hw }: { hw: string }) {
           ))}
         </select>
         <select value={clusterFilter} onChange={(e) => setClusterFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
-          <option value="all">All Cluster Sizes</option>
+          <option value="all">All GPU Counts</option>
           {clusterOptions.map((c) => (
-            <option key={c} value={String(c)}>{c === 1 ? "Single" : `${c} nodes`}</option>
+            <option key={c} value={String(c)}>{c === 1 ? "1 GPU" : `${c} GPUs`}</option>
           ))}
         </select>
         <select value={quantFilter} onChange={(e) => setQuantFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
@@ -333,7 +333,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
               <th className="px-4 py-3">Model</th>
               <th className="px-4 py-3">Runtime</th>
               <th className="px-4 py-3">Quant.</th>
-              <th className="px-4 py-3">Cluster</th>
+              <th className="px-4 py-3">GPUs</th>
               <th className="px-4 py-3 text-right">Tokens/sec</th>
               <th className="px-4 py-3">{family === "pp" ? "TTFT" : "Type"}</th>
             </tr>
@@ -369,7 +369,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
                   {e.backend ? <span className="ml-1 text-xs text-zinc-600">{e.backend}</span> : null}
                 </td>
                 <td className="px-4 py-2.5 text-zinc-400">{e.quantization}</td>
-                <td className="px-4 py-2.5 text-zinc-400">{e.clusterSize === 1 ? "Single" : `${e.clusterSize} nodes`}</td>
+                <td className="px-4 py-2.5 text-zinc-400">{e.clusterSize === 1 ? "1 GPU" : `${e.clusterSize} GPUs`}</td>
                 <td className="px-4 py-2.5 text-right font-mono font-semibold text-zinc-100">{fmtTps(e.tokensPerSec)}</td>
                 <td className="px-4 py-2.5">
                   {family === "pp" ? (
