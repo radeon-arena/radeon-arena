@@ -26,7 +26,7 @@ export type Bundle = {
     data: { generated_at?: string; measurements?: unknown[]; meta?: Record<string, unknown>; profile?: string };
     device?: { id?: string; key?: string; result_key?: string; image_device?: string; label?: string; gpu?: string; arch?: string | null; arch_aliases?: string[]; runner_labels?: string[]; topology?: Record<string, unknown> };
     model?: { id?: string; name?: string; path?: string; source?: string; revision?: string | null; served_name?: string; quantization?: string; description?: string; patches?: unknown[] };
-    launch?: { id?: string; runtime?: string; container?: string; image?: string; image_requested?: string; image_resolved?: string; image_digest?: string; image_tag?: string; image_commit?: string; image_id?: string; command?: string; defaults?: Record<string, unknown>; env?: Record<string, unknown>; mods?: unknown[] };
+    launch?: { id?: string; runtime?: string; backend?: string; container?: string; image?: string; image_requested?: string; image_resolved?: string; image_digest?: string; image_tag?: string; image_commit?: string; image_id?: string; command?: string; defaults?: Record<string, unknown>; env?: Record<string, unknown>; mods?: unknown[]; topology?: { node_count?: number; gpu_count?: number; tensor_parallel_size?: number } };
     benchmark?: { profile?: string; profile_file?: string | null; framework?: string; metadata?: Record<string, unknown>; args?: Record<string, unknown>; schedule?: unknown[] | null; measurement_count?: number; point_params?: unknown[]; failed_points?: number | null; skipped_points?: number | null; max_context?: number | null };
   }[]>;
 };
@@ -97,12 +97,16 @@ function rowsFromBundle(bundle: Bundle): RawRun[] {
       const runtimeRaw = logicalRuntime(launchAxis.runtime, recipeContainer, metaContainer);
       const engineName = runtimeRaw.includes("vllm") ? "vLLM" : "llama.cpp";
       const engineSlug = runtimeRaw.includes("vllm") ? "vllm" : "llamacpp-hip";
-      const backend = runtimeRaw.includes("vllm") ? "ROCm/HIP · TRITON_ATTN" : "ROCm/HIP";
+      const backend = typeof launchAxis.backend === "string" && launchAxis.backend
+        ? launchAxis.backend
+        : runtimeRaw.includes("vllm") ? "ROCm/HIP · TRITON_ATTN" : "ROCm/HIP";
       const modelPath = typeof modelAxis.source === "string" ? modelAxis.source : typeof recipe.source === "string" ? recipe.source : typeof recipe.model === "string" ? recipe.model : typeof meta.model === "string" ? meta.model : "";
       const modelName = typeof modelAxis.name === "string" && modelAxis.name ? modelAxis.name : modelPath.split("/").filter(Boolean).pop() || String(meta.recipe ?? rec.file).replace(/^results\/[^/]+\//, "").replace(/\.json$/, "");
       const recipeQuant = typeof recipe.metadata?.quantization === "string" ? recipe.metadata.quantization : undefined;
       const quant = String(modelAxis.quantization ?? meta.quantization ?? recipeQuant ?? modelName.match(/(bf16|fp8|q[248][-_][0-9a-z-]+|awq[-_a-z0-9]*)/i)?.[0] ?? "Unknown").toUpperCase();
       const gpu = typeof deviceAxis.gpu === "string" && deviceAxis.gpu ? deviceAxis.gpu : DEVICE_GPU[device] ?? device;
+      const topology = typeof launchAxis.topology === "object" && launchAxis.topology ? launchAxis.topology : {};
+      const gpuCount = typeof topology.gpu_count === "number" && topology.gpu_count > 0 ? topology.gpu_count : 1;
       const runDate = String(data.generated_at ?? bundle.generated_at ?? new Date().toISOString()).slice(0, 10);
 
       for (const m of data.measurements ?? []) {
@@ -136,7 +140,7 @@ function rowsFromBundle(bundle: Bundle): RawRun[] {
           spec_files: rec.spec_files ?? {},
           deviceAxis,
           modelAxis,
-          launchAxis,
+          launchAxis: { ...launchAxis, topology: { ...topology, gpu_count: gpuCount } },
           benchmarkAxis: rec.benchmark ?? {},
           configAxis: {
             matrix_id: String(rec.file).split("/").pop()?.replace(/\.json$/, ""),

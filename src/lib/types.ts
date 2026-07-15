@@ -94,7 +94,7 @@ export interface Benchmark {
   runtime: Runtime;
   backend?: string; // attention/compute backend, e.g. "ROCm/HIP", "Vulkan"
   quantization: Quantization;
-  clusterSize: number; // 1, 2, 4, 8 ...
+  clusterSize: number; // GPUs used by this single-node launch: 1, 2, 4, 8 ...
   gpu: string; // e.g. "Radeon PRO W7900", "Radeon AI PRO R9700", "Radeon 8060S (Strix Halo)"
   benchmarkType?: string;
   recipeType: RecipeType;
