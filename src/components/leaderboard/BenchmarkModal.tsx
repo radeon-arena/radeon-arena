@@ -55,6 +55,8 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
 
   const permalinkId = data?.recipePermalinkId ?? data?.benchmarkId ?? id;
   const rawUrl = "#recipe";
+  const resolvedConfig = (data?.recipe?.fullRecipe?.config ?? {}) as Record<string, unknown>;
+  const matrixId = pickStr(resolvedConfig.matrix_id) ?? "<matrix-id>";
 
   async function copyRecipe() {
     try {
@@ -157,7 +159,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
                   View on Hugging Face ↗
                 </a>
               )}
-              <button onClick={copyRecipe} className="btn-ghost">Download recipe (copy YAML)</button>
+              <button onClick={copyRecipe} className="btn-ghost">Copy resolved configuration</button>
             </div>
 
             {/* Recipe */}
@@ -189,15 +191,15 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
                 — AMD ROCm containers &amp; recipes for Radeon.
               </p>
               <pre className="thin-scroll mt-2 overflow-auto rounded-lg border border-ink-700 bg-ink-950 p-3 font-mono text-xs leading-relaxed text-zinc-300">
-{`# 1. Get the recipe
-# Copy the recipe YAML above into recipe.yaml
-
-# 2. Clone the toolkit
+{`# 1. Clone the toolkit
 git clone ${HALO.url}.git
 cd radeonrun
 
-# 3. Run it
-python run-recipe.py recipe.yaml`}
+# 2. Run the matrix shown above
+python3 run-recipe.py ${matrixId}
+
+# Optional: override with any OCI image
+#   --image docker.io/vendor/runtime:tag`}
               </pre>
             </section>
 
@@ -232,31 +234,39 @@ function pickStr(v: unknown): string | undefined {
 
 function imageHref(image: string): string | undefined {
   if (/^https?:\/\//i.test(image)) return image;
-  const ref = image.replace(/^ghcr\.io\//, "");
-  const [name] = ref.split(":");
-  if (name.toLowerCase() === "inferstation/vllm-rocm-halo") {
-    return "https://github.com/InferStation/InferStation/pkgs/container/vllm-rocm-halo";
+  const withoutDigest = image.split("@", 1)[0];
+  const withoutTag = withoutDigest.replace(/:[^/]+$/, "");
+  if (withoutTag.startsWith("ghcr.io/")) {
+    const name = withoutTag.slice("ghcr.io/".length);
+    const [owner, ...rest] = name.split("/");
+    if (!owner || !rest.length) return undefined;
+    return `https://github.com/${owner}/pkgs/container/${encodeURIComponent(rest.join("/"))}`;
   }
-  if (!name.includes("/")) return undefined;
-  return `https://github.com/${name}/pkgs/container/${encodeURIComponent(name.split("/").pop() ?? "")}`;
+  if (withoutTag.startsWith("quay.io/")) return `https://quay.io/repository/${withoutTag.slice("quay.io/".length)}`;
+  const dockerName = withoutTag.replace(/^docker\.io\//, "");
+  if (!dockerName.includes(".") && dockerName.includes("/")) return `https://hub.docker.com/r/${dockerName}`;
+  return undefined;
 }
 
 /**
- * Reproducibility provenance — surfaces the exact build (pinned container image,
+ * Reproducibility provenance — surfaces the exact requested/resolved image,
  * engine build commit, image digest, build flags) that produced this number.
- * Radeon Arena is a performance leaderboard: each result is tied to the precise
- * image that produced it, never a moving `:latest` tag. Renders only the fields
- * present in the recipe, so older records degrade gracefully.
+ * Renders only the fields present in the result, so older records degrade
+ * gracefully.
  */
 function ReproducibilitySection({ benchmark }: { benchmark: Benchmark }) {
   const fr = (benchmark.recipe?.fullRecipe ?? {}) as Record<string, unknown>;
-  const image = pickStr(fr.image) || pickStr(benchmark.recipe?.container);
-  const imageTag = pickStr(fr.imageTag);
-  const imageCommit = pickStr(fr.imageCommit);
-  const imageId = pickStr(fr.imageId);
-  const engineCommit = pickStr(fr.engineCommit);
-  const engineVersion = pickStr(fr.engineVersion);
-  const buildFlags = pickStr(fr.buildFlags);
+  const launch = (fr.launch ?? {}) as Record<string, unknown>;
+  const image = pickStr(launch.image) || pickStr(fr.image) || pickStr(benchmark.recipe?.container);
+  const imageRequested = pickStr(launch.image_requested);
+  const imageResolved = pickStr(launch.image_resolved);
+  const imageDigest = pickStr(launch.image_digest);
+  const imageTag = pickStr(launch.image_tag) || pickStr(fr.imageTag);
+  const imageCommit = pickStr(launch.image_commit) || pickStr(fr.imageCommit);
+  const imageId = pickStr(launch.image_id) || pickStr(fr.imageId);
+  const engineCommit = pickStr(launch.engine_commit) || pickStr(fr.engineCommit);
+  const engineVersion = pickStr(launch.engine_version) || pickStr(fr.engineVersion);
+  const buildFlags = pickStr(launch.build_flags) || pickStr(fr.buildFlags);
 
   const engineLine = [benchmark.runtime, engineVersion, engineCommit ? `@ ${engineCommit.slice(0, 12)}` : undefined]
     .filter(Boolean)
@@ -267,8 +277,11 @@ function ReproducibilitySection({ benchmark }: { benchmark: Benchmark }) {
     const value = imageTag && !image.includes(":") ? `${image}:${imageTag}` : image;
     rows.push({ label: "Container image", value, href: imageHref(value) });
   }
+  if (imageRequested && imageRequested !== image) rows.push({ label: "Requested image", value: imageRequested, href: imageHref(imageRequested) });
+  if (imageResolved) rows.push({ label: "Resolved image", value: imageResolved, href: imageHref(imageResolved) });
+  if (imageDigest) rows.push({ label: "Registry digest", value: imageDigest });
   if (imageCommit) rows.push({ label: "Image build commit", value: imageCommit });
-  if (imageId) rows.push({ label: "Image digest", value: imageId });
+  if (imageId) rows.push({ label: "Local image ID", value: imageId });
   if (engineLine.trim()) rows.push({ label: "Engine", value: engineLine });
   if (buildFlags) rows.push({ label: "Build flags", value: buildFlags });
 
@@ -278,7 +291,7 @@ function ReproducibilitySection({ benchmark }: { benchmark: Benchmark }) {
     <section>
       <h3 className="text-sm font-semibold text-radeon-300">Reproducibility</h3>
       <p className="mt-1 text-xs text-zinc-500">
-        The exact build that produced this number — pinned image + engine commit, so the result reproduces from this recipe alone (never a moving <span className="font-mono">:latest</span> tag).
+        Image provenance captured by the runner. The requested reference may come from any OCI registry; resolved digest and local image ID identify the measured build when available.
       </p>
       <dl className="mt-2 space-y-2 rounded-xl border border-ink-800 bg-ink-950/50 p-4">
         {rows.map((r) => (

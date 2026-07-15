@@ -3,20 +3,19 @@ import { RecipeGeneratorView } from "./RecipeGeneratorView";
 const RADEONRUN = "https://github.com/radeon-arena/radeonrun";
 
 export function SubmitView({ hw }: { hw?: string }) {
-  void hw;
   return (
     <div className="space-y-4">
       <div className="card p-7 text-sm leading-relaxed text-zinc-300">
         <h2 className="text-xl font-semibold text-zinc-100">Submit Recipe</h2>
         <p className="mt-3 text-zinc-400">
           Radeon Arena accepts benchmark updates through GitHub pull requests. The site does not accept
-          numbers from a web form: every row should be tied to a reproducible recipe, a pinned image, and
+          numbers from a web form: every row should be tied to a reproducible matrix and recorded image identity, and
           a measured result file that can be reviewed in git.
         </p>
         <p className="mt-3 text-zinc-400">
           Open a PR against <span className="font-medium text-zinc-200">radeon-arena/radeonrun</span> with
-          the recipe and the measured <code>results/&lt;device&gt;/&lt;recipe&gt;.json</code>. Include the model,
-          runtime, quantization, GPU, benchmark profile, image tag/commit, and the measured
+          model/launch/matrix specs and the measured <code>results/&lt;device&gt;/&lt;matrix&gt;.json</code>. Include the model,
+          runtime, quantization, GPU, benchmark profile, requested/resolved image identity, and the measured
           throughput/latency numbers.
         </p>
         <p className="mt-3 text-zinc-400">
@@ -31,17 +30,17 @@ export function SubmitView({ hw }: { hw?: string }) {
       </div>
 
       <p className="text-xs text-zinc-500">
-        Measurement uses <code>serve-stream-in512-out128</code> at concurrency 1 / 4 / 16 / 32.
+        Measurement parameters come from the selected benchmark profile; the committed result records every input/output length, depth, concurrency, and repetition.
       </p>
 
       <div className="card p-7">
-        <h3 className="text-lg font-semibold text-zinc-100">Recipe draft helper</h3>
+        <h3 className="text-lg font-semibold text-zinc-100">Matrix draft helper</h3>
         <p className="mt-2 text-sm text-zinc-400">
-          Paste a serve command to generate a starter YAML snippet for your radeonrun PR. Treat it as a
-          draft: before submitting, fill in the pinned image tag, model source, and measured result JSON.
+          Paste a serve command to generate starter Model, Launch, and Matrix YAML documents. Treat them as a
+          draft: verify the OCI image, model source, placeholders, and measured result JSON before submitting.
         </p>
         <div className="mt-5">
-          <RecipeGeneratorView />
+          <RecipeGeneratorView hw={hw} />
         </div>
       </div>
     </div>

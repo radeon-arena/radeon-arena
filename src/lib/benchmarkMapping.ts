@@ -20,9 +20,17 @@ export interface RawRun {
   command?: string;
   harness?: string;
   image?: string;
+  image_requested?: string;
+  image_resolved?: string;
+  image_digest?: string;
   image_tag?: string;
   image_commit?: string;
   image_id?: string;
+  deviceAxis?: Record<string, unknown>;
+  modelAxis?: Record<string, unknown>;
+  launchAxis?: Record<string, unknown>;
+  benchmarkAxis?: Record<string, unknown>;
+  configAxis?: Record<string, unknown>;
   notes?: string;
   id?: string;
 }
@@ -72,7 +80,9 @@ function round(n: number): number {
 export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
   const groups = new Map<string, RawRun[]>();
   for (const r of runs) {
-    const key = [r.host.slug, r.model.slug, r.engine.slug, r.engine.backend, r.model.quantization].join("|");
+    const launchId = [r.launchAxis?.id, r.image_resolved, r.image_digest, r.image, r.command].filter(Boolean).join("|") || "launch";
+    const benchmarkId = String(r.benchmarkAxis?.id ?? r.benchmarkAxis?.profile ?? r.scenario ?? "benchmark");
+    const key = [r.host.slug, r.model.slug, r.engine.slug, r.engine.backend, r.model.quantization, launchId, benchmarkId].join("|");
     const g = groups.get(key);
     if (g) g.push(r);
     else groups.set(key, [r]);
@@ -142,18 +152,32 @@ export function benchmarksFromRawRuns(runs: RawRun[]): Benchmark[] {
       model: sample.model.source_url || undefined,
       description: `${runtime}${backend ? ` / ${backend}` : ""} serving of ${sample.model.name} (${quant}) on ${gpu}. ${provenance}`,
       fullRecipe: {
-        engine: runtime,
-        engineVersion: sample.engine.version,
-        engineCommit: sample.engine.commit,
-        backend,
-        buildFlags: sample.engine.build_flags || undefined,
-        gpu,
-        quantization: quant,
-        scenario: sample.scenario,
-        image: sample.image || sample.image_tag,
-        imageTag: sample.image_tag,
-        imageCommit: sample.image_commit,
-        imageId: sample.image_id,
+        config: sample.configAxis ?? {},
+        device: sample.deviceAxis ?? {
+          gpu,
+          clusterSize: 1,
+        },
+        model: sample.modelAxis ?? {
+          name: sample.model.name,
+          source: sample.model.source_url,
+          quantization: quant,
+        },
+        launch: sample.launchAxis ?? {
+          runtime,
+          backend,
+          image: sample.image,
+          image_tag: sample.image_tag,
+          image_commit: sample.image_commit,
+          image_id: sample.image_id,
+          command: sample.command,
+          build_flags: sample.engine.build_flags || undefined,
+        },
+        benchmark: sample.benchmarkAxis ?? {
+          profile: sample.scenario,
+          pp: sample.pp,
+          tg: sample.tg,
+          concurrency: [...new Set(group.map((r) => r.concurrency ?? r.batch ?? 1))].sort((a, b) => Number(a) - Number(b)),
+        },
       },
     };
 
