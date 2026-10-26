@@ -29,6 +29,9 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <a href="/me" className="shrink-0 rounded-md px-3 py-1.5 text-zinc-300 hover:bg-ink-800">
+              Account
+            </a>
           </nav>
         </div>
 
