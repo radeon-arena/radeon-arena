@@ -11,14 +11,34 @@ export default function PrivacyPage() {
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link href="/" className="text-sm text-radeon-400 hover:text-radeon-300">← Back to home</Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-50">Privacy</h1>
-      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-06-30</p>
+      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-10-26</p>
 
       <div className="card mt-8 space-y-6 p-7 text-sm leading-7 text-zinc-300">
         <section>
-          <h2 className="text-lg font-semibold text-zinc-100">No accounts or login</h2>
+          <h2 className="text-lg font-semibold text-zinc-100">Accounts and sign-in</h2>
           <p className="mt-2 text-zinc-400">
-            Radeon Arena is a static website. We do not run a login system, store user accounts, set
-            application cookies, or collect account credentials on this site.
+            Signing in is optional. GitHub sign-in is handled by Agent Tools and returns a short-lived,
+            one-use identity assertion to Radeon Arena; Radeon Arena never receives your GitHub access
+            token. If email-code sign-in is enabled, the code is single-use and expires after 10 minutes.
+            We store a display name, stable provider identifier, verified email when supplied, avatar URL,
+            role, account status, and login timestamps.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-zinc-100">Sessions, devices, and deployment history</h2>
+          <p className="mt-2 text-zinc-400">
+            Web session and device tokens are random values stored only as hashes. Web sessions use a
+            Secure, HttpOnly, SameSite=Lax cookie. Device records contain an install identifier, label,
+            creation and last-use times, and revocation state. When you authorize a device, you can link
+            that install&apos;s Radeon Arena deployment sessions, machine profile, requested task, generated
+            plan, result status, and troubleshooting events to your account. IP addresses are reduced to
+            an IPv4 /24 or IPv6 /48 prefix for abuse prevention.
+          </p>
+          <p className="mt-2 text-zinc-400">
+            The Account page lets you export your account data, revoke devices, and delete your account.
+            Deleting an account removes its linked deployment sessions and device credentials and returns
+            the local install to anonymous use.
           </p>
         </section>
 
@@ -51,10 +71,11 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-zinc-100">Changes</h2>
+          <h2 className="text-lg font-semibold text-zinc-100">Retention and changes</h2>
           <p className="mt-2 text-zinc-400">
-            If the site adds analytics, accounts, forms, or other data collection features later, this
-            notice should be updated before or alongside that change.
+            Web sessions expire after 30 days of inactivity and device credentials after 90 days without
+            use. Operational and audit records are retained only as needed for security and support. We
+            will update this notice before or alongside material changes to account data collection.
           </p>
         </section>
       </div>
