@@ -17,9 +17,9 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-lg font-semibold text-zinc-100">Accounts and sign-in</h2>
           <p className="mt-2 text-zinc-400">
-            Signing in is optional. GitHub sign-in is handled by Agent Tools and returns a short-lived,
-            one-use identity assertion to Radeon Arena; Radeon Arena never receives your GitHub access
-            token. If email-code sign-in is enabled, the code is single-use and expires after 10 minutes.
+            Signing in is optional. GitHub sign-in, when configured, uses Radeon Arena&apos;s own OAuth
+            application with state and PKCE. The GitHub access token is used only to fetch your identity
+            and verified email, then discarded. Email codes are single-use and expire after 10 minutes.
             We store a display name, stable provider identifier, verified email when supplied, avatar URL,
             role, account status, and login timestamps.
           </p>
