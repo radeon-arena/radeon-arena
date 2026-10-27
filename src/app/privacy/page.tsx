@@ -43,6 +43,23 @@ export default function PrivacyPage() {
         </section>
 
         <section>
+          <h2 className="text-lg font-semibold text-zinc-100">Deployment assistant and model processing</h2>
+          <p className="mt-2 text-zinc-400">
+            An A2A deployment session stores the structured machine profile, requested task and answers,
+            generated plan, redacted troubleshooting events, and any outcome you explicitly report. This
+            supports multi-step sessions, your deployment history, and troubleshooting. Requests that need
+            planning or diagnosis are sent to the configured Tianshu language-model service. Do not include
+            credentials or unrelated personal data.
+          </p>
+          <p className="mt-2 text-zinc-400">
+            The client redacts common tokens, full IP addresses, home-directory usernames, and authorization
+            headers from reported errors. GitHub access tokens, OAuth codes, Web session tokens, device tokens,
+            cookies, and API keys are not stored in session records. Logged-in users can export or delete their
+            account and linked sessions. Anonymous-session automatic retention is not yet implemented.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-lg font-semibold text-zinc-100">Static hosting and third-party requests</h2>
           <p className="mt-2 text-zinc-400">
             The site is served as a static website through Cloudflare and an nginx origin. Your browser
