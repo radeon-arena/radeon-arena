@@ -2,7 +2,7 @@
 // All external links point to real, public, working resources.
 export const SITE = {
   name: "Radeon Arena",
-  tagline: "Community-driven LLM benchmarking for AMD Radeon",
+  tagline: "LLM benchmarks and developer support for AMD Radeon",
   description:
     "Compare Large Language Model performance on AMD Radeon GPUs. Real benchmarks, real hardware, real results.",
   github: "https://github.com/radeon-arena/radeon-arena",

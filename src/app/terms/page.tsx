@@ -11,14 +11,15 @@ export default function TermsPage() {
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link href="/" className="text-sm text-radeon-400 hover:text-radeon-300">← Back to home</Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-50">Terms of Use</h1>
-      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-06-30</p>
+      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-11-16</p>
 
       <div className="card mt-8 space-y-6 p-7 text-sm leading-7 text-zinc-300">
         <section>
-          <h2 className="text-lg font-semibold text-zinc-100">Community benchmark information</h2>
+          <h2 className="text-lg font-semibold text-zinc-100">About Radeon Arena</h2>
           <p className="mt-2 text-zinc-400">
-            Radeon Arena is a community-driven benchmark display site for AMD Radeon hardware. Results are
-            derived from public recipe and result files in the radeonrun repository. The site is provided
+            Radeon Arena is part of China ADP (AMD Developer Community). It publishes LLM inference
+            benchmarks for AMD Radeon hardware and provides developer support services. Benchmark results
+            are derived from public recipe and result files in the radeonrun repository. The site is provided
             for technical comparison and reproducibility work, not as a warranty or certification of any
             product, workload, driver, model, or service.
           </p>
