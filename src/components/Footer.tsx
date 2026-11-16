@@ -46,7 +46,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-start justify-between gap-2 border-t border-ink-800 pt-6 text-xs text-zinc-600 sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} Radeon Arena. {SITE.tagline}.
+            © {new Date().getFullYear()} Radeon Arena · China ADP (AMD Developer Community). {SITE.tagline}.
             <span className="ml-2 text-zinc-700">build {process.env.NEXT_PUBLIC_BUILD_TIME ?? "dev"}</span>
           </p>
           <div className="flex flex-wrap gap-3">

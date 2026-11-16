@@ -63,8 +63,8 @@ export default function HomePage() {
           <h2 className="text-xl font-semibold text-zinc-100">Benchmark Engines</h2>
           <p className="mt-2 max-w-2xl text-sm text-zinc-400">
             The numbers on this leaderboard were produced by these open-source inference engines
-            running on AMD ROCm hardware. (This site itself is a static Next.js app — it just
-            collects and displays their results.)
+            running on AMD ROCm hardware. (The leaderboard itself only collects and displays
+            their results.)
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {Object.values(PROJECTS).map((p) => (

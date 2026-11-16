@@ -206,7 +206,7 @@ python3 run-recipe.py ${matrixId}
             <section className="border-t border-ink-800 pt-5">
               <h3 className="text-sm font-semibold text-radeon-300">Discussion</h3>
               <p className="mt-1 text-xs text-zinc-500">
-                Radeon Arena is a static display site. Discuss result changes in the GitHub pull request that adds or updates the benchmark data.
+                Leaderboard data is read-only on this site. Discuss result changes in the GitHub pull request that adds or updates the benchmark data.
               </p>
             </section>
           </div>
