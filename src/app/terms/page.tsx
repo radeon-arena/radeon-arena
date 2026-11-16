@@ -17,11 +17,10 @@ export default function TermsPage() {
         <section>
           <h2 className="text-lg font-semibold text-zinc-100">About Radeon Arena</h2>
           <p className="mt-2 text-zinc-400">
-            Radeon Arena is part of China ADP (AMD Developer Community). It publishes LLM inference
-            benchmarks for AMD Radeon hardware and provides developer support services. Benchmark results
-            are derived from public recipe and result files in the radeonrun repository. The site is provided
-            for technical comparison and reproducibility work, not as a warranty or certification of any
-            product, workload, driver, model, or service.
+            Radeon Arena publishes LLM inference benchmarks for AMD Radeon hardware and provides developer
+            support services. Benchmark results are derived from public recipe and result files in the
+            radeonrun repository. The site is provided for technical comparison and reproducibility work,
+            not as a warranty or certification of any product, workload, driver, model, or service.
           </p>
         </section>
 
