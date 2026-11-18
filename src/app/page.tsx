@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Carousel } from "@/components/Carousel";
-import { SITE, PROJECTS } from "@/lib/site";
+import { SITE, PROJECTS, API } from "@/lib/site";
 
 const FEATURES = [
   {
@@ -54,6 +54,24 @@ export default function HomePage() {
               <p className="text-sm text-zinc-400">{f.body}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Support agent API */}
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+        <div className="card flex flex-col items-start justify-between gap-4 p-8 sm:flex-row sm:items-center">
+          <div>
+            <h2 className="text-xl font-semibold text-zinc-100">AMD GPU Support Agent API</h2>
+            <p className="mt-1 max-w-2xl text-sm text-zinc-400">
+              Let your AI agent ask about ROCm, drivers and local LLMs on AMD GPUs over A2A, with structured JSON in
+              and out. Answers cite the official AMD ROCm community support FAQ. Free with an email code or GitHub
+              sign-in.
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <Link href={API.docs} className="btn-primary">Read the API docs</Link>
+            <a href={API.agentCard} className="btn-ghost">Agent Card</a>
+          </div>
         </div>
       </section>
 

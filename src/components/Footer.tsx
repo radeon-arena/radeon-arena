@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { SITE, PROJECTS } from "@/lib/site";
+import { SITE, PROJECTS, API } from "@/lib/site";
 
 export function Footer() {
   return (
     <footer className="mt-16 border-t border-ink-800 bg-ink-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-4">
           <div>
             <h3 className="mb-3 text-sm font-semibold text-zinc-200">Benchmark Engines</h3>
             <ul className="space-y-2 text-sm">
@@ -41,6 +41,17 @@ export function Footer() {
             <a href="/strix/leaderboard" className="mt-3 inline-block text-sm text-radeon-400 hover:text-radeon-300">
               Browse the leaderboard →
             </a>
+          </div>
+
+          <div>
+            <h3 className="mb-3 text-sm font-semibold text-zinc-200">Developers</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href={API.docs} className="text-zinc-400 hover:text-radeon-400">API Docs</Link></li>
+              <li><a href={API.agentCard} className="text-zinc-400 hover:text-radeon-400">Agent Card</a></li>
+              <li><a href={API.llmsTxt} className="text-zinc-400 hover:text-radeon-400">llms.txt</a></li>
+              <li><a href={API.skillsRepo} className="text-zinc-400 hover:text-radeon-400">Skills on GitHub</a></li>
+              <li><a href={API.mcpRepo} className="text-zinc-400 hover:text-radeon-400">MCP tools on GitHub</a></li>
+            </ul>
           </div>
         </div>
 

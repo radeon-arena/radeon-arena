@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link href="/" className="text-sm text-radeon-400 hover:text-radeon-300">← Back to home</Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-50">Privacy</h1>
-      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-10-26</p>
+      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-11-18</p>
 
       <div className="card mt-8 space-y-6 p-7 text-sm leading-7 text-zinc-300">
         <section>
@@ -43,17 +43,20 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-zinc-100">Deployment assistant and model processing</h2>
+          <h2 className="text-lg font-semibold text-zinc-100">Support agent and model processing</h2>
           <p className="mt-2 text-zinc-400">
-            An A2A deployment session stores the structured machine profile, requested task and answers,
-            generated plan, redacted troubleshooting events, and any outcome you explicitly report. This
-            supports multi-step sessions, your deployment history, and troubleshooting. Requests that need
-            planning or diagnosis are sent to the language-model service provided by AMD RadeonCloud. Do not include
-            credentials or unrelated personal data.
+            A support agent task (deployment plan, question or troubleshooting) stores the structured machine
+            profile, the question or requested task, follow-up messages, replies, generated plans, redacted
+            troubleshooting events, the reply language, and any outcome you explicitly report. This supports
+            multi-step tasks, your history, and troubleshooting. Questions, plans and diagnoses are sent to the
+            language-model service provided by AMD RadeonCloud. To answer, the agent may send search queries to DuckDuckGo
+            and GitHub and fetch public web pages. Knowledge-base searches run on the Radeon Arena server without a
+            language model. Do not include credentials or unrelated personal data.
           </p>
           <p className="mt-2 text-zinc-400">
-            The client redacts common tokens, full IP addresses, home-directory usernames, and authorization
-            headers from reported errors. GitHub access tokens, OAuth codes, Web session tokens, device tokens,
+            Before storing questions, error text and follow-ups, the service masks common API tokens, authorization
+            headers, key and password assignments, IPv4 addresses, and home-directory usernames. The MCP client also
+            redacts reported errors. GitHub access tokens, OAuth codes, Web session tokens, device tokens,
             cookies, and API keys are not stored in session records. Logged-in users can export or delete their
             account and linked sessions. Anonymous-session automatic retention is not yet implemented.
           </p>

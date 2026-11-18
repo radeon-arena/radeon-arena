@@ -14,6 +14,18 @@ export const SITE = {
   cloud: "https://radeon.anruicloud.com/",
 };
 
+// Public API of the AMD GPU Support Agent (served by the A2A sidecar on this domain).
+export const API = {
+  docs: "/docs",
+  endpoint: "https://radeon-arena.com/a2a",
+  agentCard: "https://radeon-arena.com/.well-known/agent-card.json",
+  requestSchema: "https://radeon-arena.com/a2a/schemas/request.v1.json",
+  replySchema: "https://radeon-arena.com/a2a/schemas/reply.v1.json",
+  llmsTxt: "/llms.txt",
+  skillsRepo: "https://github.com/radeon-arena/skills",
+  mcpRepo: "https://github.com/radeon-arena/mcp",
+};
+
 // The real open-source projects that produce the benchmark results.
 export const PROJECTS = {
   vllmDocker: {

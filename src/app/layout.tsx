@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://radeon-arena.com"),
   title: "Radeon Arena - LLM Leaderboard",
   description:
-    "LLM inference benchmark leaderboard for AMD Radeon GPUs. Real measurements (vLLM and llama.cpp on ROCm) across RDNA hardware.",
-  keywords: ["LLM", "benchmark", "AMD", "Radeon", "ROCm", "RDNA", "vLLM", "llama.cpp"],
+    "LLM inference benchmarks measured on AMD Radeon GPUs (vLLM and llama.cpp on ROCm), and an A2A API for ROCm and local LLM support questions.",
+  keywords: ["LLM", "benchmark", "AMD", "Radeon", "ROCm", "RDNA", "vLLM", "llama.cpp", "A2A", "API", "ROCm FAQ"],
   applicationName: "Radeon Arena",
   icons: { icon: "/icon.svg" },
   openGraph: {
