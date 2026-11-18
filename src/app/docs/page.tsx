@@ -57,6 +57,9 @@ function Endpoint({ route, body, returns, errors }: { route: string; body: React
   );
 }
 
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 function Code({ lang, children }: { lang: string; children: string }) {
   return (
     <div className="mt-3 overflow-hidden rounded-lg border border-ink-700 bg-ink-850">
@@ -64,7 +67,8 @@ function Code({ lang, children }: { lang: string; children: string }) {
         {lang}
       </div>
       <pre className="thin-scroll overflow-x-auto p-4 font-mono text-[13px] leading-6 text-zinc-200">
-        <code>{children}</code>
+        {/* Cloudflare hides email addresses from readers without JavaScript; email_off keeps samples literal. */}
+        <code dangerouslySetInnerHTML={{ __html: `<!--email_off-->${escapeHtml(children)}<!--/email_off-->` }} />
       </pre>
     </div>
   );
