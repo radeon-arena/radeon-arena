@@ -6,6 +6,7 @@ export function Header() {
   const navItems = [
     { href: `/${DEFAULT_HW}/leaderboard`, label: "Leaderboard" },
     { href: `/${DEFAULT_HW}/recipes`, label: "Recipes" },
+    { href: "/docs", label: "API Docs" },
     { href: "/blogs", label: "Blog" },
   ];
 

@@ -1,0 +1,30 @@
+# Radeon Arena
+
+> LLM inference benchmarks measured on AMD Radeon GPUs (vLLM and llama.cpp on ROCm), and an A2A API for the AMD GPU Support Agent, which answers questions about AMD GPUs, ROCm and local LLMs and cites the official AMD ROCm community support FAQ.
+
+The public leaderboard currently shows the Radeon 8060S (Strix Halo). The API takes and returns structured JSON and needs a free account, created with an email code or a GitHub sign-in. Each account can send 30 messages per minute.
+
+## API
+
+- [API Docs](https://radeon-arena.com/docs): authentication, actions, reply types, errors and limits
+- [Agent Card](https://radeon-arena.com/.well-known/agent-card.json): A2A JSON-RPC 1.0 endpoint, skills, example requests and sign-up steps
+- [Request schema](https://radeon-arena.com/a2a/schemas/request.v1.json): JSON Schema for the data part you send
+- [Reply schema](https://radeon-arena.com/a2a/schemas/reply.v1.json): JSON Schema for the data part of every reply
+
+## Benchmarks
+
+- [Strix Halo leaderboard](https://radeon-arena.com/strix/leaderboard): measured results by model, engine and quantization
+- [Recipes](https://radeon-arena.com/strix/recipes): the commands and settings behind each result
+- [Submit a benchmark](https://radeon-arena.com/strix/submit): how to contribute results
+
+## Open source
+
+- [radeon-arena/skills](https://github.com/radeon-arena/skills): twelve single-task agent skills for AMD GPU setup and triage
+- [radeon-arena/mcp](https://github.com/radeon-arena/mcp): local MCP servers for support evidence, read-only diagnostics and public ROCm CI status
+- [radeon-arena/radeonrun](https://github.com/radeon-arena/radeonrun): containers and recipes used for the benchmarks
+
+## Optional
+
+- [Privacy](https://radeon-arena.com/privacy)
+- [Terms](https://radeon-arena.com/terms)
+- [Data policy](https://radeon-arena.com/data-policy)
