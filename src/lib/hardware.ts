@@ -14,7 +14,7 @@ export type Hardware = {
 export const HARDWARE: Hardware[] = [
   { key: "r9700", label: "Radeon AI PRO R9700", short: "R9700", sub: "RDNA4 · gfx1201", match: (g) => /r9700/i.test(g) },
   { key: "strix", label: "Strix Halo", short: "Strix Halo", sub: "Radeon 8060S · gfx1151", match: (g) => /strix|8060s|gfx1151/i.test(g) },
-  { key: "w7900", label: "Radeon PRO W7900D", short: "W7900D", sub: "RDNA3 · gfx1100", match: (g) => /w7900/i.test(g) },
+  { key: "w7900", label: "Radeon PRO W7900", short: "W7900", sub: "RDNA3 · gfx1100", match: (g) => /w7900/i.test(g) },
 ];
 
 // Tabs are ordered newest architecture first (RDNA4, RDNA3.5, RDNA3); the
