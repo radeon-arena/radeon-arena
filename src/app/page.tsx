@@ -5,7 +5,7 @@ import { SITE, PROJECTS, API } from "@/lib/site";
 const FEATURES = [
   {
     title: "Real Performance",
-    body: "Measured benchmarks from RadeonArena automated runs on AMD RDNA hardware — Radeon 8060S (Strix Halo) and Radeon AI PRO R9700.",
+    body: "Measured benchmarks from RadeonArena automated runs on AMD RDNA hardware — Radeon 8060S (Strix Halo), Radeon AI PRO R9700 and Radeon PRO W7900D.",
   },
   {
     title: "Multiple Runtimes",

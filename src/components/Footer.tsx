@@ -36,7 +36,7 @@ export function Footer() {
             <h3 className="mb-3 text-sm font-semibold text-zinc-200">Data</h3>
             <p className="text-sm text-zinc-500">
               Benchmarks measured by RadeonArena on AMD RDNA hardware—Radeon 8060S
-              (Strix Halo) and Radeon AI PRO R9700. Real numbers, refreshed continuously.
+              (Strix Halo), Radeon AI PRO R9700 and Radeon PRO W7900D. Real numbers, refreshed continuously.
             </p>
             <a href="/strix/leaderboard" className="mt-3 inline-block text-sm text-radeon-400 hover:text-radeon-300">
               Browse the leaderboard →
