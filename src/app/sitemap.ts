@@ -19,6 +19,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/r9700/leaderboard",
     "/r9700/recipes",
     "/r9700/submit",
+    "/w7900",
+    "/w7900/leaderboard",
+    "/w7900/recipes",
+    "/w7900/submit",
   ];
 
   return routes.map((route) => ({

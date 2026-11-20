@@ -2,7 +2,7 @@
 
 > LLM inference benchmarks measured on AMD Radeon GPUs (vLLM and llama.cpp on ROCm), and an A2A API for the AMD GPU Support Agent, which answers questions about AMD GPUs, ROCm and local LLMs and cites the official AMD ROCm community support FAQ.
 
-The public leaderboard currently shows the Radeon 8060S (Strix Halo) and the Radeon AI PRO R9700. The API takes and returns structured JSON and needs a free account, created with an email code or a GitHub sign-in. Each account can send 30 messages per minute.
+The public leaderboard currently shows the Radeon 8060S (Strix Halo), the Radeon AI PRO R9700 and the Radeon PRO W7900D. The API takes and returns structured JSON and needs a free account, created with an email code or a GitHub sign-in. Each account can send 30 messages per minute.
 
 ## API
 
@@ -15,6 +15,7 @@ The public leaderboard currently shows the Radeon 8060S (Strix Halo) and the Rad
 
 - [Strix Halo leaderboard](https://radeon-arena.com/strix/leaderboard): measured results by model, engine and quantization
 - [Radeon AI PRO R9700 leaderboard](https://radeon-arena.com/r9700/leaderboard): measured results on one, two and four R9700 cards
+- [Radeon PRO W7900D leaderboard](https://radeon-arena.com/w7900/leaderboard): measured results on one and two W7900D cards
 - [Recipes](https://radeon-arena.com/strix/recipes): the commands and settings behind each result
 - [Submit a benchmark](https://radeon-arena.com/strix/submit): how to contribute results
 

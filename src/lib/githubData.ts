@@ -41,7 +41,7 @@ const ENGINE_IMAGE: Record<string, Record<string, string>> = {
 
 const DEVICE_GPU: Record<string, string> = {
   strix: "Strix Halo / Radeon 8060S (gfx1151)",
-  w7900: "Radeon PRO W7900",
+  w7900: "Radeon PRO W7900D",
   r9700: "Radeon AI PRO R9700",
 };
 
