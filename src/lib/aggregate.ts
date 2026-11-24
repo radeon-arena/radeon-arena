@@ -9,7 +9,8 @@ import type {
 import { orgDisplayName } from "./modelMeta";
 import { orgKeyOf } from "./scoring";
 
-export const MAX_ENTRIES_PER_TEST = 100;
+// The cap applies across all hardware before the per-hardware tabs filter, so it must exceed the whole bundle.
+export const MAX_ENTRIES_PER_TEST = 2000;
 
 export function snapshotIntervalHours(): number {
   const v = parseFloat(process.env.SNAPSHOT_INTERVAL_HOURS ?? "0.5");
