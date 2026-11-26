@@ -56,11 +56,6 @@ export function HeaderNav({
       active: section === "recipes",
     },
     {
-      href: lp(lang, "/docs"),
-      label: t(lang, "API Docs", "API 文档"),
-      active: section === "docs",
-    },
-    {
       href: lp(lang, "/blogs"),
       label: t(lang, "Blog", "博客"),
       active: section === "blogs",
@@ -121,6 +116,14 @@ export function HeaderNav({
 }
 
 // Icon-only account link, rendered at the far right of the header. Account
+
+      <Link
+        href={lp(lang, "/docs")}
+        aria-current={section === "docs" ? "page" : undefined}
+        className={`${LINK_BASE} order-4 lg:order-3 ${section === "docs" ? LINK_ACTIVE : LINK_IDLE}`}
+      >
+        {t(lang, "API Docs", "API 文档")}
+      </Link>
 // pages are served by the API service and exist in English only, so the link
 // always points to /me.
 export function AccountIcon({ lang }: { lang: Lang }) {
