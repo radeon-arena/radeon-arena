@@ -546,7 +546,7 @@ export default function ApiDocsPage() {
 
           <Section id="versioning" title="Versioning">
             <p>
-              The Agent Card carries the API version (0.2.8 now). Data types carry their version in the schema name, such as{" "}
+              The Agent Card carries the current API version. Data types carry their version in the schema name, such as{" "}
               <C>radeonrun.answer/v1</C>, and the schema files carry it in the file name. Versions not listed below
               changed only the server, not the API.
             </p>
