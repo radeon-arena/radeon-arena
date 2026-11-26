@@ -92,7 +92,8 @@ export default function PrivacyPage() {
             page views, clicks (link text and address), the referring page, time zone, browser language,
             window size, whether the browser reports automation, time on page and scroll depth to this
             site&apos;s <code>/event</code> endpoint, keyed by random visitor and session IDs kept in your
-            browser&apos;s local storage. Hosting and DNS providers may retain standard operational logs,
+            browser&apos;s local storage. A <code>ra_lang</code> cookie remembers whether you last read
+            the site in English or Chinese, so the account pages can use the same language. Hosting and DNS providers may retain standard operational logs,
             such as request metadata needed for security, reliability, and abuse prevention.
           </p>
         </section>

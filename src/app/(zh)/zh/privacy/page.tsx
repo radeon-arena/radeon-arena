@@ -72,7 +72,7 @@ export default function PrivacyPageZh() {
           <h2 className="text-lg font-semibold text-zinc-100">统计</h2>
           <p className="mt-2 text-zinc-400">
             本站使用自有的统计脚本，不使用第三方统计服务。脚本会把页面浏览、点击（链接文字和地址）、来源页、时区、浏览器语言、窗口尺寸、浏览器是否报告为自动化程序、停留时长和滚动深度发送到本站的
-            <code>/event</code> 接口，并用保存在浏览器本地存储里的随机访客 ID 和会话 ID 关联。托管和 DNS 服务商可能保留常规运行日志，例如安全、稳定性和防滥用所需的请求元数据。
+            <code>/event</code> 接口，并用保存在浏览器本地存储里的随机访客 ID 和会话 ID 关联。另有一个 <code>ra_lang</code> Cookie 记录你上次用的是中文还是英文，账户页据此显示相同的语言。托管和 DNS 服务商可能保留常规运行日志，例如安全、稳定性和防滥用所需的请求元数据。
           </p>
         </section>
 

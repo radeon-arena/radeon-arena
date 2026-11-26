@@ -17,12 +17,12 @@ export function Header({ lang }: { lang: Lang }) {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
         {/* Left: logo + primary navigation */}
         <div className="flex min-w-0 items-center gap-1">
-          <Link href={lp(lang, "/")} className="mr-2 flex shrink-0 items-center gap-2">
+          <Link href={lp(lang, "/")} aria-label="Radeon Arena" className="mr-2 flex shrink-0 items-center gap-2">
             <span className="grid h-7 w-7 place-items-center rounded-md bg-ink-900">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`${basePath}/icon.svg`} alt="" width={20} height={20} />
             </span>
-            <span className="font-semibold tracking-tight text-zinc-100">
+            <span className="hidden font-semibold tracking-tight text-zinc-100 min-[480px]:inline">
               Radeon<span className="text-radeon-500">Arena</span>
             </span>
           </Link>
