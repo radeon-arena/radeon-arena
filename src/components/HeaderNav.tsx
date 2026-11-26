@@ -111,11 +111,6 @@ export function HeaderNav({
           ),
         )}
       </div>
-    </div>
-  );
-}
-
-// Icon-only account link, rendered at the far right of the header. Account
 
       <Link
         href={lp(lang, "/docs")}
@@ -124,6 +119,11 @@ export function HeaderNav({
       >
         {t(lang, "API Docs", "API 文档")}
       </Link>
+    </div>
+  );
+}
+
+// Icon-only account link, rendered at the far right of the header. Account
 // pages are served by the API service and exist in English only, so the link
 // always points to /me.
 export function AccountIcon({ lang }: { lang: Lang }) {
