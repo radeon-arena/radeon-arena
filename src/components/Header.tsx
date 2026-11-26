@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HARDWARE, DEFAULT_HW } from "@/lib/hardware";
 import { lp, type Lang } from "@/lib/i18n";
-import { HeaderNav } from "@/components/HeaderNav";
+import { AccountIcon, HeaderNav } from "@/components/HeaderNav";
 import { LangSwitch } from "@/components/LangSwitch";
 
 export function Header({ lang }: { lang: Lang }) {
@@ -28,8 +28,9 @@ export function Header({ lang }: { lang: Lang }) {
             </span>
         </Link>
 
-        <div className="order-2 ml-auto flex h-14 items-center lg:order-4 lg:ml-0">
+        <div className="order-2 ml-auto flex h-14 items-center gap-1 lg:order-4 lg:ml-0">
           <LangSwitch lang={lang} />
+          <AccountIcon lang={lang} />
         </div>
 
         <HeaderNav lang={lang} hardware={hardware} defaultHw={DEFAULT_HW} />

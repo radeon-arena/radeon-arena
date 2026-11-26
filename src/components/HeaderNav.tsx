@@ -66,9 +66,6 @@ export function HeaderNav({
       active: section === "blogs",
     },
   ];
-  // Account pages are served by the API service and exist in English only.
-  const accountActive = ["me", "login", "device"].includes(section);
-
   const hwSection = HW_SECTIONS.includes(section) ? section : "leaderboard";
 
   return (
@@ -87,13 +84,6 @@ export function HeaderNav({
             {item.label}
           </Link>
         ))}
-        <a
-          href="/me"
-          aria-current={accountActive ? "page" : undefined}
-          className={`${LINK_BASE} ${accountActive ? LINK_ACTIVE : LINK_IDLE}`}
-        >
-          {t(lang, "Account", "账户")}
-        </a>
       </nav>
 
       <span aria-hidden="true" className="order-2 mx-1 h-5 w-px shrink-0 bg-ink-700 lg:hidden" />
@@ -127,5 +117,44 @@ export function HeaderNav({
         )}
       </div>
     </div>
+  );
+}
+
+// Icon-only account link, rendered at the far right of the header. Account
+// pages are served by the API service and exist in English only, so the link
+// always points to /me.
+export function AccountIcon({ lang }: { lang: Lang }) {
+  const pathname = usePathname() || "/";
+  const local = pathname.replace(/^\/zh(?=\/|$)/, "").replace(/\/+$/, "");
+  const first = local.split("/")[1] ?? "";
+  const active = ["me", "login", "device"].includes(first);
+  const label = t(lang, "Account", "账户");
+  return (
+    <a
+      href="/me"
+      aria-label={label}
+      title={label}
+      aria-current={active ? "page" : undefined}
+      className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-radeon-500 ${
+        active ? "bg-white text-zinc-50 shadow-sm" : "text-zinc-300 hover:bg-ink-800 hover:text-zinc-50"
+      }`}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+      </svg>
+    </a>
   );
 }
