@@ -224,7 +224,7 @@ const POSTS: BlogPost[] = [
           and none of them reached the agent. That run alone cost the service 6.5 million input tokens.
         </P>
         <P>
-          <strong>The plan B6 received was wrong for this machine.</strong> It arrived after 19 minutes and chose
+          <strong>The plan B6 received was wrong for this machine.</strong> It arrived 18 minutes into the run and chose
           llama.cpp&apos;s Windows ROCm build, which found no GPU here. The agent reported the error; our
           troubleshooting traced it to hipBLAS and rocBLAS libraries missing from that package and suggested the Vulkan
           build of the same release, which worked. The switch came 30 minutes after the plan arrived, though the model
@@ -253,7 +253,7 @@ const POSTS: BlogPost[] = [
         <H2>What we take from this</H2>
         <UL>
           <li>
-            The service has to be reachable where its users are. From this network two in three calls failed, and a
+            The service has to be reachable where its users are. From this network three in four calls failed, and a
             helper that fails costs more than no helper.
           </li>
           <li>
@@ -279,8 +279,8 @@ const POSTS: BlogPost[] = [
             size.
           </li>
           <li>
-            The service was redeployed between B5 and B6, on a new host and with a job that syncs official AMD
-            documentation into its knowledge base.
+            All three B runs used the same host, but between B5 and B6 the service was updated with a job that
+            syncs official AMD documentation into its knowledge base.
           </li>
           <li>
             Agent-side requests and tokens come from a local metering proxy; service-side numbers come from the
