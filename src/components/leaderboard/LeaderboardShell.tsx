@@ -1,5 +1,6 @@
 "use client";
 
+import { hwLabel } from "@/lib/hardware";
 import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
 import { UsersView } from "@/components/leaderboard/UsersView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
@@ -36,11 +37,14 @@ const PAGE_COPY: Record<Lang, Record<TabKey, { title: string; subtitle: string }
 
 export function LeaderboardShell({ hw, tab, lang }: { hw: string; tab: TabKey; lang: Lang }) {
   const copy = PAGE_COPY[lang][tab];
+  // 中文榜单标题写明是哪款显卡，避免只看到“大模型推理榜单”不知道是哪一块卡的数据
+  const title = lang === "zh" && tab === "leaderboard" ? `${hwLabel(hw)} 推理性能榜单` : copy.title;
+  const subtitle = lang === "zh" && tab === "leaderboard" ? `大模型在 ${hwLabel(hw)} 上的实测推理速度，按模型、引擎和量化排序。` : copy.subtitle;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight text-radeon-400">{copy.title}</h1>
-      <p className="mt-1 text-sm text-zinc-400">{copy.subtitle}</p>
+      <h1 className="text-3xl font-bold tracking-tight text-radeon-400">{title}</h1>
+      <p className="mt-1 text-sm text-zinc-400">{subtitle}</p>
 
       <div className="mt-6">
         {tab === "leaderboard" && <LeaderboardView hw={hw} />}
