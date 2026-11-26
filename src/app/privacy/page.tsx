@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link href="/" className="text-sm text-radeon-400 hover:text-radeon-300">← Back to home</Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-50">Privacy</h1>
-      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-11-18</p>
+      <p className="mt-3 text-sm text-zinc-500">Last updated: 2026-11-26</p>
 
       <div className="card mt-8 space-y-6 p-7 text-sm leading-7 text-zinc-300">
         <section>
@@ -19,8 +19,10 @@ export default function PrivacyPage() {
           <p className="mt-2 text-zinc-400">
             Signing in is optional. GitHub sign-in, when configured, uses Radeon Arena&apos;s own OAuth
             application with state and PKCE. The GitHub access token is used only to fetch your identity
-            and verified email, then discarded. Email codes are single-use and expire after 10 minutes.
-            We store a display name, stable provider identifier, verified email when supplied, avatar URL,
+            and your public or verified primary email, then discarded. Every account needs a verified email
+            address; if GitHub provides none, we ask you for one and confirm it with a code. We do not
+            collect phone numbers. Email codes are single-use and expire after 10 minutes.
+            We store a display name, stable provider identifier, verified email, avatar URL,
             role, account status, and login timestamps.
           </p>
         </section>

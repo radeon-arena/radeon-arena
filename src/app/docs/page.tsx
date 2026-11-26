@@ -261,7 +261,7 @@ export default function ApiDocsPage() {
               Use the Radeon Arena API to reach the AMD GPU Support Agent from your application or AI agent. It
               answers questions about AI on AMD GPUs, Ryzen AI and ROCm, diagnoses errors, writes local LLM
               deployment plans and searches the support knowledge base. Answers cite the official AMD ROCm
-              community support FAQ.
+              community support FAQ and AMD&apos;s public documentation, which the knowledge base picks up daily.
             </p>
             <nav aria-label="On this page" className="mt-6 lg:hidden">
               <p className="text-sm font-semibold text-zinc-100">On this page</p>
@@ -333,7 +333,12 @@ export default function ApiDocsPage() {
             />
             <p>The code has 6 digits and expires after 10 minutes. Five wrong attempts invalidate it. Ask the person for the code, or use device authorization.</p>
             <H3>Device authorization</H3>
-            <p>Use this when a person can open a link. They sign in with GitHub and approve the install.</p>
+            <p>
+              Use this when a person can open a link. They sign in with GitHub or an email code and approve the install.
+              Every account needs a verified email address: GitHub sign-in uses the account&apos;s public or verified
+              primary email, and if GitHub has none, the person enters an email address and confirms it with a code
+              before approving.
+            </p>
             <Endpoint
               route="POST /api/device/start"
               body={<span><C>install_id</C> (a UUID you generate), <C>label</C> (optional, up to 80 characters)</span>}
@@ -541,12 +546,17 @@ export default function ApiDocsPage() {
 
           <Section id="versioning" title="Versioning">
             <p>
-              The Agent Card carries the API version. Data types carry their version in the schema name, such as{" "}
-              <C>radeonrun.answer/v1</C>, and the schema files carry it in the file name.
+              The Agent Card carries the API version (0.2.8 now). Data types carry their version in the schema name, such as{" "}
+              <C>radeonrun.answer/v1</C>, and the schema files carry it in the file name. Versions not listed below
+              changed only the server, not the API.
             </p>
             <Table
               head={["Version", "Changes"]}
               rows={[
+                [<C key="1">0.2.8</C>, "Every account needs a verified email address. GitHub sign-in reads the public or verified primary email; without one, the person confirms an email address by code before approving a device. No phone number is collected."],
+                [<C key="1">0.2.4</C>, "The knowledge base also takes in AMD's public documentation (ROCm docs and blogs, ROCm CLI, AMD Skills, AMD AI Playbooks and more), refreshed daily. Citations for these records link to the original page."],
+                [<C key="1">0.2.2</C>, <span key="2">Deployment plans aim at a working endpoint. They no longer quote measured tok/s or include benchmark or tuning steps.</span>],
+                [<C key="1">0.2.1</C>, <span key="2">Benchmark references refresh every 15 minutes from the published leaderboard. Recipe ids in <C>based_on</C> are unique across devices: a non-Strix result that shares a Strix name gets a device suffix, such as <C>qwen3-14b-bf16-llamacpp-w7900</C>.</span>],
                 [<C key="1">0.2.0</C>, <span key="2">The <C>language</C> option; error codes are stable identifiers; JSON Schemas; example requests in the Agent Card.</span>],
                 [<C key="1">0.1.0</C>, "Deployment plans, questions, troubleshooting and knowledge search."],
               ]}
