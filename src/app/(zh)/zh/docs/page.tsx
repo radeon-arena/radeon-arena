@@ -225,9 +225,10 @@ export default function ApiDocsPageZh() {
               rows={[
                 [<C key="1">ask</C>, "新任务", <span key="3"><C>question</C>（必填，最多 4,000 字符）、<C>profile</C></span>, <span key="4"><C>radeonrun.answer/v1</C> 或 <C>radeonrun.need_info/v1</C></span>],
                 [<C key="1">troubleshoot</C>, "新任务", <span key="3"><C>error_text</C>（必填，取最后 4,096 个字符）、<C>context</C>（最多 2,000）、<C>profile</C></span>, <span key="4"><C>radeonrun.fix/v1</C> 或 <C>radeonrun.need_info/v1</C></span>],
-                [<C key="1">start</C>, "新任务", <span key="3"><C>profile</C>（必填）、<C>need</C>（必填：要运行的模型或任务，最多 2,000）</span>, <span key="4"><C>radeonrun.plan/v1</C> 或 <C>radeonrun.need_info/v1</C></span>],
+                [<C key="1">start</C>, "新任务", <span key="3"><C>profile</C>（必填）、<C>need</C>（必填：要运行的模型或任务，最多 2,000）；分步部署时加 <C>guided: true</C>，<C>need</C> 可省</span>, <span key="4"><C>radeonrun.plan/v1</C> 或 <C>radeonrun.need_info/v1</C>；分步部署时为推荐框架的 <C>radeonrun.options/v1</C></span>],
                 [<C key="1">search_knowledge</C>, "单独的新任务", <span key="3"><C>query</C>（必填，最多 16,000）</span>, <span key="4"><C>radeonrun.knowledge/v1</C>。不调用模型，任务随即结束。</span>],
                 [<C key="1">answer</C>, "同一任务", <span key="3"><C>text</C>（必填，最多 4,000）</span>, "同类型的下一条回复"],
+                [<C key="1">choose</C>, "同一任务", <span key="3"><C>stage</C>（必填：<C>framework</C> 或 <C>model</C>）、<C>choice</C>（必填，自由文本，最多 2,000：可以是推荐里的，也可以是推荐以外的任何选择、偏好或提问）</span>, <span key="4"><C>framework</C> 之后：推荐模型的 <C>radeonrun.options/v1</C>（用户提问时会再次给出框架推荐）；<C>model</C> 之后：<C>radeonrun.plan/v1</C></span>],
                 [<C key="1">report_issue</C>, "同一任务", <span key="3"><C>error_text</C>（必填）、<C>step_id</C>（方案步骤，如 <C>s2</C>）、<C>profile</C></span>, <span key="4"><C>radeonrun.fix/v1</C> 或 <C>radeonrun.need_info/v1</C></span>],
                 [<C key="1">report_result</C>, "同一任务", <span key="3"><C>success</C>（必填，布尔值）、<C>note</C>（最多 1,000）</span>, <span key="4"><C>radeonrun.result/v1</C>，任务随即结束。</span>],
               ]}
@@ -275,6 +276,7 @@ export default function ApiDocsPageZh() {
                 [<C key="1">radeonrun.fix/v1</C>, <span key="2"><C>diagnosis</C>、<C>fixes</C> [<C>id</C>, <C>label</C>, <C>steps</C>, <C>new_plan</C>]、<C>verified</C>（已知问题时为 true）、<C>issue_id</C>、<C>confidence</C>、<C>sources</C>、<C>also_matched</C>、<C>step_id</C>；同一方案步骤失败三次后另有 <C>escalate</C> [<C>message</C>, <C>url</C>, <C>draft</C>]</span>],
                 [<C key="1">radeonrun.plan/v1</C>, <span key="2"><C>title</C>、<C>summary</C>、<C>engine</C>、<C>model</C>、<C>quantization</C>、<C>method</C>、<C>steps</C> [<C>id</C>, <C>title</C>, <C>run</C>, <C>expect</C>, <C>needs_admin</C>]、<C>endpoint</C> [<C>base_url</C>, <C>model</C>, <C>api_key</C>]、<C>notes</C>、<C>based_on</C>（Radeon Arena 配方 id）、<C>sources</C></span>],
                 [<C key="1">radeonrun.need_info/v1</C>, <span key="2"><C>questions</C>、<C>step_id</C>。在同一任务里用 <C>answer</C> 回答。</span>],
+                [<C key="1">radeonrun.options/v1</C>, <span key="2">分步部署的一步：<C>stage</C>、<C>question</C>、<C>options</C>（名称、说明、是否推荐、理由）、对上一次回答的 <C>analysis</C>、理解到的框架 <C>accepted</C>、<C>sources</C>。选项只是建议：用 <C>choose</C> 回答，可以说任何框架或模型。</span>],
                 [<C key="1">radeonrun.knowledge/v1</C>, <span key="2"><C>status</C>（<C>matched</C>、<C>no_match</C>、<C>not_configured</C>、<C>unavailable</C>）、<C>matches</C> [<C>id</C>, <C>title</C>, <C>excerpt</C>, <C>truncated</C>, <C>source</C>]、<C>guidance</C></span>],
                 [<C key="1">radeonrun.result/v1</C>, <C key="2">recorded</C>],
                 [<C key="1">radeonrun.error/v1</C>, <span key="2"><C>error</C>；限额类错误另有 <C>retry_after</C>、<C>limit</C> 和 <C>next_action</C></span>],
@@ -323,7 +325,8 @@ export default function ApiDocsPageZh() {
                 [<C key="1">new_knowledge_task_required</C>, <span key="2"><C>search_knowledge</C> 发到了已有任务里</span>],
                 [<C key="1">session_already_started</C>, <span key="2">向已开始的任务发送了新任务类动作；请用 <C>answer</C> 继续</span>],
                 [<C key="1">session_not_found</C>, "任务不存在，或属于其他安装实例"],
-                [<span key="1"><C>plan_unavailable</C>、<C>answer_unavailable</C></span>, "没能生成方案或回答，请稍后重试。"],
+                [<span key="1"><C>plan_unavailable</C>、<C>answer_unavailable</C>、<C>options_unavailable</C></span>, "没能生成方案、回答或推荐，请稍后重试。"],
+                [<span key="1"><C>not_guided</C>、<C>invalid_stage</C>、<C>invalid_choice</C></span>, <span key="2">对不是用 <C>guided</C> 开始的任务发了 <C>choose</C>，或者 stage 不是 framework、model，或者没有填 choice</span>],
               ]}
             />
             <p>与在 AMD 硬件上做 AI 无关的请求，返回 <C>radeonrun.refused/v1</C>，原因为 <C>off_topic</C>。</p>
@@ -363,6 +366,10 @@ export default function ApiDocsPageZh() {
             <Table
               head={["版本", "变化"]}
               rows={[
+                [<C key="1">0.2.12</C>, "分步部署那一步改为只带实测摘要、不带完整启动参数；回复不是合法 JSON 时让模型改写一次。"],
+                [<C key="1">0.2.11</C>, <span key="2">分步部署：<C>start</C> 加 <C>guided: true</C>，先后用 <C>radeonrun.options/v1</C> 推荐框架和模型，新动作 <C>choose</C>。选择是自由文本，从不限于推荐项。</span>],
+                [<C key="1">0.2.10</C>, "账户页和登录邮件按网站语言显示中文。"],
+                [<C key="1">0.2.9</C>, "更正已知问题 KI-0014：这个报错表示镜像或程序没有为本卡架构编译，或镜像的 ROCm 与主机驱动不配套。"],
                 [<C key="1">0.2.8</C>, "每个账户都必须有已验证的邮箱。GitHub 登录读取公开邮箱或已验证的主邮箱；没有时，使用者先用验证码确认邮箱，才能批准设备。不收集手机号。"],
                 [<C key="1">0.2.4</C>, "知识库还收录 AMD 公开文档（ROCm 文档与博客、ROCm CLI、AMD Skills、AMD AI Playbooks 等），每天更新。这些条目的引用链接到原始页面。"],
                 [<C key="1">0.2.2</C>, <span key="2">部署方案以跑通接口为目标，不再引用实测 tok/s，也不再包含跑分或调优步骤。</span>],

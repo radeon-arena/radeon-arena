@@ -197,9 +197,10 @@ export default function ApiDocsPage() {
               rows={[
                 [<C key="1">ask</C>, "New", <span key="3"><C>question</C> (required, up to 4,000 characters), <C>profile</C></span>, <span key="4"><C>radeonrun.answer/v1</C> or <C>radeonrun.need_info/v1</C></span>],
                 [<C key="1">troubleshoot</C>, "New", <span key="3"><C>error_text</C> (required; the last 4,096 characters are used), <C>context</C> (up to 2,000), <C>profile</C></span>, <span key="4"><C>radeonrun.fix/v1</C> or <C>radeonrun.need_info/v1</C></span>],
-                [<C key="1">start</C>, "New", <span key="3"><C>profile</C> (required), <C>need</C> (required: the model or task to run, up to 2,000)</span>, <span key="4"><C>radeonrun.plan/v1</C> or <C>radeonrun.need_info/v1</C></span>],
+                [<C key="1">start</C>, "New", <span key="3"><C>profile</C> (required), <C>need</C> (required: the model or task to run, up to 2,000), or <C>guided: true</C> with <C>need</C> optional for a step-by-step deployment</span>, <span key="4"><C>radeonrun.plan/v1</C> or <C>radeonrun.need_info/v1</C>; with <C>guided</C>, <C>radeonrun.options/v1</C> suggesting frameworks</span>],
                 [<C key="1">search_knowledge</C>, "New, on its own", <span key="3"><C>query</C> (required, up to 16,000)</span>, <span key="4"><C>radeonrun.knowledge/v1</C>. No model call. The task completes.</span>],
                 [<C key="1">answer</C>, "Same task", <span key="3"><C>text</C> (required, up to 4,000)</span>, "The next reply of the same kind"],
+                [<C key="1">choose</C>, "Same task", <span key="3"><C>stage</C> (required: <C>framework</C> or <C>model</C>), <C>choice</C> (required, free text up to 2,000: one of the suggested options, anything else the user wants, a preference or a question)</span>, <span key="4">After <C>framework</C>: <C>radeonrun.options/v1</C> suggesting models (or frameworks again if the user asked a question). After <C>model</C>: <C>radeonrun.plan/v1</C></span>],
                 [<C key="1">report_issue</C>, "Same task", <span key="3"><C>error_text</C> (required), <C>step_id</C> (plan step such as <C>s2</C>), <C>profile</C></span>, <span key="4"><C>radeonrun.fix/v1</C> or <C>radeonrun.need_info/v1</C></span>],
                 [<C key="1">report_result</C>, "Same task", <span key="3"><C>success</C> (required, boolean), <C>note</C> (up to 1,000)</span>, <span key="4"><C>radeonrun.result/v1</C>. The task completes.</span>],
               ]}
@@ -252,6 +253,7 @@ export default function ApiDocsPage() {
                 [<C key="1">radeonrun.fix/v1</C>, <span key="2"><C>diagnosis</C>, <C>fixes</C> [<C>id</C>, <C>label</C>, <C>steps</C>, <C>new_plan</C>], <C>verified</C> (true for a known issue), <C>issue_id</C>, <C>confidence</C>, <C>sources</C>, <C>also_matched</C>, <C>step_id</C>, <C>escalate</C> [<C>message</C>, <C>url</C>, <C>draft</C>] after a plan step fails three times</span>],
                 [<C key="1">radeonrun.plan/v1</C>, <span key="2"><C>title</C>, <C>summary</C>, <C>engine</C>, <C>model</C>, <C>quantization</C>, <C>method</C>, <C>steps</C> [<C>id</C>, <C>title</C>, <C>run</C>, <C>expect</C>, <C>needs_admin</C>], <C>endpoint</C> [<C>base_url</C>, <C>model</C>, <C>api_key</C>], <C>notes</C>, <C>based_on</C> (Radeon Arena recipe ids), <C>sources</C></span>],
                 [<C key="1">radeonrun.need_info/v1</C>, <span key="2"><C>questions</C>, <C>step_id</C>. Answer in the same task with <C>answer</C>.</span>],
+                [<C key="1">radeonrun.options/v1</C>, <span key="2">A guided deployment step: <C>stage</C>, <C>question</C>, <C>options</C> (name, description, recommended, reason), <C>analysis</C> of the previous answer, <C>accepted</C> (the framework understood from it), <C>sources</C>. The options are suggestions only: answer with <C>choose</C>, naming any framework or model.</span>],
                 [<C key="1">radeonrun.knowledge/v1</C>, <span key="2"><C>status</C> (<C>matched</C>, <C>no_match</C>, <C>not_configured</C>, <C>unavailable</C>), <C>matches</C> [<C>id</C>, <C>title</C>, <C>excerpt</C>, <C>truncated</C>, <C>source</C>], <C>guidance</C></span>],
                 [<C key="1">radeonrun.result/v1</C>, <C key="2">recorded</C>],
                 [<C key="1">radeonrun.error/v1</C>, <span key="2"><C>error</C>, plus <C>retry_after</C>, <C>limit</C> and <C>next_action</C> for limits</span>],
@@ -300,7 +302,8 @@ export default function ApiDocsPage() {
                 [<C key="1">new_knowledge_task_required</C>, <span key="2"><C>search_knowledge</C> was sent inside an existing task</span>],
                 [<C key="1">session_already_started</C>, <span key="2">A new-task action was sent to a task that has started; continue with <C>answer</C></span>],
                 [<C key="1">session_not_found</C>, "The task does not exist or belongs to another install"],
-                [<span key="1"><C>plan_unavailable</C>, <C>answer_unavailable</C></span>, "No plan or answer could be produced. Retry later."],
+                [<span key="1"><C>plan_unavailable</C>, <C>answer_unavailable</C>, <C>options_unavailable</C></span>, "No plan, answer or suggestions could be produced. Retry later."],
+                [<span key="1"><C>not_guided</C>, <C>invalid_stage</C>, <C>invalid_choice</C></span>, <span key="2"><C>choose</C> sent to a task not started with <C>guided</C>, with a stage other than framework or model, or without a choice</span>],
               ]}
             />
             <p>Requests unrelated to AI on AMD hardware return <C>radeonrun.refused/v1</C> with reason <C>off_topic</C>.</p>
@@ -344,6 +347,10 @@ export default function ApiDocsPage() {
             <Table
               head={["Version", "Changes"]}
               rows={[
+                [<C key="1">0.2.12</C>, "The guided-deployment step sends measured results instead of full launch details, and a reply that is not valid JSON is rewritten once."],
+                [<C key="1">0.2.11</C>, <span key="2">Guided deployment: <C>start</C> with <C>guided: true</C>, <C>radeonrun.options/v1</C> suggestions for frameworks and then models, and the <C>choose</C> action. The choice is free text and is never limited to the suggestions.</span>],
+                [<C key="1">0.2.10</C>, "Account pages and sign-in emails in Chinese, following the site language."],
+                [<C key="1">0.2.9</C>, "Known issue KI-0014 corrected: the error means the image or program has no code for the GPU architecture, or its ROCm does not match the host driver."],
                 [<C key="1">0.2.8</C>, "Every account needs a verified email address. GitHub sign-in reads the public or verified primary email; without one, the person confirms an email address by code before approving a device. No phone number is collected."],
                 [<C key="1">0.2.4</C>, "The knowledge base also takes in AMD's public documentation (ROCm docs and blogs, ROCm CLI, AMD Skills, AMD AI Playbooks and more), refreshed daily. Citations for these records link to the original page."],
                 [<C key="1">0.2.2</C>, <span key="2">Deployment plans aim at a working endpoint. They no longer quote measured tok/s or include benchmark or tuning steps.</span>],
