@@ -26,7 +26,7 @@ function readTime(lang: Lang, minutes: number): string {
 export function BlogIndex({ lang }: { lang: Lang }) {
   const posts = allPosts(lang);
   return (
-    <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
       <div className="chip mb-6 border-radeon-700/50 text-radeon-300">{t(lang, "Blog", "博客")}</div>
       <h1 className="text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
         Radeon <span className="text-radeon-500">Arena</span> {t(lang, "Blog", "博客")}
@@ -39,7 +39,7 @@ export function BlogIndex({ lang }: { lang: Lang }) {
         )}
       </p>
 
-      <div className="mt-10 space-y-4">
+      <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {posts.length === 0 && (
           <div className="card p-8 text-center">
             <p className="text-sm text-zinc-400">
