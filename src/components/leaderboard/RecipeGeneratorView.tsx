@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import yaml from "js-yaml";
+import { useLang } from "@/components/LangProvider";
 
 const PLACEHOLDER = `vllm serve Qwen/Qwen3-8B \\
   --quantization fp8 \\
@@ -10,6 +11,7 @@ const PLACEHOLDER = `vllm serve Qwen/Qwen3-8B \\
   --gpu-memory-utilization 0.9`;
 
 export function RecipeGeneratorView({ hw }: { hw?: string }) {
+  const zh = useLang() === "zh";
   const [command, setCommand] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -31,11 +33,12 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
         image: image || undefined,
         source: source || undefined,
         device: hw === "strix" ? "halo" : hw || "halo",
+        zh,
       });
       setErrors(data.validationErrors);
       setYamlOut(data.documents.map((document) => `# ${document.file}\n${yaml.dump(document.data, { indent: 2, lineWidth: -1, noRefs: true }).trim()}`).join("\n---\n"));
     } catch {
-      setMessage("Failed to generate recipe");
+      setMessage(zh ? "生成配方失败" : "Failed to generate recipe");
     } finally {
       setLoading(false);
     }
@@ -43,8 +46,8 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <div className="card p-5">
-        <label className="mb-1 block text-xs text-zinc-500">Serve command</label>
+      <div className="card min-w-0 p-5">
+        <label className="mb-1 block text-xs text-zinc-500">{zh ? "启动命令" : "Serve command"}</label>
         <textarea
           value={command}
           onChange={(e) => setCommand(e.target.value)}
@@ -52,20 +55,20 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
           rows={8}
           className="w-full rounded-lg border border-ink-600 bg-ink-950 p-3 font-mono text-xs text-zinc-200"
         />
-        <label className="mb-1 mt-3 block text-xs text-zinc-500">Description (optional)</label>
+        <label className="mb-1 mt-3 block text-xs text-zinc-500">{zh ? "说明（可选）" : "Description (optional)"}</label>
         <input
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full rounded-lg border border-ink-600 bg-ink-950 p-2 text-sm text-zinc-200"
         />
-        <label className="mb-1 mt-3 block text-xs text-zinc-500">OCI image (recommended)</label>
+        <label className="mb-1 mt-3 block text-xs text-zinc-500">{zh ? "OCI 镜像（建议填写）" : "OCI image (recommended)"}</label>
         <input
           value={image}
           onChange={(e) => setImage(e.target.value)}
-          placeholder="docker.io/vendor/runtime:tag or registry/repo@sha256:..."
+          placeholder={zh ? "docker.io/vendor/runtime:tag 或 registry/repo@sha256:..." : "docker.io/vendor/runtime:tag or registry/repo@sha256:..."}
           className="w-full rounded-lg border border-ink-600 bg-ink-950 p-2 font-mono text-xs text-zinc-200"
         />
-        <label className="mb-1 mt-3 block text-xs text-zinc-500">Hugging Face source (recommended)</label>
+        <label className="mb-1 mt-3 block text-xs text-zinc-500">{zh ? "Hugging Face 来源（建议填写）" : "Hugging Face source (recommended)"}</label>
         <input
           value={source}
           onChange={(e) => setSource(e.target.value)}
@@ -73,14 +76,14 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
           className="w-full rounded-lg border border-ink-600 bg-ink-950 p-2 font-mono text-xs text-zinc-200"
         />
         <button onClick={generate} disabled={loading || !command.trim()} className="btn-primary mt-4 disabled:opacity-50">
-          {loading ? "Generating…" : "Generate Matrix Draft"}
+          {loading ? (zh ? "生成中…" : "Generating…") : zh ? "生成测试矩阵草稿" : "Generate Matrix Draft"}
         </button>
         {message && <p className="mt-3 text-sm text-amber-600">{message}</p>}
       </div>
 
-      <div className="card p-5">
+      <div className="card min-w-0 p-5">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs text-zinc-500">model + launch + matrix YAML</span>
+          <span className="text-xs text-zinc-500">{zh ? "模型 + 启动 + 矩阵 YAML" : "model + launch + matrix YAML"}</span>
           {yamlOut && (
             <button
               onClick={async () => {
@@ -89,12 +92,12 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 1500);
                 } catch {
-                  setMessage("Clipboard unavailable — select the text and copy manually.");
+                  setMessage(zh ? "无法使用剪贴板，请手动选中文本复制。" : "Clipboard unavailable — select the text and copy manually.");
                 }
               }}
               className="text-xs text-radeon-400 hover:text-radeon-300"
             >
-              {copied ? "Copied ✓" : "Copy"}
+              {copied ? (zh ? "已复制 ✓" : "Copied ✓") : zh ? "复制" : "Copy"}
             </button>
           )}
         </div>
@@ -104,14 +107,14 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
           </ul>
         )}
         <pre className="thin-scroll min-h-[12rem] overflow-auto rounded-lg border border-ink-700 bg-ink-950 p-3 font-mono text-xs text-zinc-300">
-{yamlOut ?? "// Paste a serve command and click Generate."}
+{yamlOut ?? (zh ? "// 粘贴启动命令，然后点击生成。" : "// Paste a serve command and click Generate.")}
         </pre>
       </div>
     </div>
   );
 }
 
-type DraftOptions = { description?: string; image?: string; source?: string; device: string };
+type DraftOptions = { description?: string; image?: string; source?: string; device: string; zh?: boolean };
 type DraftDocument = { file: string; data: Record<string, unknown> };
 
 function configId(value: string): string {
@@ -136,7 +139,7 @@ function parseCommand(command: string, options: DraftOptions): { documents: Draf
   const serveMatch = command.match(/serve\s+([^\s\\]+)/);
   const flagMatch = command.match(/--model(?:-path)?[ =]+([^\s\\]+)/) || command.match(/(?:^|\s)-m[ =]+([^\s\\]+)/);
   const model = serveMatch?.[1] ?? flagMatch?.[1] ?? "";
-  if (!model) errors.push("Could not detect a model path in the command.");
+  if (!model) errors.push(options.zh ? "没能从命令里识别出模型路径。" : "Could not detect a model path in the command.");
   const tpMatch = command.match(/--tensor-parallel-size[ =]+(\d+)/) || command.match(/--tp[ =]+(\d+)/);
   const clusterSize = tpMatch ? parseInt(tpMatch[1], 10) : 1;
   const quantMatch = command.match(/--quantization[ =]+([^\s\\]+)/);
@@ -165,8 +168,8 @@ function parseCommand(command: string, options: DraftOptions): { documents: Draf
       template = template.replace(pattern, replacement);
     }
   }
-  if (!options.image) errors.push("Confirm the inferred OCI image or enter an explicit image reference.");
-  if (!options.source && !inferredSource) errors.push("Add the Hugging Face source/revision before submitting.");
+  if (!options.image) errors.push(options.zh ? "请确认推断出的 OCI 镜像，或明确填写镜像引用。" : "Confirm the inferred OCI image or enter an explicit image reference.");
+  if (!options.source && !inferredSource) errors.push(options.zh ? "提交前请补上 Hugging Face 来源和版本。" : "Add the Hugging Face source/revision before submitting.");
   return {
     validationErrors: errors,
     documents: [

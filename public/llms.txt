@@ -26,6 +26,10 @@ The public leaderboard currently shows the Radeon 8060S (Strix Halo), the Radeon
 - [llama.cpp on AMD Radeon](https://radeon-arena.com/blogs/engine-llama-cpp/): every llama.cpp result on the board, and what quantization does to decode speed
 - [Blog index](https://radeon-arena.com/blogs): one post per model with all of its measured deployments across devices, engines and weight formats
 
+## 中文
+
+Every page also has a Chinese version under /zh, for example [API 文档](https://radeon-arena.com/zh/docs), [Strix Halo 榜单](https://radeon-arena.com/zh/strix/leaderboard) and [博客](https://radeon-arena.com/zh/blogs). Blog posts have the same slugs in both languages.
+
 ## Open source
 
 - [radeon-arena/skills](https://github.com/radeon-arena/skills): twelve single-task agent skills for AMD GPU setup and triage

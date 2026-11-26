@@ -1850,3 +1850,1854 @@ export const MODEL_POSTS: BlogPost[] = [
     ),
   },
 ];
+
+export const ENGINE_POSTS_ZH: BlogPost[] = [
+  {
+    slug: "engine-vllm",
+    title: "vLLM 在 AMD Radeon 上的全部实测结果",
+    date: "2026-11-26",
+    readingMinutes: 5,
+    tags: ["引擎", "vLLM", "R9700", "Strix Halo", "W7900"],
+    excerpt: "榜单上全部 34 条 vLLM 结果，覆盖 8 个模型，设备包括 R9700、Strix Halo、W7900：能跑什么、跑多快，vLLM 在哪些情况下占优、在哪些情况下吃亏。",
+    content: (
+      <>
+      <Lead>{"榜单上有 34 条结果是用 vLLM 跑的，覆盖 8 个模型（按设备分：R9700 10 条，Strix Halo 14 条，W7900 10 条）。本文把它们集中到一处。"}</Lead>
+      <H2>我们怎么跑</H2>
+      <P>{"三台设备上都跑了 vLLM。BF16 权重用它跑，ROCm 上它支持的量化格式也用它跑：AWQ、AMD Quark W8A8-INT8 和 Intel AutoRound INT4。DiffusionGemma 需要 vLLM 的 main 分支，单独标成 vLLM (main)。"}</P>
+      <P>{"每条结果都绑定固定版本的镜像，不用会变的标签；每一行的镜像和完整启动命令都在对应设备的配方页上。R9700 上的服务加了 --attention-backend TRITON_ATTN。"}</P>
+      <H2>我们看到的情况</H2>
+      <UL>
+        <li>{"vLLM 的长处在并发。下表里每一组权重、设备、卡数都相同的对比中，vLLM 在 32 并发时的总吞吐都高于 llama.cpp，常常高出好几倍。"}</li>
+        <li>{"单请求则互有胜负：在 Strix Halo 上，Qwen3.6-35B-A3B 的 BF16 是 llama.cpp 更快（22.0 对 17.1 tok/s）；W7900 双卡 BF16 跑 Qwen3.6-27B 也是 llama.cpp 更快（11.9 对 7.2）。"}</li>
+        <li>{"vLLM 的量化格式不一定能提高单请求速度。在 R9700 上，Qwen3.6-27B 用 Quark W8A8-INT8 双卡是 11.8 tok/s，BF16 双卡是 20.8。"}</li>
+      </UL>
+      <H2>vLLM 与 llama.cpp：相同权重、相同卡数</H2>
+      <P>{"单请求的解码 tok/s，以及 32 并发时的总 tok/s。"}</P>
+      <Table
+        head={["模型", "设备", "权重", "卡数", "vLLM 单请求", "llama.cpp 单请求", "vLLM 32 并发", "llama.cpp 32 并发"]}
+        numericFrom={3}
+        rows={[
+        ["Gemma-4-26B-A4B", "Strix Halo", "BF16", "1", "24.8", "21.6", "396", "144"],
+        ["Gemma-4-26B-A4B", "W7900", "BF16", "2", "78.7", "41.5", "569", "104"],
+        ["Qwen3-30B-A3B", "Strix Halo", "BF16", "1", "25.3", "24.5", "238", "148"],
+        ["Qwen3-30B-A3B", "W7900", "BF16", "2", "75.5", "53.5", "498", "222"],
+        ["Qwen3.6-27B", "R9700", "BF16", "2", "20.8", "10.6", "122", "44"],
+        ["Qwen3.6-27B", "Strix Halo", "BF16", "1", "4.3", "4.2", "57", "23"],
+        ["Qwen3.6-27B", "W7900", "BF16", "2", "7.2", "11.9", "194", "21"],
+        ["Qwen3.6-35B-A3B", "R9700", "BF16", "4", "96.8", "43.5", "827", "99"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "BF16", "1", "17.1", "22.0", "122", "94"],
+        ["Qwen3.6-35B-A3B", "W7900", "BF16", "2", "72.3", "44.3", "585", "121"],
+        ["Qwen3.8-27B", "R9700", "BF16", "2", "20.9", "10.6", "119", "47"],
+        ["Qwen3.8-27B", "Strix Halo", "BF16", "1", "4.3", "3.8", "53", "15"],
+        ]}
+      />
+      <H2>全部 vLLM 结果</H2>
+      <P>{"每个模型都有单独一篇文章，列出它在各个引擎上的全部部署。"}</P>
+      <Table
+        head={["模型", "设备", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s"]}
+        numericFrom={3}
+        rows={[
+        ["DiffusionGemma-26B-A4B", "Strix Halo", "AWQ-INT4", "1", "8.7", "12"],
+        ["DiffusionGemma-26B-A4B", "Strix Halo", "BF16", "1", "7.7", "13"],
+        ["DiffusionGemma-26B-A4B", "W7900", "AWQ-INT4", "1", "20.3", "26"],
+        ["Gemma-4-26B-A4B", "Strix Halo", "AWQ-4bit", "1", "42.5", "434"],
+        ["Gemma-4-26B-A4B", "Strix Halo", "BF16", "1", "24.8", "396"],
+        ["Gemma-4-26B-A4B", "W7900", "AWQ-4bit", "1", "89.5", "431"],
+        ["Gemma-4-26B-A4B", "W7900", "BF16", "2", "78.7", "569"],
+        ["Gemma-4-31B", "Strix Halo", "Quark-W8A8-INT8", "1", "6.3", "78"],
+        ["Gemma-4-31B", "W7900", "Quark-W8A8-INT8", "1", "20.2", "71"],
+        ["Qwen3-30B-A3B", "Strix Halo", "BF16", "1", "25.3", "238"],
+        ["Qwen3-30B-A3B", "Strix Halo", "BF16+YaRN", "1", "25.1", "213"],
+        ["Qwen3-30B-A3B", "W7900", "BF16", "2", "75.5", "498"],
+        ["Qwen3-30B-A3B", "W7900", "BF16+YaRN", "2", "69.0", "308"],
+        ["Qwen3-4B", "R9700", "BF16", "1", "70.3", "1,639"],
+        ["Qwen3.6-27B", "R9700", "BF16", "2", "20.8", "122"],
+        ["Qwen3.6-27B", "R9700", "Quark-W8A8-INT8", "2", "11.8", "175"],
+        ["Qwen3.6-27B", "R9700", "BF16", "4", "34.1", "324"],
+        ["Qwen3.6-27B", "Strix Halo", "BF16", "1", "4.3", "57"],
+        ["Qwen3.6-27B", "Strix Halo", "Quark-W8A8-INT8", "1", "7.8", "56"],
+        ["Qwen3.6-27B", "W7900", "BF16", "2", "7.2", "194"],
+        ["Qwen3.6-35B-A3B", "R9700", "AWQ-4bit", "1", "69.7", "384"],
+        ["Qwen3.6-35B-A3B", "R9700", "AWQ-4bit", "2", "88.1", "654"],
+        ["Qwen3.6-35B-A3B", "R9700", "Quark-W8A8-INT8", "2", "63.9", "727"],
+        ["Qwen3.6-35B-A3B", "R9700", "BF16", "4", "96.8", "827"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "AWQ-4bit", "1", "26.1", "124"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "BF16", "1", "17.1", "122"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "INT4-mixed-AutoRound", "1", "37.8", "189"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "Quark-W8A8-INT8", "1", "30.8", "161"],
+        ["Qwen3.6-35B-A3B", "W7900", "AWQ-4bit", "1", "38.1", "299"],
+        ["Qwen3.6-35B-A3B", "W7900", "Quark-W8A8-INT8", "1", "72.9", "421"],
+        ["Qwen3.6-35B-A3B", "W7900", "BF16", "2", "72.3", "585"],
+        ["Qwen3.8-27B", "R9700", "BF16", "2", "20.9", "119"],
+        ["Qwen3.8-27B", "R9700", "BF16", "4", "32.7", "330"],
+        ["Qwen3.8-27B", "Strix Halo", "BF16", "1", "4.3", "53"],
+        ]}
+      />
+      <H2>各模型文章</H2>
+      <UL>
+        <li><A href="/zh/blogs/model-qwen3-4b">{"Qwen3-4B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/zh/blogs/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
+        <li><A href="/zh/blogs/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/zh/blogs/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
+      </UL>
+      <H2>测试方法</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "engine-llama-cpp",
+    title: "llama.cpp 在 AMD Radeon 上的全部实测结果",
+    date: "2026-11-26",
+    readingMinutes: 5,
+    tags: ["引擎", "llama.cpp", "R9700", "Strix Halo", "W7900"],
+    excerpt: "榜单上全部 192 条 llama.cpp 结果，覆盖 30 个模型，设备包括 R9700、Strix Halo、W7900：能跑什么、跑多快，llama.cpp 在哪些情况下占优、在哪些情况下吃亏。",
+    content: (
+      <>
+      <Lead>{"榜单上有 192 条结果是用 llama.cpp 跑的，覆盖 30 个模型（按设备分：R9700 51 条，Strix Halo 70 条，W7900 71 条）。本文把它们集中到一处。"}</Lead>
+      <H2>我们怎么跑</H2>
+      <P>{"榜单上所有 GGUF 结果都用 llama.cpp 的 ROCm/HIP 后端跑，三台设备都有。典型的启动命令是 llama-server -ngl 999 -fa on -c 32768 -np 32：所有层放到 GPU 上，打开 flash attention，32 个并行槽位共用 32K 上下文。多卡运行时按层切到各张卡上。在 Strix Halo 上，最大的几个模型按配方加 --no-mmap 或 --load-mode none 加载。"}</P>
+      <P>{"每条结果都绑定固定版本的镜像，不用会变的标签。Strix Halo 上 7 月测的模型，用的 llama.cpp 比 11 月新加的模型旧，跨这两批比较时要留意。每一行的镜像和命令都在对应设备的配方页上。"}</P>
+      <H2>我们看到的情况</H2>
+      <UL>
+        <li>{"要把模型塞进显存，llama.cpp 最省事：从 2 比特到 BF16 的 GGUF 量化都用同一个服务程序跑，榜单上 100 GB 级别的模型也只在这里跑。"}</li>
+        <li>{"单请求速度跟着权重大小走，所以量化的收益很直接。下表列出在一张卡上同时测了 BF16（或 F16）、Q8_0 和 4 比特版本的模型，各自的单请求解码速度。"}</li>
+        <li>{"32 并发时的总吞吐增长不如 vLLM，有些配置在 4 或 16 并发到顶后反而下降；各模型的文章里列出了这些情况。"}</li>
+      </UL>
+      <H2>单卡上的量化收益</H2>
+      <P>{"单请求解码 tok/s。最后一列是 4 比特版本相对 BF16 或 F16 的倍数。"}</P>
+      <Table
+        head={["模型", "设备", "BF16/F16", "Q8_0", "4 比特", "4 比特格式", "4 比特比 16 位"]}
+        numericFrom={2}
+        rows={[
+        ["Qwen3-4B", "Strix Halo", "25.3", "44.8", "66.7", "Q4_K_M", "2.6 倍"],
+        ["Qwen3-4B", "W7900", "64.9", "90.2", "103.8", "Q4_K_M", "1.6 倍"],
+        ["Qwen3-8B", "Strix Halo", "11.9", "25.5", "40.1", "Q4_K_M", "3.4 倍"],
+        ["Qwen3-8B", "W7900", "39.5", "63.1", "72.8", "Q4_K_M", "1.8 倍"],
+        ["Qwen3-14B", "Strix Halo", "7.7", "14.4", "23.5", "Q4_K_M", "3.0 倍"],
+        ["Qwen3-14B", "W7900", "23.5", "38.0", "48.1", "Q4_K_M", "2.0 倍"],
+        ["Qwen3-32B", "Strix Halo", "3.4", "6.5", "10.8", "Q4_K_M", "3.2 倍"],
+        ["Qwen3-30B-A3B", "Strix Halo", "24.5", "50.1", "67.5", "Q4_K_M", "2.8 倍"],
+        ["Qwen3.6-27B", "Strix Halo", "4.2", "7.6", "11.9", "Q4_K_M", "2.9 倍"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "22.0", "44.3", "49.3", "UD-Q4_K_M", "2.2 倍"],
+        ["Qwen3.8-27B", "Strix Halo", "3.8", "6.9", "10.7", "UD-Q4_K_M", "2.8 倍"],
+        ["Gemma-4-26B-A4B", "Strix Halo", "21.6", "39.6", "43.3", "UD-Q4_K_M", "2.0 倍"],
+        ["Granite 4.2 8B", "R9700", "30.9", "45.7", "78.2", "Q4_K_M", "2.5 倍"],
+        ["Granite 4.2 8B", "Strix Halo", "10.7", "21.4", "33.4", "Q4_K_M", "3.1 倍"],
+        ["Granite 4.2 8B", "W7900", "37.0", "58.0", "76.7", "Q4_K_M", "2.1 倍"],
+        ["Granite 4.2 30B", "Strix Halo", "3.2", "6.3", "10.2", "Q4_K_M", "3.2 倍"],
+        ["LFM2.5-24B-A2B", "Strix Halo", "26.9", "57.0", "77.0", "UD-Q4_K_XL", "2.9 倍"],
+        ["LFM3-1.7B", "R9700", "115.2", "158.9", "210.1", "Q4_K_M", "1.8 倍"],
+        ["LFM3-1.7B", "Strix Halo", "45.6", "88.5", "124.2", "Q4_K_M", "2.7 倍"],
+        ["LFM3-1.7B", "W7900", "121.2", "166.7", "193.8", "Q4_K_M", "1.6 倍"],
+        ["Ling-3.0-tiny", "R9700", "92.5", "123.2", "135.4", "Q4_K_M", "1.5 倍"],
+        ["Ling-3.0-tiny", "Strix Halo", "52.0", "86.0", "108.7", "Q4_K_M", "2.1 倍"],
+        ["Ling-3.0-tiny", "W7900", "92.3", "109.3", "127.9", "Q4_K_M", "1.4 倍"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "R9700", "32.8", "47.6", "71.7", "Q4_K_M", "2.2 倍"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "Strix Halo", "11.1", "22.2", "31.8", "Q4_K_M", "2.9 倍"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "W7900", "37.2", "58.8", "71.2", "Q4_K_M", "1.9 倍"],
+        ["Nemotron 3.5 Bolt E4B", "R9700", "46.0", "65.5", "86.2", "UD-Q4_K_XL", "1.9 倍"],
+        ["Nemotron 3.5 Bolt E4B", "Strix Halo", "20.5", "35.5", "46.5", "UD-Q4_K_XL", "2.3 倍"],
+        ["Nemotron 3.5 Bolt E4B", "W7900", "53.6", "72.0", "85.3", "UD-Q4_K_XL", "1.6 倍"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "Strix Halo", "24.9", "42.3", "50.3", "Q4_0", "2.0 倍"],
+        ["MiniCPM-V 4.7 1B", "R9700", "150.9", "191.2", "211.5", "Q4_K_M", "1.4 倍"],
+        ["MiniCPM-V 4.7 1B", "Strix Halo", "87.2", "143.9", "175.2", "Q4_K_M", "2.0 倍"],
+        ["MiniCPM-V 4.7 1B", "W7900", "163.8", "173.9", "203.4", "Q4_K_M", "1.2 倍"],
+        ["MiniCPM-V 4.7 35B-A3B", "Strix Halo", "20.3", "40.0", "52.4", "Q4_K_M", "2.6 倍"],
+        ["MiniCPM5-2B", "R9700", "84.9", "112.0", "144.9", "Q4_K_M", "1.7 倍"],
+        ["MiniCPM5-2B", "Strix Halo", "32.9", "67.2", "93.5", "Q4_K_M", "2.8 倍"],
+        ["MiniCPM5-2B", "W7900", "98.4", "131.1", "149.8", "Q4_K_M", "1.5 倍"],
+        ]}
+      />
+      <H2>全部 llama.cpp 结果</H2>
+      <P>{"每个模型都有单独一篇文章，列出它在各个引擎上的全部部署。"}</P>
+      <Table
+        head={["模型", "设备", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s"]}
+        numericFrom={3}
+        rows={[
+        ["DeepSeek-V4-Flash-0731", "R9700", "UD-Q2_K_XL", "4", "19.6", "76"],
+        ["DeepSeek-V4-Flash-0731", "Strix Halo", "UD-Q2_K_XL", "1", "11.5", "32"],
+        ["DeepSeek-V4-Flash-0731", "W7900", "UD-Q2_K_XL", "4", "18.9", "55"],
+        ["GLM-5.3-Flash", "R9700", "UD-IQ2_XXS", "4", "21.9", "58"],
+        ["GLM-5.3-Flash", "W7900", "UD-IQ2_XXS", "4", "21.6", "70"],
+        ["Gemma-4-26B-A4B", "Strix Halo", "BF16", "1", "21.6", "144"],
+        ["Gemma-4-26B-A4B", "Strix Halo", "Q8_0", "1", "39.6", "160"],
+        ["Gemma-4-26B-A4B", "Strix Halo", "UD-Q4_K_M", "1", "43.3", "207"],
+        ["Gemma-4-26B-A4B", "W7900", "Q8_0", "1", "57.1", "107"],
+        ["Gemma-4-26B-A4B", "W7900", "UD-Q4_K_M", "1", "58.4", "109"],
+        ["Gemma-4-26B-A4B", "W7900", "BF16", "2", "41.5", "104"],
+        ["Granite 4.2 30B", "R9700", "Q4_K_M", "1", "26.7", "122"],
+        ["Granite 4.2 30B", "R9700", "Q8_0", "2", "14.9", "84"],
+        ["Granite 4.2 30B", "R9700", "BF16", "4", "9.7", "118"],
+        ["Granite 4.2 30B", "Strix Halo", "BF16", "1", "3.2", "24"],
+        ["Granite 4.2 30B", "Strix Halo", "Q4_K_M", "1", "10.2", "47"],
+        ["Granite 4.2 30B", "Strix Halo", "Q8_0", "1", "6.3", "42"],
+        ["Granite 4.2 30B", "W7900", "Q4_K_M", "1", "27.8", "107"],
+        ["Granite 4.2 30B", "W7900", "Q8_0", "1", "20.3", "94"],
+        ["Granite 4.2 30B", "W7900", "BF16", "2", "12.1", "81"],
+        ["Granite 4.2 8B", "R9700", "BF16", "1", "30.9", "303"],
+        ["Granite 4.2 8B", "R9700", "Q4_K_M", "1", "78.2", "351"],
+        ["Granite 4.2 8B", "R9700", "Q8_0", "1", "45.7", "185"],
+        ["Granite 4.2 8B", "Strix Halo", "BF16", "1", "10.7", "85"],
+        ["Granite 4.2 8B", "Strix Halo", "Q4_K_M", "1", "33.4", "160"],
+        ["Granite 4.2 8B", "Strix Halo", "Q8_0", "1", "21.4", "143"],
+        ["Granite 4.2 8B", "W7900", "BF16", "1", "37.0", "254"],
+        ["Granite 4.2 8B", "W7900", "Q4_K_M", "1", "76.7", "309"],
+        ["Granite 4.2 8B", "W7900", "Q8_0", "1", "58.0", "292"],
+        ["LFM2.5-24B-A2B", "R9700", "Q8_0", "1", "113.6", "396"],
+        ["LFM2.5-24B-A2B", "R9700", "UD-Q4_K_XL", "1", "132.3", "475"],
+        ["LFM2.5-24B-A2B", "R9700", "BF16", "2", "72.0", "280"],
+        ["LFM2.5-24B-A2B", "Strix Halo", "BF16", "1", "26.9", "82"],
+        ["LFM2.5-24B-A2B", "Strix Halo", "Q8_0", "1", "57.0", "217"],
+        ["LFM2.5-24B-A2B", "Strix Halo", "UD-Q4_K_XL", "1", "77.0", "282"],
+        ["LFM2.5-24B-A2B", "W7900", "Q8_0", "1", "109.6", "414"],
+        ["LFM2.5-24B-A2B", "W7900", "UD-Q4_K_XL", "1", "123.3", "458"],
+        ["LFM2.5-24B-A2B", "W7900", "BF16", "2", "74.5", "259"],
+        ["LFM3-1.7B", "R9700", "BF16", "1", "115.2", "690"],
+        ["LFM3-1.7B", "R9700", "Q4_K_M", "1", "210.1", "756"],
+        ["LFM3-1.7B", "R9700", "Q8_0", "1", "158.9", "567"],
+        ["LFM3-1.7B", "Strix Halo", "BF16", "1", "45.6", "257"],
+        ["LFM3-1.7B", "Strix Halo", "Q4_K_M", "1", "124.2", "559"],
+        ["LFM3-1.7B", "Strix Halo", "Q8_0", "1", "88.5", "494"],
+        ["LFM3-1.7B", "W7900", "BF16", "1", "121.2", "577"],
+        ["LFM3-1.7B", "W7900", "Q4_K_M", "1", "193.8", "746"],
+        ["LFM3-1.7B", "W7900", "Q8_0", "1", "166.7", "699"],
+        ["Ling-3.0-flash", "R9700", "Q4_K_M", "4", "44.3", "105"],
+        ["Ling-3.0-flash", "Strix Halo", "Q4_K_M", "1", "30.0", "83"],
+        ["Ling-3.0-flash", "W7900", "Q4_K_M", "2", "47.0", "160"],
+        ["Ling-3.0-tiny", "R9700", "BF16", "1", "92.5", "303"],
+        ["Ling-3.0-tiny", "R9700", "Q4_K_M", "1", "135.4", "560"],
+        ["Ling-3.0-tiny", "R9700", "Q8_0", "1", "123.2", "497"],
+        ["Ling-3.0-tiny", "Strix Halo", "BF16", "1", "52.0", "216"],
+        ["Ling-3.0-tiny", "Strix Halo", "Q4_K_M", "1", "108.7", "348"],
+        ["Ling-3.0-tiny", "Strix Halo", "Q8_0", "1", "86.0", "309"],
+        ["Ling-3.0-tiny", "W7900", "BF16", "1", "92.3", "410"],
+        ["Ling-3.0-tiny", "W7900", "Q4_K_M", "1", "127.9", "540"],
+        ["Ling-3.0-tiny", "W7900", "Q8_0", "1", "109.3", "504"],
+        ["Llama-3.1-8B-Instruct", "Strix Halo", "BF16", "1", "12.1", "190"],
+        ["Llama-3.1-8B-Instruct", "Strix Halo", "Q4_K_M", "1", "41.1", "454"],
+        ["Llama-3.1-8B-Instruct", "W7900", "BF16", "1", "42.1", "245"],
+        ["Llama-3.1-8B-Instruct", "W7900", "Q4_K_M", "1", "78.8", "275"],
+        ["MiMo-V2.5", "Strix Halo", "UD-Q2_K_XL", "1", "19.2", "39"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "R9700", "BF16", "1", "32.8", "156"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "R9700", "Q4_K_M", "1", "71.7", "225"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "R9700", "Q8_0", "1", "47.6", "177"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "Strix Halo", "BF16", "1", "11.1", "76"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "Strix Halo", "Q4_K_M", "1", "31.8", "132"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "Strix Halo", "Q8_0", "1", "22.2", "123"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "W7900", "BF16", "1", "37.2", "205"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "W7900", "Q4_K_M", "1", "71.2", "239"],
+        ["MiMo-V2.6-Distill-Qwen-9B", "W7900", "Q8_0", "1", "58.8", "233"],
+        ["MiMo-V2.6-Flash", "R9700", "IQ2_XS_M", "4", "16.4", "24"],
+        ["MiMo-V2.6-Flash", "W7900", "IQ2_XS_M", "4", "24.4", "36"],
+        ["MiniCPM-V 4.7 1B", "R9700", "F16", "1", "150.9", "812"],
+        ["MiniCPM-V 4.7 1B", "R9700", "Q4_K_M", "1", "211.5", "731"],
+        ["MiniCPM-V 4.7 1B", "R9700", "Q8_0", "1", "191.2", "711"],
+        ["MiniCPM-V 4.7 1B", "Strix Halo", "F16", "1", "87.2", "416"],
+        ["MiniCPM-V 4.7 1B", "Strix Halo", "Q4_K_M", "1", "175.2", "587"],
+        ["MiniCPM-V 4.7 1B", "Strix Halo", "Q8_0", "1", "143.9", "541"],
+        ["MiniCPM-V 4.7 1B", "W7900", "F16", "1", "163.8", "754"],
+        ["MiniCPM-V 4.7 1B", "W7900", "Q4_K_M", "1", "203.4", "912"],
+        ["MiniCPM-V 4.7 1B", "W7900", "Q8_0", "1", "173.9", "849"],
+        ["MiniCPM-V 4.7 35B-A3B", "R9700", "Q4_K_M", "1", "82.8", "257"],
+        ["MiniCPM-V 4.7 35B-A3B", "R9700", "Q8_0", "2", "66.0", "188"],
+        ["MiniCPM-V 4.7 35B-A3B", "R9700", "F16", "4", "47.3", "143"],
+        ["MiniCPM-V 4.7 35B-A3B", "Strix Halo", "F16", "1", "20.3", "69"],
+        ["MiniCPM-V 4.7 35B-A3B", "Strix Halo", "Q4_K_M", "1", "52.4", "148"],
+        ["MiniCPM-V 4.7 35B-A3B", "Strix Halo", "Q8_0", "1", "40.0", "131"],
+        ["MiniCPM-V 4.7 35B-A3B", "W7900", "Q4_K_M", "1", "84.0", "269"],
+        ["MiniCPM-V 4.7 35B-A3B", "W7900", "Q8_0", "1", "69.7", "256"],
+        ["MiniCPM-V 4.7 35B-A3B", "W7900", "F16", "2", "49.8", "183"],
+        ["MiniCPM5-2B", "R9700", "F16", "1", "84.9", "704"],
+        ["MiniCPM5-2B", "R9700", "Q4_K_M", "1", "144.9", "760"],
+        ["MiniCPM5-2B", "R9700", "Q8_0", "1", "112.0", "507"],
+        ["MiniCPM5-2B", "Strix Halo", "F16", "1", "32.9", "211"],
+        ["MiniCPM5-2B", "Strix Halo", "Q4_K_M", "1", "93.5", "441"],
+        ["MiniCPM5-2B", "Strix Halo", "Q8_0", "1", "67.2", "412"],
+        ["MiniCPM5-2B", "W7900", "F16", "1", "98.4", "575"],
+        ["MiniCPM5-2B", "W7900", "Q4_K_M", "1", "149.8", "719"],
+        ["MiniCPM5-2B", "W7900", "Q8_0", "1", "131.1", "669"],
+        ["Nemotron 3.5 Bolt 74B-A9B", "R9700", "UD-Q4_K_XL", "2", "34.6", "102"],
+        ["Nemotron 3.5 Bolt 74B-A9B", "R9700", "Q8_0", "4", "29.8", "84"],
+        ["Nemotron 3.5 Bolt 74B-A9B", "Strix Halo", "Q8_0", "1", "16.1", "44"],
+        ["Nemotron 3.5 Bolt 74B-A9B", "Strix Halo", "UD-Q4_K_XL", "1", "18.3", "44"],
+        ["Nemotron 3.5 Bolt 74B-A9B", "W7900", "Q8_0", "2", "35.3", "118"],
+        ["Nemotron 3.5 Bolt 74B-A9B", "W7900", "UD-Q4_K_XL", "2", "39.0", "120"],
+        ["Nemotron 3.5 Bolt E4B", "R9700", "BF16", "1", "46.0", "438"],
+        ["Nemotron 3.5 Bolt E4B", "R9700", "Q8_0", "1", "65.5", "340"],
+        ["Nemotron 3.5 Bolt E4B", "R9700", "UD-Q4_K_XL", "1", "86.2", "433"],
+        ["Nemotron 3.5 Bolt E4B", "Strix Halo", "BF16", "1", "20.5", "184"],
+        ["Nemotron 3.5 Bolt E4B", "Strix Halo", "Q8_0", "1", "35.5", "256"],
+        ["Nemotron 3.5 Bolt E4B", "Strix Halo", "UD-Q4_K_XL", "1", "46.5", "294"],
+        ["Nemotron 3.5 Bolt E4B", "W7900", "BF16", "1", "53.6", "402"],
+        ["Nemotron 3.5 Bolt E4B", "W7900", "Q8_0", "1", "72.0", "428"],
+        ["Nemotron 3.5 Bolt E4B", "W7900", "UD-Q4_K_XL", "1", "85.3", "454"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "R9700", "Q4_0", "1", "93.2", "186"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "R9700", "Q8_0", "2", "81.3", "274"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "R9700", "BF16", "4", "57.2", "227"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "Strix Halo", "BF16", "1", "24.9", "96"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "Strix Halo", "Q4_0", "1", "50.3", "139"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "Strix Halo", "Q8_0", "1", "42.3", "121"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "W7900", "Q4_0", "1", "87.0", "268"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "W7900", "Q8_0", "1", "84.2", "248"],
+        ["Nemotron 3.5 Lightning 30B-A3B", "W7900", "BF16", "2", "60.5", "220"],
+        ["Nemotron 3.5 Super VL 120B-A12B", "R9700", "UD-Q4_K_XL", "4", "27.2", "77"],
+        ["Nemotron 3.5 Super VL 120B-A12B", "Strix Halo", "UD-Q4_K_XL", "1", "14.1", "34"],
+        ["Nemotron 3.5 Super VL 120B-A12B", "W7900", "UD-Q4_K_XL", "4", "32.2", "96"],
+        ["Qwen3-14B", "Strix Halo", "BF16", "1", "7.7", "135"],
+        ["Qwen3-14B", "Strix Halo", "Q4_K_M", "1", "23.5", "252"],
+        ["Qwen3-14B", "Strix Halo", "Q8_0", "1", "14.4", "173"],
+        ["Qwen3-14B", "W7900", "BF16", "1", "23.5", "144"],
+        ["Qwen3-14B", "W7900", "Q4_K_M", "1", "48.1", "170"],
+        ["Qwen3-14B", "W7900", "Q8_0", "1", "38.0", "161"],
+        ["Qwen3-30B-A3B", "Strix Halo", "BF16", "1", "24.5", "148"],
+        ["Qwen3-30B-A3B", "Strix Halo", "Q4_K_M", "1", "67.5", "387"],
+        ["Qwen3-30B-A3B", "Strix Halo", "Q8_0", "1", "50.1", "264"],
+        ["Qwen3-30B-A3B", "W7900", "Q4_K_M", "1", "85.2", "280"],
+        ["Qwen3-30B-A3B", "W7900", "Q8_0", "1", "75.4", "269"],
+        ["Qwen3-30B-A3B", "W7900", "BF16", "2", "53.5", "222"],
+        ["Qwen3-32B", "Strix Halo", "BF16", "1", "3.4", "63"],
+        ["Qwen3-32B", "Strix Halo", "Q4_K_M", "1", "10.8", "132"],
+        ["Qwen3-32B", "Strix Halo", "Q8_0", "1", "6.5", "86"],
+        ["Qwen3-32B", "W7900", "Q4_K_M", "1", "22.8", "81"],
+        ["Qwen3-32B", "W7900", "Q8_0", "1", "17.9", "79"],
+        ["Qwen3-32B", "W7900", "BF16", "2", "10.8", "86"],
+        ["Qwen3-4B", "R9700", "Q4_K_M", "1", "123.8", "565"],
+        ["Qwen3-4B", "Strix Halo", "BF16", "1", "25.3", "331"],
+        ["Qwen3-4B", "Strix Halo", "Q4_K_M", "1", "66.7", "552"],
+        ["Qwen3-4B", "Strix Halo", "Q8_0", "1", "44.8", "413"],
+        ["Qwen3-4B", "W7900", "BF16", "1", "64.9", "324"],
+        ["Qwen3-4B", "W7900", "Q4_K_M", "1", "103.8", "330"],
+        ["Qwen3-4B", "W7900", "Q8_0", "1", "90.2", "350"],
+        ["Qwen3-8B", "Strix Halo", "BF16", "1", "11.9", "176"],
+        ["Qwen3-8B", "Strix Halo", "Q4_K_M", "1", "40.1", "413"],
+        ["Qwen3-8B", "Strix Halo", "Q8_0", "1", "25.5", "304"],
+        ["Qwen3-8B", "W7900", "BF16", "1", "39.5", "222"],
+        ["Qwen3-8B", "W7900", "Q4_K_M", "1", "72.8", "255"],
+        ["Qwen3-8B", "W7900", "Q8_0", "1", "63.1", "255"],
+        ["Qwen3.6-27B", "R9700", "Q4_K_M", "1", "24.1", "69"],
+        ["Qwen3.6-27B", "R9700", "BF16", "2", "10.6", "44"],
+        ["Qwen3.6-27B", "R9700", "Q8_0", "2", "15.4", "52"],
+        ["Qwen3.6-27B", "Strix Halo", "BF16", "1", "4.2", "23"],
+        ["Qwen3.6-27B", "Strix Halo", "Q4_K_M", "1", "11.9", "42"],
+        ["Qwen3.6-27B", "Strix Halo", "Q8_0", "1", "7.6", "37"],
+        ["Qwen3.6-27B", "W7900", "Q4_K_M", "1", "23.4", "22"],
+        ["Qwen3.6-27B", "W7900", "Q8_0", "1", "19.0", "21"],
+        ["Qwen3.6-27B", "W7900", "BF16", "2", "11.9", "21"],
+        ["Qwen3.6-35B-A3B", "R9700", "UD-Q4_K_M", "1", "66.1", "174"],
+        ["Qwen3.6-35B-A3B", "R9700", "Q8_0", "2", "57.5", "153"],
+        ["Qwen3.6-35B-A3B", "R9700", "BF16", "4", "43.5", "99"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "BF16", "1", "22.0", "94"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "Q8_0", "1", "44.3", "142"],
+        ["Qwen3.6-35B-A3B", "Strix Halo", "UD-Q4_K_M", "1", "49.3", "165"],
+        ["Qwen3.6-35B-A3B", "W7900", "Q8_0", "1", "59.6", "145"],
+        ["Qwen3.6-35B-A3B", "W7900", "UD-Q4_K_M", "1", "63.8", "150"],
+        ["Qwen3.6-35B-A3B", "W7900", "BF16", "2", "44.3", "121"],
+        ["Qwen3.8-27B", "R9700", "UD-Q4_K_M", "1", "23.0", "58"],
+        ["Qwen3.8-27B", "R9700", "BF16", "2", "10.6", "47"],
+        ["Qwen3.8-27B", "R9700", "Q8_0", "2", "15.3", "50"],
+        ["Qwen3.8-27B", "Strix Halo", "BF16", "1", "3.8", "15"],
+        ["Qwen3.8-27B", "Strix Halo", "Q8_0", "1", "6.9", "22"],
+        ["Qwen3.8-27B", "Strix Halo", "UD-Q4_K_M", "1", "10.7", "25"],
+        ["Qwen3.8-27B", "W7900", "Q8_0", "1", "20.1", "86"],
+        ["Qwen3.8-27B", "W7900", "UD-Q4_K_M", "1", "27.5", "90"],
+        ["Qwen3.8-27B", "W7900", "BF16", "2", "12.4", "84"],
+        ["Qwen3.8-Flash-Next", "R9700", "UD-Q3_K_XL", "4", "30.4", "63"],
+        ["Qwen3.8-Flash-Next", "Strix Halo", "UD-Q3_K_XL", "1", "20.8", "48"],
+        ["Qwen3.8-Flash-Next", "W7900", "UD-Q3_K_XL", "4", "30.3", "114"],
+        ["Qwen3.8-Flash-Next", "W7900", "UD-Q4_K_XL", "4", "29.0", "117"],
+        ["Step-3.5-Flash", "Strix Halo", "Q4_K_S", "1", "23.5", "118"],
+        ]}
+      />
+      <H2>各模型文章</H2>
+      <UL>
+        <li><A href="/zh/blogs/model-qwen3-4b">{"Qwen3-4B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3-8b">{"Qwen3-8B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3-14b">{"Qwen3-14B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3-32b">{"Qwen3-32B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/zh/blogs/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
+        <li><A href="/zh/blogs/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/zh/blogs/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
+        <li><A href="/zh/blogs/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
+        <li><A href="/zh/blogs/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
+        <li><A href="/zh/blogs/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
+        <li><A href="/zh/blogs/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
+        <li><A href="/zh/blogs/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
+        <li><A href="/zh/blogs/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
+        <li><A href="/zh/blogs/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
+        <li><A href="/zh/blogs/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
+        <li><A href="/zh/blogs/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
+        <li><A href="/zh/blogs/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
+        <li><A href="/zh/blogs/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
+        <li><A href="/zh/blogs/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
+        <li><A href="/zh/blogs/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
+        <li><A href="/zh/blogs/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
+        <li><A href="/zh/blogs/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
+        <li><A href="/zh/blogs/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
+        <li><A href="/zh/blogs/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
+        <li><A href="/zh/blogs/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
+        <li><A href="/zh/blogs/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
+      </UL>
+      <H2>测试方法</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      </>
+    ),
+  },
+];
+
+export const MODEL_POSTS_ZH: BlogPost[] = [
+  {
+    slug: "model-qwen3-4b",
+    title: "Qwen3-4B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3-4B", "R9700", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
+    excerpt: "Qwen3-4B 在 R9700、Strix Halo、W7900 上共 8 种实测部署。单请求最快：123.8 tok/s（R9700、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Qwen3-4B 是通义千问 Qwen3 系列的 4B 稠密模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 8 种部署，引擎用了 llama.cpp 和 vLLM，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 3, 6]}
+        rows={[
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "123.8", "565", "—", "2026 年 7 月"],
+        ["R9700", "vLLM", "BF16", "1", "70.3", "1,639", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "25.3", "331", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "66.7", "552", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "44.8", "413", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "64.9", "324", "239", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "103.8", "330", "250", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "90.2", "350", "207", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 123.8 tok/s（llama.cpp、Q4_K_M）；Strix Halo 66.7 tok/s（llama.cpp、Q4_K_M）；W7900 103.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：1,639 tok/s（R9700、vLLM、BF16）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 2.6 倍，66.7 对 25.3 tok/s。"}</li>
+        <li>{"只有 R9700 跑了这个模型的 vLLM。单卡 32 并发时，vLLM 总吞吐达到 1,639 tok/s，同一张卡上 llama.cpp 跑 Q4_K_M 只有 565；但单请求是 llama.cpp Q4_K_M 更快（123.8 对 70.3 tok/s）。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"Qwen/Qwen3-4B"}</li>
+        <li>{"unsloth/Qwen3-4B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3-8b",
+    title: "Qwen3-8B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3-8B", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Qwen3-8B 在 Strix Halo、W7900 上共 6 种实测部署。单请求最快：72.8 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Qwen3-8B 是 Qwen3 系列的 8B 稠密模型。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 6 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "BF16", "1", "11.9", "176", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "40.1", "413", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "25.5", "304", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "39.5", "222", "352", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "72.8", "255", "328", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "63.1", "255", "301", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 40.1 tok/s（llama.cpp、Q4_K_M）；W7900 72.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：413 tok/s（Strix Halo、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 3.4 倍，40.1 对 11.9 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/Qwen3-8B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3-14b",
+    title: "Qwen3-14B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3-14B", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Qwen3-14B 在 Strix Halo、W7900 上共 6 种实测部署。单请求最快：48.1 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Qwen3-14B 是 Qwen3 系列的 14B 稠密模型。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 6 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "BF16", "1", "7.7", "135", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "23.5", "252", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "14.4", "173", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "23.5", "144", "547", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "48.1", "170", "489", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "38.0", "161", "473", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 23.5 tok/s（llama.cpp、Q4_K_M）；W7900 48.1 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：252 tok/s（Strix Halo、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 3.0 倍，23.5 对 7.7 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/Qwen3-14B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3-32b",
+    title: "Qwen3-32B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3-32B", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Qwen3-32B 在 Strix Halo、W7900 上共 6 种实测部署。单请求最快：22.8 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Qwen3-32B 是榜单上 Qwen3 系列最大的稠密模型。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 6 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 3]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "BF16", "1", "3.4", "63", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "10.8", "132", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "6.5", "86", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "22.8", "81", "1,081", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "17.9", "79", "980", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "10.8", "86", "927", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 10.8 tok/s（llama.cpp、Q4_K_M）；W7900 22.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：132 tok/s（Strix Halo、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 3.2 倍，10.8 对 3.4 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/Qwen3-32B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3-30b-a3b",
+    title: "Qwen3-30B-A3B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3-30B-A3B", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
+    excerpt: "Qwen3-30B-A3B 在 Strix Halo、W7900 上共 10 种实测部署。单请求最快：85.2 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Qwen3-30B-A3B 是 Qwen3 系列的混合专家（MoE）模型，总参数 30B，激活约 3B。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 10 种部署，引擎用了 llama.cpp 和 vLLM，权重格式 4 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 5]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "BF16", "1", "24.5", "148", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "67.5", "387", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "50.1", "264", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "BF16", "1", "25.3", "238", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "BF16+YaRN", "1", "25.1", "213", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "85.2", "280", "305", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "75.4", "269", "268", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "53.5", "222", "379", "2026 年 11 月"],
+        ["W7900", "vLLM", "BF16", "2", "75.5", "498", "94", "2026 年 11 月"],
+        ["W7900", "vLLM", "BF16+YaRN", "2", "69.0", "308", "253", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 67.5 tok/s（llama.cpp、Q4_K_M）；W7900 85.2 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：498 tok/s（W7900、vLLM、BF16、2 卡）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 2.8 倍，67.5 对 24.5 tok/s。"}</li>
+        <li>{"Strix Halo 上同样的 BF16 权重：vLLM 单请求 25.3 tok/s，32 并发 238；llama.cpp 分别是 24.5 和 148。"}</li>
+        <li>{"W7900 2 卡 上同样的 BF16 权重：vLLM 单请求 75.5 tok/s，32 并发 498；llama.cpp 分别是 53.5 和 222。"}</li>
+        <li>{"BF16+YaRN 这几行用的是同一份权重，只是打开了面向长上下文的 YaRN RoPE 缩放。测试提示只有 512 个 token，所以这几行反映的是短上下文下这项设置的代价：W7900 上 vLLM 双卡，单请求 69.0 对 75.5 tok/s，32 并发 308 对 498 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"Qwen/Qwen3-30B-A3B"}</li>
+        <li>{"unsloth/Qwen3-30B-A3B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3.6-27b",
+    title: "Qwen3.6-27B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3.6-27B", "R9700", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
+    excerpt: "Qwen3.6-27B 在 R9700、Strix Halo、W7900 上共 15 种实测部署。单请求最快：34.1 tok/s（R9700、vLLM、BF16、4 卡）。",
+    content: (
+      <>
+      <Lead>{"Qwen3.6-27B 是 Qwen3.6 的 27B 稠密模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 15 种部署，引擎用了 llama.cpp 和 vLLM，权重格式 4 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[5, 7, 11]}
+        rows={[
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "24.1", "69", "679", "2026 年 7 月"],
+        ["R9700", "llama.cpp", "BF16", "2", "10.6", "44", "585", "2026 年 7 月"],
+        ["R9700", "llama.cpp", "Q8_0", "2", "15.4", "52", "1,727", "2026 年 7 月"],
+        ["R9700", "vLLM", "BF16", "2", "20.8", "122", "—", "2026 年 7 月"],
+        ["R9700", "vLLM", "Quark-W8A8-INT8", "2", "11.8", "175", "382", "2026 年 7 月"],
+        ["R9700", "vLLM", "BF16", "4", "34.1", "324", "186", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "4.2", "23", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "11.9", "42", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "7.6", "37", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "BF16", "1", "4.3", "57", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "Quark-W8A8-INT8", "1", "7.8", "56", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "23.4", "22", "1,258", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "19.0", "21", "1,159", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "11.9", "21", "1,354", "2026 年 11 月"],
+        ["W7900", "vLLM", "BF16", "2", "7.2", "194", "323", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 34.1 tok/s（vLLM、BF16、4 卡）；Strix Halo 11.9 tok/s（llama.cpp、Q4_K_M）；W7900 23.4 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：324 tok/s（R9700、vLLM、BF16、4 卡）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 2.9 倍，11.9 对 4.2 tok/s。"}</li>
+        <li>{"R9700 2 卡 上同样的 BF16 权重：vLLM 单请求 20.8 tok/s，32 并发 122；llama.cpp 分别是 10.6 和 44。"}</li>
+        <li>{"Strix Halo 上同样的 BF16 权重：vLLM 单请求 4.3 tok/s，32 并发 57；llama.cpp 分别是 4.2 和 23。"}</li>
+        <li>{"W7900 2 卡 上同样的 BF16 权重：vLLM 单请求 7.2 tok/s，32 并发 194；llama.cpp 分别是 11.9 和 21。"}</li>
+        <li>{"Strix Halo、llama.cpp、Q4_K_M 这组配置的总吞吐在 16 并发时到顶，为 52 tok/s，到 32 并发反而降到 42。"}</li>
+        <li>{"Strix Halo、llama.cpp、Q8_0 这组配置的总吞吐在 16 并发时到顶，为 48 tok/s，到 32 并发反而降到 37。"}</li>
+        <li>{"W7900、llama.cpp、Q4_K_M 这组配置的总吞吐在 4 并发时到顶，为 40 tok/s，到 32 并发反而降到 22。"}</li>
+        <li>{"W7900、llama.cpp、Q8_0 这组配置的总吞吐在 4 并发时到顶，为 44 tok/s，到 32 并发反而降到 21。"}</li>
+        <li>{"W7900、llama.cpp、BF16、2 卡 这组配置的总吞吐在 4 并发时到顶，为 30 tok/s，到 32 并发反而降到 21。"}</li>
+        <li>{"在 R9700 上，vLLM 跑 Quark W8A8-INT8 并没有更快：双卡单请求 11.8 tok/s，BF16 双卡是 20.8。在 Strix Halo 上它的单请求确实快过 BF16，7.8 对 4.3 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"Qwen/Qwen3.6-27B"}</li>
+        <li>{"nameistoken/Qwen3.6-27B-Quark-W8A8-INT8"}</li>
+        <li>{"unsloth/Qwen3.6-27B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3.6-35b-a3b",
+    title: "Qwen3.6-35B-A3B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3.6-35B-A3B", "R9700", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
+    excerpt: "Qwen3.6-35B-A3B 在 R9700、Strix Halo、W7900 上共 20 种实测部署。单请求最快：96.8 tok/s（R9700、vLLM、BF16、4 卡）。",
+    content: (
+      <>
+      <Lead>{"Qwen3.6-35B-A3B 是 Qwen3.6 的 MoE 模型，总参数 35B，激活约 3B。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 20 种部署，引擎用了 llama.cpp 和 vLLM，权重格式 6 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[6, 9, 18]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-Q4_K_M", "1", "66.1", "174", "316", "2026 年 7 月"],
+        ["R9700", "llama.cpp", "Q8_0", "2", "57.5", "153", "531", "2026 年 7 月"],
+        ["R9700", "llama.cpp", "BF16", "4", "43.5", "99", "454", "2026 年 7 月"],
+        ["R9700", "vLLM", "AWQ-4bit", "1", "69.7", "384", "130", "2026 年 7 月"],
+        ["R9700", "vLLM", "AWQ-4bit", "2", "88.1", "654", "99", "2026 年 7 月"],
+        ["R9700", "vLLM", "Quark-W8A8-INT8", "2", "63.9", "727", "90", "2026 年 7 月"],
+        ["R9700", "vLLM", "BF16", "4", "96.8", "827", "94", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "22.0", "94", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "44.3", "142", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_M", "1", "49.3", "165", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "AWQ-4bit", "1", "26.1", "124", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "BF16", "1", "17.1", "122", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "INT4-mixed-AutoRound", "1", "37.8", "189", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "Quark-W8A8-INT8", "1", "30.8", "161", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "59.6", "145", "468", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_M", "1", "63.8", "150", "494", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "44.3", "121", "620", "2026 年 11 月"],
+        ["W7900", "vLLM", "AWQ-4bit", "1", "38.1", "299", "364", "2026 年 11 月"],
+        ["W7900", "vLLM", "Quark-W8A8-INT8", "1", "72.9", "421", "132", "2026 年 11 月"],
+        ["W7900", "vLLM", "BF16", "2", "72.3", "585", "114", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 96.8 tok/s（vLLM、BF16、4 卡）；Strix Halo 49.3 tok/s（llama.cpp、UD-Q4_K_M）；W7900 72.9 tok/s（vLLM、Quark-W8A8-INT8）。"}</li>
+        <li>{"32 并发总吞吐最高：827 tok/s（R9700、vLLM、BF16、4 卡）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：UD-Q4_K_M 的单请求解码速度是 BF16 的 2.2 倍，49.3 对 22.0 tok/s。"}</li>
+        <li>{"R9700 4 卡 上同样的 BF16 权重：vLLM 单请求 96.8 tok/s，32 并发 827；llama.cpp 分别是 43.5 和 99。"}</li>
+        <li>{"Strix Halo 上同样的 BF16 权重：vLLM 单请求 17.1 tok/s，32 并发 122；llama.cpp 分别是 22.0 和 94。"}</li>
+        <li>{"W7900 2 卡 上同样的 BF16 权重：vLLM 单请求 72.3 tok/s，32 并发 585；llama.cpp 分别是 44.3 和 121。"}</li>
+        <li>{"这是榜单上部署方式最多的模型：llama.cpp 跑了 BF16、Q8_0 和 UD-Q4_K_M，vLLM 跑了 BF16、AWQ-4bit、Quark W8A8-INT8 和 Intel 的 INT4 AutoRound。其中 AWQ 和 Quark 权重是第三方量化的。"}</li>
+        <li>{"在 Strix Halo 上，vLLM 最快的格式是 INT4 AutoRound，单请求 37.8 tok/s，32 并发 189；但单请求还是 llama.cpp 跑 UD-Q4_K_M 更快，49.3 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"Intel/Qwen3.6-35B-A3B-int4-mixed-AutoRound"}</li>
+        <li>{"Qwen/Qwen3.6-35B-A3B"}</li>
+        <li>{"cyankiwi/Qwen3.6-35B-A3B-AWQ-4bit"}</li>
+        <li>{"nameistoken/Qwen3.6-35B-A3B-Quark-W8A8-INT8"}</li>
+        <li>{"unsloth/Qwen3.6-35B-A3B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3.8-27b",
+    title: "Qwen3.8-27B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3.8-27B", "R9700", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
+    excerpt: "Qwen3.8-27B 在 R9700、Strix Halo、W7900 上共 12 种实测部署。单请求最快：32.7 tok/s（R9700、vLLM、BF16、4 卡）。",
+    content: (
+      <>
+      <Lead>{"Qwen3.8-27B 是 Qwen3.8 的 27B 稠密模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 12 种部署，引擎用了 llama.cpp 和 vLLM，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[4, 7, 10]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-Q4_K_M", "1", "23.0", "58", "1,119", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "BF16", "2", "10.6", "47", "592", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "2", "15.3", "50", "1,708", "2026 年 11 月"],
+        ["R9700", "vLLM", "BF16", "2", "20.9", "119", "233", "2026 年 11 月"],
+        ["R9700", "vLLM", "BF16", "4", "32.7", "330", "230", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "3.8", "15", "2,370", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "6.9", "22", "2,029", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_M", "1", "10.7", "25", "1,799", "2026 年 11 月"],
+        ["Strix Halo", "vLLM", "BF16", "1", "4.3", "53", "1,000", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "20.1", "86", "828", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_M", "1", "27.5", "90", "856", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "12.4", "84", "1,009", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 32.7 tok/s（vLLM、BF16、4 卡）；Strix Halo 10.7 tok/s（llama.cpp、UD-Q4_K_M）；W7900 27.5 tok/s（llama.cpp、UD-Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：330 tok/s（R9700、vLLM、BF16、4 卡）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：UD-Q4_K_M 的单请求解码速度是 BF16 的 2.8 倍，10.7 对 3.8 tok/s。"}</li>
+        <li>{"R9700 2 卡 上同样的 BF16 权重：vLLM 单请求 20.9 tok/s，32 并发 119；llama.cpp 分别是 10.6 和 47。"}</li>
+        <li>{"Strix Halo 上同样的 BF16 权重：vLLM 单请求 4.3 tok/s，32 并发 53；llama.cpp 分别是 3.8 和 15。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"Qwen/Qwen3.8-27B"}</li>
+        <li>{"unsloth/Qwen3.8-27B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-qwen3.8-flash-next",
+    title: "Qwen3.8-Flash-Next 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Qwen3.8-Flash-Next", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Qwen3.8-Flash-Next 在 R9700、Strix Halo、W7900 上共 4 种实测部署。单请求最快：30.4 tok/s（R9700、llama.cpp、UD-Q3_K_XL、4 卡）。",
+    content: (
+      <>
+      <Lead>{"Qwen3.8-Flash-Next 是 Qwen3.8 的大型 MoE 模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 4 种部署，引擎用了 llama.cpp，权重格式 2 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1, 2]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-Q3_K_XL", "4", "30.4", "63", "869", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q3_K_XL", "1", "20.8", "48", "1,235", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q3_K_XL", "4", "30.3", "114", "739", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_XL", "4", "29.0", "117", "714", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 30.4 tok/s（llama.cpp、UD-Q3_K_XL、4 卡）；Strix Halo 20.8 tok/s（llama.cpp、UD-Q3_K_XL）；W7900 30.3 tok/s（llama.cpp、UD-Q3_K_XL、4 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：117 tok/s（W7900、llama.cpp、UD-Q4_K_XL、4 卡）。"}</li>
+        <li>{"R9700、llama.cpp、UD-Q3_K_XL、4 卡 这组配置的总吞吐在 16 并发时到顶，为 80 tok/s，到 32 并发反而降到 63。"}</li>
+        <li>{"只测了低比特的 UD 版本。R9700 和 W7900 上分摊到四张卡，Strix Halo 则用它唯一的集成显卡跑。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/Qwen3.8-Flash-Next-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-diffusiongemma-26b-a4b",
+    title: "DiffusionGemma-26B-A4B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "DiffusionGemma-26B-A4B", "Strix Halo", "W7900", "vLLM (main)"],
+    excerpt: "DiffusionGemma-26B-A4B 在 Strix Halo、W7900 上共 3 种实测部署。单请求最快：20.3 tok/s（W7900、vLLM (main)、AWQ-INT4）。",
+    content: (
+      <>
+      <Lead>{"DiffusionGemma-26B-A4B 是 Google 基于 Gemma 4 26B-A4B MoE 架构做的扩散语言模型。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 3 种部署，引擎用了 vLLM (main)，权重格式 2 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 2]}
+        rows={[
+        ["Strix Halo", "vLLM (main)", "AWQ-INT4", "1", "8.7", "12", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM (main)", "BF16", "1", "7.7", "13", "—", "2026 年 7 月"],
+        ["W7900", "vLLM (main)", "AWQ-INT4", "1", "20.3", "26", "6,297", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 8.7 tok/s（vLLM (main)、AWQ-INT4）；W7900 20.3 tok/s（vLLM (main)、AWQ-INT4）。"}</li>
+        <li>{"32 并发总吞吐最高：26 tok/s（W7900、vLLM (main)、AWQ-INT4）。"}</li>
+        <li>{"DiffusionGemma 每次对一整块 token 反复细化，而不是一个接一个地生成，所以流式输出的第一个 token 来得晚：在 W7900 上，请求发出 6.3 秒后才到。它跑在 vLLM 的 main 分支上。"}</li>
+        <li>{"超过 4 个并发后，总吞吐几乎不再增长。W7900 上的服务启动时最多只允许 4 条序列。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4"}</li>
+        <li>{"google/diffusiongemma-26B-A4B-it"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-gemma-4-26b-a4b",
+    title: "Gemma-4-26B-A4B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Gemma-4-26B-A4B", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
+    excerpt: "Gemma-4-26B-A4B 在 Strix Halo、W7900 上共 10 种实测部署。单请求最快：89.5 tok/s（W7900、vLLM、AWQ-4bit）。",
+    content: (
+      <>
+      <Lead>{"Gemma-4-26B-A4B 是 Google Gemma 4 的 MoE 模型，总参数 26B，激活约 4B。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 10 种部署，引擎用了 llama.cpp 和 vLLM，权重格式 4 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[2, 8]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "BF16", "1", "21.6", "144", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "39.6", "160", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_M", "1", "43.3", "207", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "AWQ-4bit", "1", "42.5", "434", "—", "2026 年 7 月"],
+        ["Strix Halo", "vLLM", "BF16", "1", "24.8", "396", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "57.1", "107", "482", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_M", "1", "58.4", "109", "518", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "41.5", "104", "598", "2026 年 11 月"],
+        ["W7900", "vLLM", "AWQ-4bit", "1", "89.5", "431", "137", "2026 年 11 月"],
+        ["W7900", "vLLM", "BF16", "2", "78.7", "569", "98", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 43.3 tok/s（llama.cpp、UD-Q4_K_M）；W7900 89.5 tok/s（vLLM、AWQ-4bit）。"}</li>
+        <li>{"32 并发总吞吐最高：569 tok/s（W7900、vLLM、BF16、2 卡）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：UD-Q4_K_M 的单请求解码速度是 BF16 的 2.0 倍，43.3 对 21.6 tok/s。"}</li>
+        <li>{"Strix Halo 上同样的 BF16 权重：vLLM 单请求 24.8 tok/s，32 并发 396；llama.cpp 分别是 21.6 和 144。"}</li>
+        <li>{"W7900 2 卡 上同样的 BF16 权重：vLLM 单请求 78.7 tok/s，32 并发 569；llama.cpp 分别是 41.5 和 104。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit"}</li>
+        <li>{"google/gemma-4-26b-a4b-it"}</li>
+        <li>{"unsloth/gemma-4-26B-A4B-it-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-gemma-4-31b",
+    title: "Gemma-4-31B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Gemma-4-31B", "Strix Halo", "W7900", "vLLM"],
+    excerpt: "Gemma-4-31B 在 Strix Halo、W7900 上共 2 种实测部署。单请求最快：20.2 tok/s（W7900、vLLM、Quark-W8A8-INT8）。",
+    content: (
+      <>
+      <Lead>{"Gemma-4-31B 是 Google Gemma 4 的 31B 稠密模型。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 2 种部署，引擎用了 vLLM，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1]}
+        rows={[
+        ["Strix Halo", "vLLM", "Quark-W8A8-INT8", "1", "6.3", "78", "—", "2026 年 7 月"],
+        ["W7900", "vLLM", "Quark-W8A8-INT8", "1", "20.2", "71", "448", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 6.3 tok/s（vLLM、Quark-W8A8-INT8）；W7900 20.2 tok/s（vLLM、Quark-W8A8-INT8）。"}</li>
+        <li>{"32 并发总吞吐最高：78 tok/s（Strix Halo、vLLM、Quark-W8A8-INT8）。"}</li>
+        <li>{"只测了 Quark W8A8-INT8 版本，用的是 vLLM。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-llama-3.1-8b",
+    title: "Llama-3.1-8B-Instruct 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Llama-3.1-8B-Instruct", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Llama-3.1-8B-Instruct 在 Strix Halo、W7900 上共 4 种实测部署。单请求最快：78.8 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Llama-3.1-8B-Instruct 是 Meta 的 8B 稠密指令模型。我们在 Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 4 种部署，引擎用了 llama.cpp，权重格式 2 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 3]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "BF16", "1", "12.1", "190", "—", "2026 年 7 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "41.1", "454", "—", "2026 年 7 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "42.1", "245", "306", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "78.8", "275", "295", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 41.1 tok/s（llama.cpp、Q4_K_M）；W7900 78.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：454 tok/s（Strix Halo、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 3.4 倍，41.1 对 12.1 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/Llama-3.1-8B-Instruct-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-granite-4.2-8b",
+    title: "Granite 4.2 8B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Granite 4.2 8B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Granite 4.2 8B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：78.2 tok/s（R9700、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Granite 4.2 8B 是 IBM Granite 4.2 的 8B 模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "BF16", "1", "30.9", "303", "186", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "78.2", "351", "172", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "45.7", "185", "550", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "10.7", "85", "732", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "33.4", "160", "488", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "21.4", "143", "500", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "37.0", "254", "261", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "76.7", "309", "252", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "58.0", "292", "237", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 78.2 tok/s（llama.cpp、Q4_K_M）；Strix Halo 33.4 tok/s（llama.cpp、Q4_K_M）；W7900 76.7 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：351 tok/s（R9700、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 2.5 倍，78.2 对 30.9 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"ibm-granite/granite-4.2-8b-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-granite-4.2-30b",
+    title: "Granite 4.2 30B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Granite 4.2 30B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Granite 4.2 30B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：27.8 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Granite 4.2 30B 是 IBM Granite 4.2 的 30B 模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 4, 6]}
+        rows={[
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "26.7", "122", "576", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "2", "14.9", "84", "1,664", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "BF16", "4", "9.7", "118", "519", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "3.2", "24", "2,764", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "10.2", "47", "1,806", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "6.3", "42", "1,654", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "27.8", "107", "802", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "20.3", "94", "731", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "12.1", "81", "724", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 26.7 tok/s（llama.cpp、Q4_K_M）；Strix Halo 10.2 tok/s（llama.cpp、Q4_K_M）；W7900 27.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：122 tok/s（R9700、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 3.2 倍，10.2 对 3.2 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"ibm-granite/granite-4.2-30b-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-lfm2.5-24b-a2b",
+    title: "LFM2.5-24B-A2B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "LFM2.5-24B-A2B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "LFM2.5-24B-A2B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：132.3 tok/s（R9700、llama.cpp、UD-Q4_K_XL）。",
+    content: (
+      <>
+      <Lead>{"LFM2.5-24B-A2B 是 Liquid AI 的 MoE 模型，总参数 24B，激活约 2B。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 5, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "Q8_0", "1", "113.6", "396", "183", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "UD-Q4_K_XL", "1", "132.3", "475", "150", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "BF16", "2", "72.0", "280", "267", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "26.9", "82", "950", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "57.0", "217", "355", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_XL", "1", "77.0", "282", "259", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "109.6", "414", "148", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_XL", "1", "123.3", "458", "129", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "74.5", "259", "279", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 132.3 tok/s（llama.cpp、UD-Q4_K_XL）；Strix Halo 77.0 tok/s（llama.cpp、UD-Q4_K_XL）；W7900 123.3 tok/s（llama.cpp、UD-Q4_K_XL）。"}</li>
+        <li>{"32 并发总吞吐最高：475 tok/s（R9700、llama.cpp、UD-Q4_K_XL）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：UD-Q4_K_XL 的单请求解码速度是 BF16 的 2.9 倍，77.0 对 26.9 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/LFM2.5-24B-A2B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-lfm3-1.7b",
+    title: "LFM3-1.7B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "LFM3-1.7B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "LFM3-1.7B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：210.1 tok/s（R9700、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"LFM3-1.7B 是 Liquid AI 的 1.7B 模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "BF16", "1", "115.2", "690", "74", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "210.1", "756", "57", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "158.9", "567", "130", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "45.6", "257", "217", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "124.2", "559", "119", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "88.5", "494", "122", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "121.2", "577", "91", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "193.8", "746", "70", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "166.7", "699", "67", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 210.1 tok/s（llama.cpp、Q4_K_M）；Strix Halo 124.2 tok/s（llama.cpp、Q4_K_M）；W7900 193.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：756 tok/s（R9700、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 1.8 倍，210.1 对 115.2 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"LiquidAI/LFM3-1.7B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-ling-3.0-flash",
+    title: "Ling-3.0-flash 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Ling-3.0-flash", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Ling-3.0-flash 在 R9700、Strix Halo、W7900 上共 3 种实测部署。单请求最快：47.0 tok/s（W7900、llama.cpp、Q4_K_M、2 卡）。",
+    content: (
+      <>
+      <Lead>{"Ling-3.0-flash 是 inclusionAI Ling 3.0 系列中较大的模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 3 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1, 2]}
+        rows={[
+        ["R9700", "llama.cpp", "Q4_K_M", "4", "44.3", "105", "482", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "30.0", "83", "790", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "2", "47.0", "160", "462", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 44.3 tok/s（llama.cpp、Q4_K_M、4 卡）；Strix Halo 30.0 tok/s（llama.cpp、Q4_K_M）；W7900 47.0 tok/s（llama.cpp、Q4_K_M、2 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：160 tok/s（W7900、llama.cpp、Q4_K_M、2 卡）。"}</li>
+        <li>{"R9700、llama.cpp、Q4_K_M、4 卡 这组配置的总吞吐在 16 并发时到顶，为 126 tok/s，到 32 并发反而降到 105。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"bartowski/Ling-3.0-flash-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-ling-3.0-tiny",
+    title: "Ling-3.0-tiny 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Ling-3.0-tiny", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Ling-3.0-tiny 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：135.4 tok/s（R9700、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"Ling-3.0-tiny 是 inclusionAI Ling 3.0 系列中的小模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "BF16", "1", "92.5", "303", "183", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "135.4", "560", "126", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "123.2", "497", "181", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "52.0", "216", "315", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "108.7", "348", "187", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "86.0", "309", "216", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "92.3", "410", "191", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "127.9", "540", "147", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "109.3", "504", "149", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 135.4 tok/s（llama.cpp、Q4_K_M）；Strix Halo 108.7 tok/s（llama.cpp、Q4_K_M）；W7900 127.9 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：560 tok/s（R9700、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 1.5 倍，135.4 对 92.5 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"inclusionAI/Ling-3.0-tiny-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-mimo-v2.6-distill-qwen-9b",
+    title: "MiMo-V2.6-Distill-Qwen-9B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "MiMo-V2.6-Distill-Qwen-9B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "MiMo-V2.6-Distill-Qwen-9B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：71.7 tok/s（R9700、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"MiMo-V2.6-Distill-Qwen-9B 是小米把 MiMo V2.6 蒸馏到 9B Qwen 模型上得到的版本。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "BF16", "1", "32.8", "156", "238", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "71.7", "225", "267", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "47.6", "177", "523", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "11.1", "76", "807", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "31.8", "132", "535", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "22.2", "123", "529", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "37.2", "205", "329", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "71.2", "239", "298", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "58.8", "233", "282", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 71.7 tok/s（llama.cpp、Q4_K_M）；Strix Halo 31.8 tok/s（llama.cpp、Q4_K_M）；W7900 71.2 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：239 tok/s（W7900、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 BF16 的 2.2 倍，71.7 对 32.8 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-mimo-v2.6-flash",
+    title: "MiMo-V2.6-Flash 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "MiMo-V2.6-Flash", "R9700", "W7900", "llama.cpp"],
+    excerpt: "MiMo-V2.6-Flash 在 R9700、W7900 上共 2 种实测部署。单请求最快：24.4 tok/s（W7900、llama.cpp、IQ2_XS_M、4 卡）。",
+    content: (
+      <>
+      <Lead>{"MiMo-V2.6-Flash 是小米的大型模型 MiMo V2.6 Flash。我们在 Radeon AI PRO R9700 和 Radeon PRO W7900 上测了它的 2 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1]}
+        rows={[
+        ["R9700", "llama.cpp", "IQ2_XS_M", "4", "16.4", "24", "5,108", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "IQ2_XS_M", "4", "24.4", "36", "2,715", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 16.4 tok/s（llama.cpp、IQ2_XS_M、4 卡）；W7900 24.4 tok/s（llama.cpp、IQ2_XS_M、4 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：36 tok/s（W7900、llama.cpp、IQ2_XS_M、4 卡）。"}</li>
+        <li>{"只测了 2 比特的 IQ2_XS_M 版本，分摊到四张卡。512 token 提示的首 token 时间，W7900 是 2.7 秒，R9700 是 5.1 秒。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"TrevorJS/MiMo-V2.6-Flash-RL-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-mimo-v2.5",
+    title: "MiMo-V2.5 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "MiMo-V2.5", "Strix Halo", "llama.cpp"],
+    excerpt: "MiMo-V2.5 在 Strix Halo 上共 1 种实测部署。单请求最快：19.2 tok/s（Strix Halo、llama.cpp、UD-Q2_K_XL）。",
+    content: (
+      <>
+      <Lead>{"MiMo-V2.5 是小米的大型模型 MiMo V2.5。我们在 Strix Halo (Radeon 8060S) 上测了它的 1 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "UD-Q2_K_XL", "1", "19.2", "39", "—", "2026 年 7 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 19.2 tok/s（llama.cpp、UD-Q2_K_XL）。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/MiMo-V2.5-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-nemotron-3.5-bolt-e4b",
+    title: "Nemotron 3.5 Bolt E4B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Nemotron 3.5 Bolt E4B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Nemotron 3.5 Bolt E4B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：86.2 tok/s（R9700、llama.cpp、UD-Q4_K_XL）。",
+    content: (
+      <>
+      <Lead>{"Nemotron 3.5 Bolt E4B 是 NVIDIA Nemotron 3.5 Bolt 系列中的小模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[2, 5, 8]}
+        rows={[
+        ["R9700", "llama.cpp", "BF16", "1", "46.0", "438", "118", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "65.5", "340", "253", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "UD-Q4_K_XL", "1", "86.2", "433", "127", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "20.5", "184", "279", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "35.5", "256", "212", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_XL", "1", "46.5", "294", "216", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "1", "53.6", "402", "135", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "72.0", "428", "125", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_XL", "1", "85.3", "454", "132", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 86.2 tok/s（llama.cpp、UD-Q4_K_XL）；Strix Halo 46.5 tok/s（llama.cpp、UD-Q4_K_XL）；W7900 85.3 tok/s（llama.cpp、UD-Q4_K_XL）。"}</li>
+        <li>{"32 并发总吞吐最高：454 tok/s（W7900、llama.cpp、UD-Q4_K_XL）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：UD-Q4_K_XL 的单请求解码速度是 BF16 的 1.9 倍，86.2 对 46.0 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"ggml-org/NVIDIA-Nemotron-3.5-Bolt-E4B-GGUF"}</li>
+        <li>{"unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-nemotron-3.5-bolt-74b-a9b",
+    title: "Nemotron 3.5 Bolt 74B-A9B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Nemotron 3.5 Bolt 74B-A9B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Nemotron 3.5 Bolt 74B-A9B 在 R9700、Strix Halo、W7900 上共 6 种实测部署。单请求最快：39.0 tok/s（W7900、llama.cpp、UD-Q4_K_XL、2 卡）。",
+    content: (
+      <>
+      <Lead>{"Nemotron 3.5 Bolt 74B-A9B 是 NVIDIA Nemotron 3.5 Bolt 的 MoE 模型，总参数 74B，激活约 9B。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 6 种部署，引擎用了 llama.cpp，权重格式 2 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 3, 5]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-Q4_K_XL", "2", "34.6", "102", "809", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "4", "29.8", "84", "988", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "16.1", "44", "1,258", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_XL", "1", "18.3", "44", "1,258", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "2", "35.3", "118", "664", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_XL", "2", "39.0", "120", "673", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 34.6 tok/s（llama.cpp、UD-Q4_K_XL、2 卡）；Strix Halo 18.3 tok/s（llama.cpp、UD-Q4_K_XL）；W7900 39.0 tok/s（llama.cpp、UD-Q4_K_XL、2 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：120 tok/s（W7900、llama.cpp、UD-Q4_K_XL、2 卡）。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-nemotron-3.5-lightning-30b-a3b",
+    title: "Nemotron 3.5 Lightning 30B-A3B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Nemotron 3.5 Lightning 30B-A3B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Nemotron 3.5 Lightning 30B-A3B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：93.2 tok/s（R9700、llama.cpp、Q4_0）。",
+    content: (
+      <>
+      <Lead>{"Nemotron 3.5 Lightning 30B-A3B 是 NVIDIA Nemotron 3.5 Lightning 的 MoE 模型，总参数 30B，激活约 3B。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 4, 6]}
+        rows={[
+        ["R9700", "llama.cpp", "Q4_0", "1", "93.2", "186", "320", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "2", "81.3", "274", "358", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "BF16", "4", "57.2", "227", "343", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "BF16", "1", "24.9", "96", "729", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_0", "1", "50.3", "139", "482", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "42.3", "121", "583", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_0", "1", "87.0", "268", "260", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "84.2", "248", "289", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "BF16", "2", "60.5", "220", "349", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 93.2 tok/s（llama.cpp、Q4_0）；Strix Halo 50.3 tok/s（llama.cpp、Q4_0）；W7900 87.0 tok/s（llama.cpp、Q4_0）。"}</li>
+        <li>{"32 并发总吞吐最高：274 tok/s（R9700、llama.cpp、Q8_0、2 卡）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_0 的单请求解码速度是 BF16 的 2.0 倍，50.3 对 24.9 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-nemotron-3.5-super-vl-120b-a12b",
+    title: "Nemotron 3.5 Super VL 120B-A12B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Nemotron 3.5 Super VL 120B-A12B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "Nemotron 3.5 Super VL 120B-A12B 在 R9700、Strix Halo、W7900 上共 3 种实测部署。单请求最快：32.2 tok/s（W7900、llama.cpp、UD-Q4_K_XL、4 卡）。",
+    content: (
+      <>
+      <Lead>{"Nemotron 3.5 Super VL 120B-A12B 是 NVIDIA Nemotron 3.5 Super 的视觉语言模型，总参数 120B，激活约 12B。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 3 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1, 2]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-Q4_K_XL", "4", "27.2", "77", "1,047", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q4_K_XL", "1", "14.1", "34", "1,943", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q4_K_XL", "4", "32.2", "96", "922", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 27.2 tok/s（llama.cpp、UD-Q4_K_XL、4 卡）；Strix Halo 14.1 tok/s（llama.cpp、UD-Q4_K_XL）；W7900 32.2 tok/s（llama.cpp、UD-Q4_K_XL、4 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：96 tok/s（W7900、llama.cpp、UD-Q4_K_XL、4 卡）。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-minicpm-v-4.7-1b",
+    title: "MiniCPM-V 4.7 1B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "MiniCPM-V 4.7 1B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "MiniCPM-V 4.7 1B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：211.5 tok/s（R9700、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"MiniCPM-V 4.7 1B 是 OpenBMB 的 1B 视觉语言模型。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "F16", "1", "150.9", "812", "72", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "211.5", "731", "71", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "191.2", "711", "108", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "F16", "1", "87.2", "416", "108", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "175.2", "587", "87", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "143.9", "541", "88", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "F16", "1", "163.8", "754", "84", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "203.4", "912", "80", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "173.9", "849", "81", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 211.5 tok/s（llama.cpp、Q4_K_M）；Strix Halo 175.2 tok/s（llama.cpp、Q4_K_M）；W7900 203.4 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：912 tok/s（W7900、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 F16 的 1.4 倍，211.5 对 150.9 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"openbmb/MiniCPM-V-4.7-1B-gguf"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-minicpm-v-4.7-35b-a3b",
+    title: "MiniCPM-V 4.7 35B-A3B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "MiniCPM-V 4.7 35B-A3B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "MiniCPM-V 4.7 35B-A3B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：84.0 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"MiniCPM-V 4.7 35B-A3B 是 OpenBMB 的 MoE 视觉语言模型，总参数 35B，激活约 3B。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 4, 6]}
+        rows={[
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "82.8", "257", "229", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "2", "66.0", "188", "362", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "F16", "4", "47.3", "143", "400", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "F16", "1", "20.3", "69", "1,051", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "52.4", "148", "437", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "40.0", "131", "487", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "84.0", "269", "254", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "69.7", "256", "248", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "F16", "2", "49.8", "183", "407", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 82.8 tok/s（llama.cpp、Q4_K_M）；Strix Halo 52.4 tok/s（llama.cpp、Q4_K_M）；W7900 84.0 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：269 tok/s（W7900、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"Strix Halo 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 F16 的 2.6 倍，52.4 对 20.3 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"openbmb/MiniCPM-V-4.7-35B-A3B-gguf"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-minicpm5-2b",
+    title: "MiniCPM5-2B 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "MiniCPM5-2B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "MiniCPM5-2B 在 R9700、Strix Halo、W7900 上共 9 种实测部署。单请求最快：149.8 tok/s（W7900、llama.cpp、Q4_K_M）。",
+    content: (
+      <>
+      <Lead>{"MiniCPM5-2B 是 OpenBMB 的 2B 模型 MiniCPM5。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 9 种部署，引擎用了 llama.cpp，权重格式 3 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[1, 4, 7]}
+        rows={[
+        ["R9700", "llama.cpp", "F16", "1", "84.9", "704", "72", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q4_K_M", "1", "144.9", "760", "67", "2026 年 11 月"],
+        ["R9700", "llama.cpp", "Q8_0", "1", "112.0", "507", "182", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "F16", "1", "32.9", "211", "285", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q4_K_M", "1", "93.5", "441", "179", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "Q8_0", "1", "67.2", "412", "169", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "F16", "1", "98.4", "575", "100", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q4_K_M", "1", "149.8", "719", "86", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "Q8_0", "1", "131.1", "669", "81", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 144.9 tok/s（llama.cpp、Q4_K_M）；Strix Halo 93.5 tok/s（llama.cpp、Q4_K_M）；W7900 149.8 tok/s（llama.cpp、Q4_K_M）。"}</li>
+        <li>{"32 并发总吞吐最高：760 tok/s（R9700、llama.cpp、Q4_K_M）。"}</li>
+        <li>{"R9700 上 llama.cpp 的量化收益：Q4_K_M 的单请求解码速度是 F16 的 1.7 倍，144.9 对 84.9 tok/s。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"openbmb/MiniCPM5-2B-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-step-3.5-flash",
+    title: "Step-3.5-Flash 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "Step-3.5-Flash", "Strix Halo", "llama.cpp"],
+    excerpt: "Step-3.5-Flash 在 Strix Halo 上共 1 种实测部署。单请求最快：23.5 tok/s（Strix Halo、llama.cpp、Q4_K_S）。",
+    content: (
+      <>
+      <Lead>{"Step-3.5-Flash 是阶跃星辰的大型模型 Step 3.5 Flash。我们在 Strix Halo (Radeon 8060S) 上测了它的 1 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0]}
+        rows={[
+        ["Strix Halo", "llama.cpp", "Q4_K_S", "1", "23.5", "118", "—", "2026 年 7 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：Strix Halo 23.5 tok/s（llama.cpp、Q4_K_S）。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"stepfun-ai/Step-3.5-Flash-GGUF-Q4_K_S"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/strix/recipes">Strix Halo</A>{"。榜单："}<A href="/zh/strix/leaderboard">{"Strix Halo"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-deepseek-v4-flash",
+    title: "DeepSeek-V4-Flash-0731 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "DeepSeek-V4-Flash-0731", "R9700", "Strix Halo", "W7900", "llama.cpp"],
+    excerpt: "DeepSeek-V4-Flash-0731 在 R9700、Strix Halo、W7900 上共 3 种实测部署。单请求最快：19.6 tok/s（R9700、llama.cpp、UD-Q2_K_XL、4 卡）。",
+    content: (
+      <>
+      <Lead>{"DeepSeek-V4-Flash-0731 是 DeepSeek 的大型模型 V4 Flash（0731 版）。我们在 Radeon AI PRO R9700、Strix Halo (Radeon 8060S) 和 Radeon PRO W7900 上测了它的 3 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1, 2]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-Q2_K_XL", "4", "19.6", "76", "1,492", "2026 年 11 月"],
+        ["Strix Halo", "llama.cpp", "UD-Q2_K_XL", "1", "11.5", "32", "2,534", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-Q2_K_XL", "4", "18.9", "55", "1,566", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 19.6 tok/s（llama.cpp、UD-Q2_K_XL、4 卡）；Strix Halo 11.5 tok/s（llama.cpp、UD-Q2_K_XL）；W7900 18.9 tok/s（llama.cpp、UD-Q2_K_XL、4 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：76 tok/s（R9700、llama.cpp、UD-Q2_K_XL、4 卡）。"}</li>
+        <li>{"只测了 2 比特的 UD-Q2_K_XL 版本。R9700 和 W7900 分摊到四张卡，Strix Halo 用它唯一的集成显卡跑。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/DeepSeek-V4-Flash-0731-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{"、"}<A href="/zh/strix/recipes">Strix Halo</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+  {
+    slug: "model-glm-5.3-flash",
+    title: "GLM-5.3-Flash 在 AMD Radeon 上的全部实测部署",
+    date: "2026-11-26",
+    readingMinutes: 3,
+    tags: ["模型", "GLM-5.3-Flash", "R9700", "W7900", "llama.cpp"],
+    excerpt: "GLM-5.3-Flash 在 R9700、W7900 上共 2 种实测部署。单请求最快：21.9 tok/s（R9700、llama.cpp、UD-IQ2_XXS、4 卡）。",
+    content: (
+      <>
+      <Lead>{"GLM-5.3-Flash 是智谱 Z.ai 的大型模型 GLM 5.3 Flash。我们在 Radeon AI PRO R9700 和 Radeon PRO W7900 上测了它的 2 种部署，引擎用了 llama.cpp，权重格式 1 种。本文把这些结果放在一起对比。"}</Lead>
+      <H2>全部部署</H2>
+      <P>{"加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"}</P>
+      <Table
+        head={["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"]}
+        numericFrom={3}
+        emphasis={[0, 1]}
+        rows={[
+        ["R9700", "llama.cpp", "UD-IQ2_XXS", "4", "21.9", "58", "1,574", "2026 年 11 月"],
+        ["W7900", "llama.cpp", "UD-IQ2_XXS", "4", "21.6", "70", "1,359", "2026 年 11 月"],
+        ]}
+      />
+      <H2>从数据看</H2>
+      <UL>
+        <li>{"各设备单请求最快：R9700 21.9 tok/s（llama.cpp、UD-IQ2_XXS、4 卡）；W7900 21.6 tok/s（llama.cpp、UD-IQ2_XXS、4 卡）。"}</li>
+        <li>{"32 并发总吞吐最高：70 tok/s（W7900、llama.cpp、UD-IQ2_XXS、4 卡）。"}</li>
+        <li>{"只测了 2 比特的 UD-IQ2_XXS 版本，用四张卡。没有在 Strix Halo 上测。"}</li>
+      </UL>
+      <H2>权重来源</H2>
+      <UL>
+        <li>{"unsloth/GLM-5.3-Flash-GGUF"}</li>
+      </UL>
+      <H2>测试方法与配方</H2>
+      <P>{"测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。"}</P>
+      <P>{"配方："}<A href="/zh/r9700/recipes">R9700</A>{" 和 "}<A href="/zh/w7900/recipes">W7900</A>{"。榜单："}<A href="/zh/r9700/leaderboard">{"R9700"}</A>{"。"}</P>
+      </>
+    ),
+  },
+];
+

@@ -24,11 +24,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/w7900/leaderboard",
     "/w7900/recipes",
     "/w7900/submit",
-    ...allPosts().map((p) => `/blogs/${p.slug}`),
   ];
+  // Blog posts keep the trailing slash their canonical URL has always had.
+  const posts = allPosts().map((p) => `/blogs/${p.slug}/`);
 
-  return routes.map((route) => ({
-    url: `${BASE_URL}${route}`,
-    lastModified: now,
-  }));
+  // Every page exists in English (root) and Chinese (/zh); list both, each
+  // with hreflang links to the other.
+  const zh = (route: string) => (route === "" ? "/zh" : `/zh${route}`);
+  return [...routes, ...posts].flatMap((route) => {
+    const languages = { en: `${BASE_URL}${route}`, "zh-CN": `${BASE_URL}${zh(route)}` };
+    return [route, zh(route)].map((path) => ({
+      url: `${BASE_URL}${path}`,
+      lastModified: now,
+      alternates: { languages },
+    }));
+  });
 }

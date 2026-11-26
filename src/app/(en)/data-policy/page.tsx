@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { alternates } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Data Policy - Radeon Arena",
   description: "Benchmark data policy for Radeon Arena.",
+  alternates: alternates("en", "/data-policy"),
 };
 
 export default function DataPolicyPage() {

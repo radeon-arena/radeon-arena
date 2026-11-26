@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { hwLabel } from "@/lib/hardware";
 import { loadGithubData, type Bundle } from "@/lib/githubData";
+import { useLang } from "@/components/LangProvider";
+import { lp } from "@/lib/i18n";
 
 type BundleRecord = Bundle["records"][string][number];
 
@@ -118,6 +120,8 @@ function imageRef(recipe: Record<string, any>, meta: Record<string, any>): strin
 }
 
 export function RecipesView({ hw }: { hw: string }) {
+  const lang = useLang();
+  const zh = lang === "zh";
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [error, setError] = useState(false);
   const [query, setQuery] = useState("");
@@ -173,20 +177,22 @@ export function RecipesView({ hw }: { hw: string }) {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-radeon-300">{hwLabel(hw)}</p>
-            <h2 className="mt-2 text-2xl font-semibold text-zinc-100">Recipes</h2>
+            <h2 className="mt-2 text-2xl font-semibold text-zinc-100">{zh ? "部署配方" : "Recipes"}</h2>
             <p className="mt-2 max-w-3xl text-sm text-zinc-400">
-              Composable model, device, launch, and benchmark specs from radeonrun. Images may come from any OCI registry; results retain the requested ref and immutable digest when the registry exposes one.
+              {zh
+                ? "来自 radeonrun 的可组合配置：模型、设备、启动方式和测试参数各自独立。镜像可以来自任意 OCI 仓库；仓库提供摘要时，结果会同时保留请求的镜像引用和不可变的 digest。"
+                : "Composable model, device, launch, and benchmark specs from radeonrun. Images may come from any OCI registry; results retain the requested ref and immutable digest when the registry exposes one."}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:min-w-80 sm:flex-row sm:items-stretch">
             <div className="text-center text-xs text-zinc-400 sm:w-28">
               <div className="h-full rounded-lg border border-ink-700 bg-ink-950 px-3 py-2">
                 <div className="text-lg font-semibold text-zinc-100">{records.length}</div>
-                <div>recipes</div>
+                <div>{zh ? "条配方" : "recipes"}</div>
               </div>
             </div>
-            <Link href={`/${hw}/submit`} className="btn-primary flex-1">
-              Submit Recipe
+            <Link href={lp(lang, `/${hw}/submit`)} className="btn-primary flex-1">
+              {zh ? "提交配方" : "Submit Recipe"}
             </Link>
           </div>
         </div>
@@ -195,26 +201,26 @@ export function RecipesView({ hw }: { hw: string }) {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search model, source, image, or command"
+            placeholder={zh ? "搜索模型、来源、镜像或命令" : "Search model, source, image, or command"}
             className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2 text-sm text-zinc-200 outline-none ring-radeon-500/30 placeholder:text-zinc-600 focus:ring-2"
           />
           <select value={runtime} onChange={(event) => setRuntime(event.target.value)} className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:ring-2 focus:ring-radeon-500/30">
-            <option value="all">All runtimes</option>
+            <option value="all">{zh ? "全部引擎" : "All runtimes"}</option>
             {facets.runtimes.map((item) => <option key={item} value={item}>{runtimeLabel(item)}</option>)}
           </select>
           <select value={quant} onChange={(event) => setQuant(event.target.value)} className="rounded-lg border border-ink-700 bg-ink-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:ring-2 focus:ring-radeon-500/30">
-            <option value="all">All quantization</option>
+            <option value="all">{zh ? "全部量化格式" : "All quantization"}</option>
             {facets.quants.map((item) => <option key={item} value={item}>{item}</option>)}
           </select>
         </div>
       </div>
 
       {error ? (
-        <div className="card p-7 text-sm text-red-200">Failed to load recipe data.</div>
+        <div className="card p-7 text-sm text-red-200">{zh ? "配方数据加载失败。" : "Failed to load recipe data."}</div>
       ) : !bundle ? (
-        <div className="card p-7 text-sm text-zinc-400">Loading recipes...</div>
+        <div className="card p-7 text-sm text-zinc-400">{zh ? "正在加载配方…" : "Loading recipes..."}</div>
       ) : filtered.length === 0 ? (
-        <div className="card p-7 text-sm text-zinc-400">No recipes match the current filters.</div>
+        <div className="card p-7 text-sm text-zinc-400">{zh ? "没有符合筛选条件的配方。" : "No recipes match the current filters."}</div>
       ) : (
         <div className="grid gap-4">
           {filtered.map((record) => {
@@ -239,14 +245,14 @@ export function RecipesView({ hw }: { hw: string }) {
                       <span className={`rounded-full border px-2.5 py-1 text-xs ${runtimeClass(container)}`}>{runtimeLabel(container)}</span>
                       <span className="chip">{quantization}</span>
                       <span className="chip">{text(benchmark.profile, "profile")}</span>
-                      <span className="chip">{numberText(benchmark.measurementCount)} points</span>
+                      <span className="chip">{numberText(benchmark.measurementCount)}{zh ? " 个测点" : " points"}</span>
                     </div>
                     <h3 className="mt-3 text-lg font-semibold text-zinc-100">{text(model.name, modelName(recipe))}</h3>
                     <p className="mt-1 text-sm text-zinc-400">{text(model.description)}</p>
 
                     <div className="mt-4 grid gap-3 text-sm lg:grid-cols-3">
                       <div>
-                        <div className="text-xs uppercase tracking-wide text-zinc-600">Model</div>
+                        <div className="text-xs uppercase tracking-wide text-zinc-600">{zh ? "模型" : "Model"}</div>
                         {typeof model.source === "string" && model.source ? (
                           <a href={`https://huggingface.co/${model.source}`} target="_blank" rel="noreferrer" className="break-all text-radeon-300 hover:text-radeon-200">{model.source}</a>
                         ) : (
@@ -255,26 +261,26 @@ export function RecipesView({ hw }: { hw: string }) {
                         <div className="mt-1 break-all font-mono text-xs text-zinc-500">{text(model.path)}</div>
                       </div>
                       <div>
-                        <div className="text-xs uppercase tracking-wide text-zinc-600">Launch</div>
+                        <div className="text-xs uppercase tracking-wide text-zinc-600">{zh ? "启动" : "Launch"}</div>
                         <div className="break-all font-mono text-xs text-zinc-300">{text(launch.image)}</div>
                         <div className="mt-1 text-xs text-zinc-500">runtime={runtimeLabel(container)} · tag={text(launch.imageTag)}</div>
                         {launch.imageResolved ? <div className="mt-1 break-all font-mono text-[11px] text-zinc-600">resolved={launch.imageResolved}</div> : null}
                       </div>
                       <div>
-                        <div className="text-xs uppercase tracking-wide text-zinc-600">Benchmark Params</div>
+                        <div className="text-xs uppercase tracking-wide text-zinc-600">{zh ? "测试参数" : "Benchmark Params"}</div>
                         <div className="font-mono text-xs text-zinc-300">{argsText(benchmark.args)}</div>
                         <div className="mt-1 font-mono text-xs text-zinc-500">serve: nseq={numberText(defaults.nseq)} · ctx={numberText(defaults.ctx)} · port={numberText(defaults.port)}</div>
                       </div>
                     </div>
 
                     <details className="mt-4 rounded-lg border border-ink-700 bg-ink-950">
-                      <summary className="cursor-pointer px-3 py-2 text-sm text-zinc-300">Serve command</summary>
+                      <summary className="cursor-pointer px-3 py-2 text-sm text-zinc-300">{zh ? "启动命令" : "Serve command"}</summary>
                       <pre className="thin-scroll overflow-auto border-t border-ink-700 p-3 font-mono text-xs text-zinc-300">{text(launch.command)}</pre>
                     </details>
                   </div>
 
                   <div className="rounded-lg border border-ink-700 bg-ink-950 p-4">
-                    <div className="text-xs uppercase tracking-wide text-zinc-600">Best measured point</div>
+                    <div className="text-xs uppercase tracking-wide text-zinc-600">{zh ? "最佳测点" : "Best measured point"}</div>
                     {best ? (
                       <>
                         <div className="mt-2 text-3xl font-semibold text-zinc-100">{numberText(best.decode_toks_per_s)} <span className="text-sm font-normal text-zinc-500">tok/s</span></div>
@@ -286,16 +292,16 @@ export function RecipesView({ hw }: { hw: string }) {
                         </div>
                       </>
                     ) : (
-                      <p className="mt-2 text-sm text-zinc-500">No measured points in the current bundle.</p>
+                      <p className="mt-2 text-sm text-zinc-500">{zh ? "当前数据包里没有测点。" : "No measured points in the current bundle."}</p>
                     )}
                     <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                      {record.matrix_file && <a href={specHref(record.matrix_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Matrix</a>}
-                      {record.model_file && <a href={specHref(record.model_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Model spec</a>}
-                      {record.launch_file && <a href={specHref(record.launch_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Launch spec</a>}
-                      {record.device_file && <a href={specHref(record.device_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Device spec</a>}
-                      {record.benchmark_file && <a href={specHref(record.benchmark_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Benchmark spec</a>}
-                      {recipeFile && <a href={`${RADEONRUN}/blob/main/${recipeFile}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Legacy recipe</a>}
-                      {resultFile && <a href={`${RADEONRUN}/blob/main/${resultFile}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">Result JSON</a>}
+                      {record.matrix_file && <a href={specHref(record.matrix_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "测试矩阵" : "Matrix"}</a>}
+                      {record.model_file && <a href={specHref(record.model_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "模型配置" : "Model spec"}</a>}
+                      {record.launch_file && <a href={specHref(record.launch_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "启动配置" : "Launch spec"}</a>}
+                      {record.device_file && <a href={specHref(record.device_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "设备配置" : "Device spec"}</a>}
+                      {record.benchmark_file && <a href={specHref(record.benchmark_file)} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "测试配置" : "Benchmark spec"}</a>}
+                      {recipeFile && <a href={`${RADEONRUN}/blob/main/${recipeFile}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "旧版配方" : "Legacy recipe"}</a>}
+                      {resultFile && <a href={`${RADEONRUN}/blob/main/${resultFile}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5">{zh ? "结果 JSON" : "Result JSON"}</a>}
                     </div>
                   </div>
                 </div>

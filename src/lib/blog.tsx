@@ -1,5 +1,6 @@
 import { A, C, H2, Lead, P, Pre, Table, UL, type BlogPost } from "./blogUi";
-import { ENGINE_POSTS, MODEL_POSTS } from "./blogModels";
+import { ENGINE_POSTS, ENGINE_POSTS_ZH, MODEL_POSTS, MODEL_POSTS_ZH } from "./blogModels";
+import type { Lang } from "./i18n";
 
 export type { BlogPost } from "./blogUi";
 
@@ -215,13 +216,181 @@ const POSTS: BlogPost[] = [
   },
 ];
 
-const ALL_POSTS: BlogPost[] = [...POSTS, ...ENGINE_POSTS, ...MODEL_POSTS];
+const AB_PROMPT_ZH = `在这台电脑上部署 Qwen3.8-27B，用它的 AMD GPU 做推理。
+要求：
+1. 提供 OpenAI 兼容的 API，必须带 API key 才能调用。
+2. 支持工具调用（function calling）。
+3. 服务在后台运行，你退出后也要继续运行。
+4. WorkBuddy 这类客户端只填 base URL 和 API key 就能用。
+5. 用正确的方式跑起来、能正常应答即可，不考虑性能：
+   不要测速，不要跑 benchmark，也不要为了速度换方案或调参数。
+完成后把 base_url、api_key 和 model 写到 C:\\Users\\devNN\\result.json，
+并自己调用一次，确认能返回结果。
+[仅 B 组] 我已经装好了 AMD GPU 支持助手的 MCP 工具（radeon）。部署前先用它查清
+怎么做，遇到问题也先问它。
+注意：这个账号没有管理员权限。我不在电脑旁，不要问我问题，自己做决定，一直做到完成。`;
 
-// Newest first; posts with the same date keep the order above.
-export function allPosts(): BlogPost[] {
-  return [...ALL_POSTS].sort((a, b) => b.date.localeCompare(a.date));
+// Chinese version of POSTS. Same facts and numbers; keep the two in step.
+const POSTS_ZH: BlogPost[] = [
+  {
+    slug: "support-agent-ab-test-windows-strix-halo",
+    title: "A/B 测试：AMD GPU 支持助手能帮编程智能体部署本地模型吗？",
+    date: "2026-11-26",
+    readingMinutes: 9,
+    tags: ["A2A", "智能体", "Strix Halo", "Windows", "llama.cpp"],
+    excerpt:
+      "同一个任务、同一个编程智能体：在中国大陆网络下的一台 Windows Strix Halo 笔记本上，接入我们的支持助手跑三次，不接入跑三次。接入后，中位数那次反而更慢、用的 token 更多，主要原因是 29 次调用我们的服务有 22 次失败。",
+    content: (
+      <>
+        <Lead>
+          我们做 AMD GPU 支持助手，是想让 AI 编程智能体更会在 AMD 硬件上搭本地推理。为了验证它到底有没有用，我们让
+          Claude Code 把同一个任务做了六遍：在一台 Radeon 8060S 的 Windows 笔记本上部署 Qwen3.8-27B。三次可以用支持助手，三次不能用。在这个环境里，它没有帮上忙。用了支持助手的中位数那次花了
+          62 分钟（不用是 47 分钟），读了 250 万输入 token（不用是 140 万），我们服务自己的模型还额外读了中位数 270 万。主要原因是：从测试机的网络出发，调用我们服务的 29 次里有 22 次失败。
+        </Lead>
+
+        <H2>任务</H2>
+        <P>
+          测试机是一台 HP ZBook Ultra G1a 14 笔记本：Ryzen AI Max+ PRO 395，Radeon 8060S（Strix Halo，gfx1151），128 GB
+          统一内存，Windows 11，AMD 驱动 32.0.32029.2010。它在中国大陆网络下：Hugging Face、Docker Hub 和 Google 打不开，hf-mirror
+          和 ModelScope 镜像能用，GitHub release 下载很慢，有时会被重置。
+        </P>
+        <P>
+          编程智能体是无界面模式的 Claude Code 2.1.331，主模型 Claude Opus 5.5，小任务用 Claude Haiku 5.5。每次运行都用同一段中文提示词，大意如下：
+        </P>
+        <Pre>{AB_PROMPT_ZH}</Pre>
+        <P>
+          第 5 条来自之前没有这条要求的一轮测试。那一轮里，两组智能体在服务早已跑通之后还在反复测速、调参，运行时间衡量的是调优花了多少力气，而不是部署本身。模型跑多快是推理引擎的事，这个任务要的是把它正确地跑起来。我们丢掉了那几次结果，加上第
+          5 条，并修改了支持助手，让它给出的方案不再引用速度数字、也不再加调优步骤（0.2.2 版）。
+        </P>
+
+        <H2>两组</H2>
+        <UL>
+          <li>
+            <strong>A</strong>：只用 Claude Code。
+          </li>
+          <li>
+            <strong>B</strong>：Claude Code 加上以 MCP 工具形式接入的支持助手。一个小连接器把问题转发到 <A href="/zh/docs">API 文档</A>
+            里介绍的 A2A 接口，也会读取本站发布的测试结果和配方。连接器还没有公开发布，它调用的接口已经公开。
+          </li>
+        </UL>
+
+        <H2>如何保证公平</H2>
+        <UL>
+          <li>
+            每次运行都用一个新建的、没有管理员权限的普通 Windows 账号，跑完就删。运行在个人目录之外留下的东西，比如{" "}
+            <C>C:\llm</C>，在下一次运行前清掉。
+          </li>
+          <li>提示词里从没提到 Radeon Arena。智能体只看到一个本地 API 地址，用来访问它自己的模型；我们在这里统计每一个请求。</li>
+          <li>两组交替运行：A5、B5、A6、B6、A7、B7。编号接着上一轮往下排。</li>
+          <li>每份运行记录我们都读过。A 组没有一次访问过 radeon-arena.com。</li>
+        </UL>
+
+        <H2>怎么检查结果</H2>
+        <P>
+          每次运行结束后，由一个独立脚本拿智能体报告的 base URL、key 和模型名做检查：带 key 能列出模型，不带 key 返回
+          401；对话请求能得到回答；带 <C>get_weather</C> 工具的请求能返回工具调用；服务进程占用了 GPU 显存。六次全部通过。我们没有测速度。
+        </P>
+
+        <H2>结果</H2>
+        <P>
+          六次部署最后都用了 llama.cpp 的 Vulkan 版本。分钟数是智能体从第一个动作到最后一个动作的实际耗时；请求、输入、输出是编程智能体的模型请求数和
+          token 数；工具是它调用工具的次数。输入包含命中缓存的提示 token，每次运行里都占输入的 90–96%。
+        </P>
+        <Table
+          head={["运行", "权重", "分钟", "请求", "输入", "输出", "工具"]}
+          numericFrom={2}
+          emphasis={[6, 7]}
+          rows={[
+            ["A5", "BF16（自行转换）", "95.3", "63", "3,712,704", "31,466", "62"],
+            ["A6", "Q8_0", "47.0", "34", "1,137,795", "15,773", "30"],
+            ["A7", "Q8_0", "46.3", "37", "1,406,591", "14,209", "34"],
+            ["B5", "UD-Q4_K_M", "39.2", "42", "2,212,448", "17,563", "47"],
+            ["B6", "Q8_0", "62.3", "54", "2,546,832", "16,134", "54"],
+            ["B7", "Q8_0", "79.8", "60", "2,673,637", "21,252", "64"],
+            ["A 中位数", "", "47.0", "37", "1,406,591", "15,773", "34"],
+            ["B 中位数", "", "62.3", "54", "2,546,832", "17,563", "54"],
+          ]}
+        />
+        <P>
+          支持助手用的是它自己的模型（Claude Haiku 5.5）。下表是 B 组在服务这一侧的情况：编程智能体调用服务的次数和其中失败的次数，以及服务端统计的会话数、模型调用次数和
+          token 数。
+        </P>
+        <Table
+          head={["运行", "调用", "失败", "会话", "模型调用", "输入", "输出"]}
+          rows={[
+            ["B5", "5", "3", "4", "18", "2,731,775", "65,963"],
+            ["B6", "8", "3", "1", "11", "1,430,107", "35,219"],
+            ["B7", "16", "16", "12", "49", "6,466,643", "218,561"],
+          ]}
+        />
+        <P>两边加起来，B 组中位数那次读了约 490 万输入 token，A 组中位数那次是 140 万。</P>
+
+        <H2>B 组发生了什么</H2>
+        <P>
+          <strong>大部分对我们服务的调用都失败了。</strong>29 次调用里失败 22 次：15 次连接超时，5 次读取超时，1
+          次协议错误，1 次会话丢失。智能体等待、重试，很多时候最后没拿到回答就继续往下做。
+        </P>
+        <P>
+          <strong>失败的调用照样消耗 token。</strong>客户端超时并不会让服务端停下手里的活。B7 里智能体调用了 12 次 start，服务开了 12
+          个会话、写了 10 份方案，没有一份送到智能体手里。光这一次运行，服务端就花了 650 万输入 token。
+        </P>
+        <P>
+          <strong>B6 收到的方案不适合这台机器。</strong>方案在运行第 18 分钟才送到，选的是 llama.cpp 的 Windows ROCm
+          版本，在这台机器上找不到 GPU。智能体报告了这个错误；我们排查后发现，那个安装包里缺少 hipBLAS 和 rocBLAS 库，于是建议改用同一版本的 Vulkan
+          构建，这才跑通。从收到方案到切换过去用了 30 分钟，不过其中一部分时间和模型下载是重叠的。
+        </P>
+        <P>
+          <strong>真正起作用的帮助来自已发布的数据。</strong>B5 是所有运行里最快的一次，39 分钟，而它的每一次方案调用都失败了。智能体转而通过连接器查到本站自己的{" "}
+          <A href="/zh/strix/recipes">配方</A>：Strix Halo 上的 Qwen3.8-27B UD-Q4_K_M（在 Linux 上实测）。另外有一个问题问通了：在
+          Windows 上用 Vulkan 版本，既不需要 ROCm/HIP SDK，也不需要管理员权限。
+        </P>
+        <P>
+          <strong>连接器在 Windows 上看不到 GPU。</strong>它的硬件检测读的是 Linux 接口，所以在 Windows 上，智能体只能自己向服务描述 GPU。
+        </P>
+
+        <H2>A 组发生了什么</H2>
+        <P>
+          没有外部帮助时，Opus 5.5 本来就知道这台机器上的常规做法：llama.cpp 的 Vulkan 版本，加上从镜像站下载的 GGUF。两次用了
+          Q8_0，分别用 47 和 46 分钟完成。第三次把“正确的方式”理解成“尽量接近原版”：下载原始权重，装上转换工具，自己做了一份
+          BF16 GGUF，用了 95 分钟。
+        </P>
+
+        <H2>我们的结论</H2>
+        <UL>
+          <li>服务必须在用户所在的网络里能连上。从这个网络出发，四次调用有三次失败；一个总是失败的帮手，比没有帮手代价更大。</li>
+          <li>重试 start 时应该接上已经在跑的会话，而不是重新规划；客户端放弃之后，服务也应该停止为它干活。</li>
+          <li>服务端每次模型调用平均读 13 万到 15.2 万输入 token，部分原因是规划器每次调用都把所有已发布的配方带上。</li>
+          <li>给 Windows 的方案必须符合 Windows 上实际能跑的情况；B6 方案里的 ROCm 版本就不符合。</li>
+          <li>连接器需要能在 Windows 上识别 GPU。</li>
+          <li>常见模型配常见硬件，强的编程智能体不太需要帮助。我们给它的最有用的东西，是这个模型在这块 GPU 上的一份实测配方。</li>
+        </UL>
+
+        <H2>局限</H2>
+        <UL>
+          <li>每组三次，一台机器，一种网络。中位数只能看出方向，不能当作精确的效果大小。</li>
+          <li>三次 B 组运行用的是同一台服务器，但在 B5 和 B6 之间，服务更新了一项把 AMD 官方文档同步进知识库的任务。</li>
+          <li>智能体一侧的请求数和 token 数来自本地计量代理；服务一侧的数字来自服务自己的会话记录。</li>
+        </UL>
+      </>
+    ),
+  },
+];
+
+const ALL_POSTS: Record<Lang, BlogPost[]> = {
+  en: [...POSTS, ...ENGINE_POSTS, ...MODEL_POSTS],
+  zh: [...POSTS_ZH, ...ENGINE_POSTS_ZH, ...MODEL_POSTS_ZH],
+};
+
+// Every post exists in both languages under the same slug; fail the build otherwise.
+if (ALL_POSTS.en.map((p) => p.slug).join(",") !== ALL_POSTS.zh.map((p) => p.slug).join(",")) {
+  throw new Error("English and Chinese blog posts are out of sync");
 }
 
-export function getPost(slug: string): BlogPost | undefined {
-  return ALL_POSTS.find((p) => p.slug === slug);
+// Newest first; posts with the same date keep the order above.
+export function allPosts(lang: Lang = "en"): BlogPost[] {
+  return [...ALL_POSTS[lang]].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export function getPost(slug: string, lang: Lang = "en"): BlogPost | undefined {
+  return ALL_POSTS[lang].find((p) => p.slug === slug);
 }

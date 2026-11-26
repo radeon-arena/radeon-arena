@@ -1,19 +1,19 @@
 export function fmtTps(n: number | undefined): string {
   if (n === undefined || !Number.isFinite(n)) return "—";
-  if (n >= 10000) return n.toLocaleString(undefined, { maximumFractionDigits: 0 });
-  return n.toLocaleString(undefined, { maximumFractionDigits: 1 });
+  if (n >= 10000) return n.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  return n.toLocaleString("en-US", { maximumFractionDigits: 1 });
 }
 
 export function fmtMs(n: number | undefined): string {
   if (n === undefined || !Number.isFinite(n)) return "—";
-  return `${n.toLocaleString(undefined, { maximumFractionDigits: 0 })} ms`;
+  return `${n.toLocaleString("en-US", { maximumFractionDigits: 0 })} ms`;
 }
 
-export function fmtDate(iso: string | undefined): string {
+export function fmtDate(iso: string | undefined, lang: "en" | "zh" = "en"): string {
   if (!iso) return "—";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  return d.toLocaleDateString(lang === "zh" ? "zh-CN" : "en-US", { year: "numeric", month: "short", day: "numeric" });
 }
 
 export function rankBadge(rank: number): string {

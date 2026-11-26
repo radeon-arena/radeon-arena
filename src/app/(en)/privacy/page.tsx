@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { alternates } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Privacy - Radeon Arena",
   description: "Privacy notice for Radeon Arena.",
+  alternates: alternates("en", "/privacy"),
 };
 
 export default function PrivacyPage() {

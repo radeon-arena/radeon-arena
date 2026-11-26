@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { CarouselItem } from "@/lib/types";
 import { loadGithubData } from "@/lib/githubData";
+import { useLang } from "@/components/LangProvider";
+import { lp } from "@/lib/i18n";
 
 export function Carousel() {
+  const lang = useLang();
+  const zh = lang === "zh";
   const [items, setItems] = useState<CarouselItem[]>([]);
 
   useEffect(() => {
@@ -30,10 +34,10 @@ export function Carousel() {
     <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-400">
-          Performance Highlights
+          {zh ? "性能亮点" : "Performance Highlights"}
         </h2>
-        <Link href="/strix/leaderboard" className="text-sm text-radeon-400 hover:text-radeon-300">
-          View full leaderboard →
+        <Link href={lp(lang, "/strix/leaderboard")} className="text-sm text-radeon-400 hover:text-radeon-300">
+          {zh ? "查看完整榜单 →" : "View full leaderboard →"}
         </Link>
       </div>
 
@@ -62,7 +66,7 @@ export function Carousel() {
                   <p className="font-mono text-lg leading-none text-radeon-300">
                     {it.tokensPerSec.toFixed(1)}
                   </p>
-                  <p className="mt-1 text-xs text-zinc-600">tok/s decode</p>
+                  <p className="mt-1 text-xs text-zinc-600">{zh ? "tok/s 解码" : "tok/s decode"}</p>
                 </div>
                 <div className="text-right">
                   {it.gpu && <p className="text-xs text-zinc-400">{it.gpu}</p>}
@@ -71,10 +75,10 @@ export function Carousel() {
               </div>
 
               <Link
-                href="/strix/leaderboard"
+                href={lp(lang, "/strix/leaderboard")}
                 className="text-xs text-radeon-400 hover:text-radeon-300"
               >
-                View on leaderboard →
+                {zh ? "在榜单中查看 →" : "View on leaderboard →"}
               </Link>
             </div>
           ))}

@@ -7,6 +7,7 @@ import { hwMatches, hwLabel } from "@/lib/hardware";
 import { loadGithubData } from "@/lib/githubData";
 import { BenchmarkModal } from "./BenchmarkModal";
 import { VerificationBadge } from "./VerificationBadge";
+import { useLang } from "@/components/LangProvider";
 
 // ── Test-name parsing ────────────────────────────────────────────────────────
 // Raw names look like "tg128 (c1)", "pp2048 @ d4096 (c5)", "tg128 (c1) in4096".
@@ -57,11 +58,17 @@ function runtimePill(rt: string): string {
   return "border-ink-600 bg-ink-800 text-zinc-300";
 }
 
-function timeAgo(iso?: string): string {
+function timeAgo(iso: string | undefined, zh: boolean): string {
   if (!iso) return "—";
   const t = new Date(iso).getTime();
   if (Number.isNaN(t)) return "—";
   const s = Math.max(0, Math.floor((Date.now() - t) / 1000));
+  if (zh) {
+    if (s < 60) return `${s} 秒前`;
+    if (s < 3600) return `${Math.floor(s / 60)} 分钟前`;
+    if (s < 86400) return `${Math.floor(s / 3600)} 小时前`;
+    return `${Math.floor(s / 86400)} 天前`;
+  }
   if (s < 60) return `${s}s ago`;
   const m = Math.floor(s / 60);
   if (m < 60) return `${m} minute${m > 1 ? "s" : ""} ago`;
@@ -71,11 +78,11 @@ function timeAgo(iso?: string): string {
   return `${d} day${d > 1 ? "s" : ""} ago`;
 }
 
-function fmtDateTime(iso?: string): string {
+function fmtDateTime(iso: string | undefined, zh: boolean): string {
   if (!iso) return "—";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleString(undefined, {
+  return d.toLocaleString(zh ? "zh-CN" : "en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -101,6 +108,8 @@ function paginationRange(page: number, totalPages: number): number[] {
 }
 
 export function LeaderboardView({ hw }: { hw: string }) {
+  const zh = useLang() === "zh";
+  const gpus = (n: number) => (zh ? `${n} 卡` : n === 1 ? "1 GPU" : `${n} GPUs`);
   const [snap, setSnap] = useState<LeaderboardSnapshot | null>(null);
   const [error, setError] = useState(false);
 
@@ -207,8 +216,8 @@ export function LeaderboardView({ hw }: { hw: string }) {
   const showingEnd = rows.length ? Math.min(page * PAGE_SIZE, rows.length) : 0;
   const pageNumbers = paginationRange(page, totalPages);
 
-  if (error) return <p className="py-12 text-center text-zinc-500">Failed to load leaderboard snapshot.</p>;
-  if (!snap) return <p className="py-12 text-center text-zinc-500">Loading leaderboard snapshot…</p>;
+  if (error) return <p className="py-12 text-center text-zinc-500">{zh ? "榜单数据加载失败。" : "Failed to load leaderboard snapshot."}</p>;
+  if (!snap) return <p className="py-12 text-center text-zinc-500">{zh ? "正在加载榜单数据…" : "Loading leaderboard snapshot…"}</p>;
 
   const intervalMin = Math.round((snap.metadata.snapshotIntervalHours ?? 0.5) * 60);
 
@@ -218,7 +227,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
       <div className="card p-5">
         <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">Test Type</label>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">{zh ? "测试类型" : "Test Type"}</label>
             <select
               value={testType}
               onChange={(e) => setTestType(e.target.value)}
@@ -232,7 +241,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">Concurrency</label>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">{zh ? "并发数" : "Concurrency"}</label>
             <select
               value={conc}
               onChange={(e) => setConc(Number(e.target.value))}
@@ -246,7 +255,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             </select>
           </div>
         </div>
-        <p className="mt-3 text-xs text-zinc-500">Showing {rows.length} results</p>
+        <p className="mt-3 text-xs text-zinc-500">{zh ? `共 ${rows.length} 条结果` : `Showing ${rows.length} results`}</p>
       </div>
 
       {/* Status bar */}
@@ -256,18 +265,18 @@ export function LeaderboardView({ hw }: { hw: string }) {
             <circle cx="12" cy="12" r="9" />
             <path d="M12 7v5l3 2" strokeLinecap="round" />
           </svg>
-          Last updated: <span className="font-medium text-zinc-200">{timeAgo(snap.generatedAt)}</span>
-          <span className="text-zinc-600">({fmtDateTime(snap.generatedAt)})</span>
+          {zh ? "最近更新：" : "Last updated: "}<span className="font-medium text-zinc-200">{timeAgo(snap.generatedAt, zh)}</span>
+          <span className="text-zinc-600">({fmtDateTime(snap.generatedAt, zh)})</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
           <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-zinc-500" fill="none" stroke="currentColor" strokeWidth="1.8">
             <rect x="4" y="4" width="16" height="16" rx="2" />
             <path d="M8 9h8M8 13h6" strokeLinecap="round" />
           </svg>
-          Showing: <span className="font-medium text-radeon-300">{rows.length}</span> of {list.length} benchmarks
+          {zh ? "显示：" : "Showing: "}<span className="font-medium text-radeon-300">{rows.length}</span>{zh ? ` / ${list.length} 条跑分` : ` of ${list.length} benchmarks`}
         </span>
         <span>
-          Update interval: <span className="font-medium text-zinc-200">Every {intervalMin} minutes</span>
+          {zh ? "更新间隔：" : "Update interval: "}<span className="font-medium text-zinc-200">{zh ? `每 ${intervalMin} 分钟` : `Every ${intervalMin} minutes`}</span>
         </span>
       </div>
 
@@ -281,43 +290,43 @@ export function LeaderboardView({ hw }: { hw: string }) {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search models…"
+            placeholder={zh ? "搜索模型…" : "Search models…"}
             className="w-full rounded-lg border border-ink-600 bg-ink-950 py-2 pl-9 pr-3 text-sm text-zinc-200 placeholder:text-zinc-600"
           />
         </div>
         <select value={runtimeFilter} onChange={(e) => setRuntimeFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
-          <option value="all">All Runtimes</option>
+          <option value="all">{zh ? "全部引擎" : "All Runtimes"}</option>
           {runtimeOptions.map((r) => (
             <option key={r} value={r}>{r}</option>
           ))}
         </select>
         <select value={clusterFilter} onChange={(e) => setClusterFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
-          <option value="all">All GPU Counts</option>
+          <option value="all">{zh ? "全部卡数" : "All GPU Counts"}</option>
           {clusterOptions.map((c) => (
-            <option key={c} value={String(c)}>{c === 1 ? "1 GPU" : `${c} GPUs`}</option>
+            <option key={c} value={String(c)}>{gpus(c)}</option>
           ))}
         </select>
         <select value={quantFilter} onChange={(e) => setQuantFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
-          <option value="all">All Quantizations</option>
+          <option value="all">{zh ? "全部量化格式" : "All Quantizations"}</option>
           {quantOptions.map((qz) => (
             <option key={qz} value={qz}>{qz}</option>
           ))}
         </select>
         <select value={verifyFilter} onChange={(e) => setVerifyFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
-          <option value="all">All Status</option>
-          <option value="verified">✓ Verified</option>
-          <option value="self">★ First-party</option>
-          <option value="pending">… Pending</option>
-          <option value="failed">⚠ Repro-failed</option>
+          <option value="all">{zh ? "全部状态" : "All Status"}</option>
+          <option value="verified">{zh ? "✓ 已验证" : "✓ Verified"}</option>
+          <option value="self">{zh ? "★ 自测" : "★ First-party"}</option>
+          <option value="pending">{zh ? "… 待验证" : "… Pending"}</option>
+          <option value="failed">{zh ? "⚠ 复现未通过" : "⚠ Repro-failed"}</option>
         </select>
         <select value={sortKey} onChange={(e) => setSortKey(e.target.value as "rank" | "tps")} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
-          <option value="rank">Rank</option>
-          <option value="tps">Tokens/sec</option>
+          <option value="rank">{zh ? "排名" : "Rank"}</option>
+          <option value="tps">{zh ? "tok/s" : "Tokens/sec"}</option>
         </select>
         <button
           type="button"
           onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
-          aria-label="Toggle sort direction"
+          aria-label={zh ? "切换排序方向" : "Toggle sort direction"}
           className="rounded-lg border border-ink-600 bg-ink-850 px-2.5 py-2 text-sm text-zinc-300 hover:bg-ink-800"
         >
           {sortDir === "asc" ? "↑" : "↓"}
@@ -329,13 +338,13 @@ export function LeaderboardView({ hw }: { hw: string }) {
         <table className="w-full min-w-[820px] text-sm">
           <thead className="border-b border-ink-700 text-left text-xs uppercase tracking-wide text-zinc-500">
             <tr>
-              <th className="px-4 py-3">Rank</th>
-              <th className="px-4 py-3">Model</th>
-              <th className="px-4 py-3">Runtime</th>
-              <th className="px-4 py-3">Quant.</th>
-              <th className="px-4 py-3">GPUs</th>
-              <th className="px-4 py-3 text-right">Tokens/sec</th>
-              <th className="px-4 py-3">{family === "pp" ? "TTFT" : "Type"}</th>
+              <th className="px-4 py-3">{zh ? "排名" : "Rank"}</th>
+              <th className="px-4 py-3">{zh ? "模型" : "Model"}</th>
+              <th className="px-4 py-3">{zh ? "引擎" : "Runtime"}</th>
+              <th className="px-4 py-3">{zh ? "量化" : "Quant."}</th>
+              <th className="px-4 py-3">{zh ? "卡数" : "GPUs"}</th>
+              <th className="px-4 py-3 text-right">{zh ? "tok/s" : "Tokens/sec"}</th>
+              <th className="px-4 py-3">{family === "pp" ? (zh ? "首字延迟" : "TTFT") : (zh ? "类型" : "Type")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800">
@@ -369,14 +378,14 @@ export function LeaderboardView({ hw }: { hw: string }) {
                   {e.backend ? <span className="ml-1 text-xs text-zinc-600">{e.backend}</span> : null}
                 </td>
                 <td className="px-4 py-2.5 text-zinc-400">{e.quantization}</td>
-                <td className="px-4 py-2.5 text-zinc-400">{e.clusterSize === 1 ? "1 GPU" : `${e.clusterSize} GPUs`}</td>
+                <td className="px-4 py-2.5 text-zinc-400">{gpus(e.clusterSize)}</td>
                 <td className="px-4 py-2.5 text-right font-mono font-semibold text-zinc-100">{fmtTps(e.tokensPerSec)}</td>
                 <td className="px-4 py-2.5">
                   {family === "pp" ? (
                     <span className="font-mono text-zinc-400">{fmtMs(e.e2eTtft)}</span>
                   ) : (
                     <span className="inline-flex items-center rounded-full border border-radeon-700/50 bg-radeon-900/30 px-2 py-0.5 text-xs text-radeon-300">
-                      Decode
+                      {zh ? "解码" : "Decode"}
                     </span>
                   )}
                 </td>
@@ -387,11 +396,11 @@ export function LeaderboardView({ hw }: { hw: string }) {
                 <td colSpan={7} className="px-4 py-10 text-center text-zinc-600">
                   {!list.some((e) => hwMatches(hw, e.gpu)) ? (
                     <>
-                      No benchmarks yet for {hwLabel(hw)}.
-                      <span className="block text-xs text-zinc-700">Results will appear here once this GPU is benchmarked.</span>
+                      {zh ? `${hwLabel(hw)} 还没有跑分。` : `No benchmarks yet for ${hwLabel(hw)}.`}
+                      <span className="block text-xs text-zinc-700">{zh ? "测完后结果会显示在这里。" : "Results will appear here once this GPU is benchmarked."}</span>
                     </>
                   ) : (
-                    "No entries match these filters."
+                    zh ? "没有符合筛选条件的结果。" : "No entries match these filters."
                   )}
                 </td>
               </tr>
@@ -402,16 +411,16 @@ export function LeaderboardView({ hw }: { hw: string }) {
 
       <div className="card flex flex-col gap-3 px-5 py-4 text-sm text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
         <span>
-          Showing <span className="font-medium text-zinc-200">{showingStart}</span> to{" "}
-          <span className="font-medium text-zinc-200">{showingEnd}</span> of{" "}
-          <span className="font-medium text-zinc-200">{rows.length}</span> entries
+          {zh ? "第 " : "Showing "}<span className="font-medium text-zinc-200">{showingStart}</span>{zh ? " 至 " : " to "}
+          <span className="font-medium text-zinc-200">{showingEnd}</span>{zh ? " 条，共 " : " of "}
+          <span className="font-medium text-zinc-200">{rows.length}</span>{zh ? " 条" : " entries"}
         </span>
-        <div className="flex items-center gap-1 self-end sm:self-auto" aria-label="Leaderboard pagination">
+        <div className="flex items-center gap-1 self-end sm:self-auto" aria-label={zh ? "榜单分页" : "Leaderboard pagination"}>
           <button
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
-            aria-label="Previous page"
+            aria-label={zh ? "上一页" : "Previous page"}
             className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-ink-700 text-zinc-400 transition-colors hover:border-radeon-700 hover:text-radeon-300 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-ink-700 disabled:hover:text-zinc-400"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -435,7 +444,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             type="button"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            aria-label="Next page"
+            aria-label={zh ? "下一页" : "Next page"}
             className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-ink-700 text-zinc-400 transition-colors hover:border-radeon-700 hover:text-radeon-300 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-ink-700 disabled:hover:text-zinc-400"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -444,8 +453,10 @@ export function LeaderboardView({ hw }: { hw: string }) {
       </div>
 
       <p className="text-xs text-zinc-600">
-        {snap.metadata.totalEntries.toLocaleString()} entries across {snap.metadata.testCount} tests
-        <span className="ml-1 text-zinc-500">· data: real RadeonArena benchmarks (AMD RDNA only)</span>
+        {zh
+          ? `共 ${snap.metadata.totalEntries.toLocaleString()} 条结果，${snap.metadata.testCount} 项测试`
+          : `${snap.metadata.totalEntries.toLocaleString()} entries across ${snap.metadata.testCount} tests`}
+        <span className="ml-1 text-zinc-500">{zh ? "· 数据：Radeon Arena 实测（仅 AMD RDNA）" : "· data: real RadeonArena benchmarks (AMD RDNA only)"}</span>
       </p>
 
       {openId && <BenchmarkModal id={openId} onClose={() => setOpenId(null)} />}
