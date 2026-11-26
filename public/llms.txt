@@ -19,6 +19,10 @@ The public leaderboard currently shows the Radeon 8060S (Strix Halo), the Radeon
 - [Recipes](https://radeon-arena.com/strix/recipes): the commands and settings behind each result
 - [Submit a benchmark](https://radeon-arena.com/strix/submit): how to contribute results
 
+## Blog
+
+- [A/B test: does the AMD GPU Support Agent help a coding agent deploy a local model?](https://radeon-arena.com/blogs/support-agent-ab-test-windows-strix-halo/): Claude Code deploying Qwen3.8-27B on a Windows Strix Halo laptop, three runs with and three without the support agent; time, tokens and failures on both sides
+
 ## Open source
 
 - [radeon-arena/skills](https://github.com/radeon-arena/skills): twelve single-task agent skills for AMD GPU setup and triage

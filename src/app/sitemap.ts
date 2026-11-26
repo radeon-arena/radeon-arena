@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { allPosts } from "@/lib/blog";
 
 const BASE_URL = "https://radeon-arena.com";
 
@@ -23,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/w7900/leaderboard",
     "/w7900/recipes",
     "/w7900/submit",
+    ...allPosts().map((p) => `/blogs/${p.slug}`),
   ];
 
   return routes.map((route) => ({
