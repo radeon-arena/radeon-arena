@@ -66,7 +66,7 @@ export function Carousel() {
                   <p className="font-mono text-lg leading-none text-radeon-300">
                     {it.tokensPerSec.toFixed(1)}
                   </p>
-                  <p className="mt-1 text-xs text-zinc-600">{zh ? "tok/s 解码" : "tok/s decode"}</p>
+                  <p className="mt-1 text-xs text-zinc-600">{zh ? "解码 tok/s" : "tok/s decode"}</p>
                 </div>
                 <div className="text-right">
                   {it.gpu && <p className="text-xs text-zinc-400">{it.gpu}</p>}

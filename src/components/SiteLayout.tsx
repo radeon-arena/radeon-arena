@@ -35,7 +35,6 @@ export function siteMetadata(lang: Lang): Metadata {
       title: m.title,
       description: m.og,
       type: "website",
-      url: lang === "zh" ? "https://radeon-arena.com/zh/" : "https://radeon-arena.com",
       locale: lang === "zh" ? "zh_CN" : "en_US",
     },
     twitter: { card: "summary", title: m.title, description: m.og },

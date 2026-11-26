@@ -4,7 +4,7 @@ import { alternates } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "服务条款 - Radeon Arena",
-  description: "Radeon Arena 使用条款。",
+  description: "Radeon Arena 服务条款。",
   alternates: alternates("zh", "/terms"),
 };
 
@@ -13,7 +13,7 @@ export default function TermsPageZh() {
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link href="/zh/" className="text-sm text-radeon-400 hover:text-radeon-300">← 返回首页</Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-50">服务条款</h1>
-      <p className="mt-3 text-sm text-zinc-500">最后更新：2026-11-16。如中英文版本不一致，以英文版为准。</p>
+      <p className="mt-3 text-sm text-zinc-500">最后更新：2026-11-16。</p>
 
       <div className="card mt-8 space-y-6 p-7 text-sm leading-7 text-zinc-300">
         <section>
@@ -27,7 +27,7 @@ export default function TermsPageZh() {
         <section>
           <h2 className="text-lg font-semibold text-zinc-100">贡献</h2>
           <p className="mt-2 text-zinc-400">
-            贡献通过 GitHub Pull Request 提交。提交配方、结果文件、文档或元数据，即表示你有权贡献这些内容，并同意本项目将其作为公开跑分数据集和网站的一部分展示、复制、转换和再分发。
+            贡献通过 GitHub Pull Request 提交。提交配方、结果文件、文档或元数据，即表示你声明：你有权贡献这些内容，且本项目可以将其作为公开跑分数据集和网站的一部分展示、复制、转换和再分发。
           </p>
         </section>
 

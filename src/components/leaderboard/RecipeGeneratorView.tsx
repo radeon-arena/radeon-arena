@@ -38,7 +38,7 @@ export function RecipeGeneratorView({ hw }: { hw?: string }) {
       setErrors(data.validationErrors);
       setYamlOut(data.documents.map((document) => `# ${document.file}\n${yaml.dump(document.data, { indent: 2, lineWidth: -1, noRefs: true }).trim()}`).join("\n---\n"));
     } catch {
-      setMessage(zh ? "生成配方失败" : "Failed to generate recipe");
+      setMessage(zh ? "生成草稿失败" : "Failed to generate recipe");
     } finally {
       setLoading(false);
     }

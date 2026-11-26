@@ -14,11 +14,11 @@ export function SubmitView({ hw }: { hw?: string }) {
         {zh ? (
           <>
             <p className="mt-3 text-zinc-400">
-              Radeon Arena 只通过 GitHub Pull Request 接收跑分更新，不接受网页表单填写的数字：每一行都要对应一个可复现的配方矩阵和记录在案的镜像，以及一份能在 git 里审阅的实测结果文件。
+              Radeon Arena 只通过 GitHub Pull Request 接收跑分更新，不接受网页表单填写的数字。榜单上的每一行都要对应一个可复现的测试矩阵、一个有记录的镜像，以及一份能在 git 里审阅的实测结果文件。
             </p>
             <p className="mt-3 text-zinc-400">
               请向 <span className="font-medium text-zinc-200">radeon-arena/radeonrun</span> 提交 PR，包含模型、启动、矩阵三份配置和实测的{" "}
-              <code>results/&lt;device&gt;/&lt;matrix&gt;.json</code>。写明模型、引擎、量化格式、GPU、跑分配置、请求和实际解析到的镜像，以及实测的吞吐和延迟。
+              <code>results/&lt;device&gt;/&lt;matrix&gt;.json</code>。写明模型、引擎、量化格式、GPU、跑分配置、请求的镜像与实际解析到的镜像，以及实测的吞吐和延迟。
             </p>
             <p className="mt-3 text-zinc-400">维护者审阅 PR、确认数字可以复现、测法与榜单一致后合并。</p>
           </>
@@ -58,7 +58,7 @@ export function SubmitView({ hw }: { hw?: string }) {
         <h3 className="text-lg font-semibold text-zinc-100">{zh ? "矩阵草稿生成器" : "Matrix draft helper"}</h3>
         <p className="mt-2 text-sm text-zinc-400">
           {zh
-            ? "粘贴一条启动命令，生成 Model、Launch、Matrix 三份 YAML 初稿。这只是草稿：提交前请核对镜像、模型来源、占位符和实测结果 JSON。"
+            ? "粘贴一条启动命令，生成模型、启动、矩阵三份 YAML 初稿。这只是草稿：提交前请核对镜像、模型来源、占位符和实测结果 JSON。"
             : "Paste a serve command to generate starter Model, Launch, and Matrix YAML documents. Treat them as a draft: verify the OCI image, model source, placeholders, and measured result JSON before submitting."}
         </p>
         <div className="mt-5">

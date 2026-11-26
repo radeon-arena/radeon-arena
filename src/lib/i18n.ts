@@ -29,9 +29,11 @@ export function enPath(pathname: string): string {
  */
 export function alternates(lang: Lang, path: string) {
   if (!path.startsWith("/blogs/")) return undefined;
+  // Spell out the slash: Next skips it for slugs with a dot (model-glm-5.3-flash).
+  const p = path.endsWith("/") ? path : `${path}/`;
   return {
-    canonical: lp(lang, path),
-    languages: { en: path, "zh-CN": lp("zh", path), "x-default": path },
+    canonical: lp(lang, p),
+    languages: { en: p, "zh-CN": lp("zh", p), "x-default": p },
   };
 }
 

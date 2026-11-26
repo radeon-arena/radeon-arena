@@ -170,7 +170,7 @@ export async function loadGithubData() {
       })
       .then((bundle) => {
         const benchmarks = benchmarksFromRawRuns(rowsFromBundle(bundle));
-        return { benchmarks, snapshot: buildSnapshot(benchmarks), carousel: buildCarousel(benchmarks), bundle };
+        return { benchmarks, snapshot: buildSnapshot(benchmarks, bundle.generated_at), carousel: buildCarousel(benchmarks), bundle };
       });
   }
   return promise;

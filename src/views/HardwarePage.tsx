@@ -20,7 +20,10 @@ export function hardwareMetadata(lang: Lang, params: Params): Metadata {
   const label = hwLabel(params.hw);
   const path = `/${params.hw}${params.rest?.[0] ? `/${params.rest[0]}` : ""}`;
   return {
-    title: t(lang, `${label} — LLM Leaderboard | Radeon Arena`, `${label} 大模型推理榜单 | Radeon Arena`),
+    title: ({
+      recipes: t(lang, `${label} — Recipes | Radeon Arena`, `${label} 部署配方 | Radeon Arena`),
+      submit: t(lang, `${label} — Submit Recipe | Radeon Arena`, `${label} 提交配方 | Radeon Arena`),
+    } as Record<string, string>)[params.rest?.[0] ?? ""] ?? t(lang, `${label} — LLM Leaderboard | Radeon Arena`, `${label} 大模型推理榜单 | Radeon Arena`),
     description: t(lang, `LLM inference benchmarks on ${label} (AMD Radeon).`, `${label}（AMD Radeon）上实测的大模型推理性能。`),
     alternates: alternates(lang, path),
   };

@@ -19,6 +19,7 @@ POST_DATE = "2026-11-26"
 DEVICES = ["r9700", "strix", "w7900"]  # site tab order
 DEV = {"strix": "Strix Halo", "r9700": "R9700", "w7900": "W7900"}
 DEV_LONG = {"strix": "Strix Halo (Radeon 8060S)", "r9700": "Radeon AI PRO R9700", "w7900": "Radeon PRO W7900"}
+DEV_LONG_ZH = {"strix": "Radeon 8060S（Strix Halo）", "r9700": "Radeon AI PRO R9700", "w7900": "Radeon PRO W7900"}
 ENG = {"llamacpp": "llama.cpp", "vllm": "vLLM", "vllm-main": "vLLM (main)"}
 FULL = ("BF16", "F16")
 
@@ -60,7 +61,7 @@ MODELS = [
 
 # Chinese descriptions, same facts as the English ones above.
 MODEL_ZH = {
-    "qwen3-4b": "通义千问 Qwen3 系列的 4B 稠密模型",
+    "qwen3-4b": "Qwen3 系列的 4B 稠密模型",
     "qwen3-8b": "Qwen3 系列的 8B 稠密模型",
     "qwen3-14b": "Qwen3 系列的 14B 稠密模型",
     "qwen3-32b": "榜单上 Qwen3 系列最大的稠密模型",
@@ -80,18 +81,18 @@ MODEL_ZH = {
     "ling-3.0-flash": "inclusionAI Ling 3.0 系列中较大的模型",
     "ling-3.0-tiny": "inclusionAI Ling 3.0 系列中的小模型",
     "mimo-v2.6-distill-qwen-9b": "小米把 MiMo V2.6 蒸馏到 9B Qwen 模型上得到的版本",
-    "mimo-v2.6-flash": "小米的大型模型 MiMo V2.6 Flash",
-    "mimo-v2.5": "小米的大型模型 MiMo V2.5",
+    "mimo-v2.6-flash": "小米 MiMo V2.6 系列的大型模型",
+    "mimo-v2.5": "小米 MiMo V2.5 系列的大型模型",
     "nemotron-3.5-bolt-e4b": "NVIDIA Nemotron 3.5 Bolt 系列中的小模型",
     "nemotron-3.5-bolt-74b-a9b": "NVIDIA Nemotron 3.5 Bolt 的 MoE 模型，总参数 74B，激活约 9B",
     "nemotron-3.5-lightning-30b-a3b": "NVIDIA Nemotron 3.5 Lightning 的 MoE 模型，总参数 30B，激活约 3B",
     "nemotron-3.5-super-vl-120b-a12b": "NVIDIA Nemotron 3.5 Super 的视觉语言模型，总参数 120B，激活约 12B",
     "minicpm-v-4.7-1b": "OpenBMB 的 1B 视觉语言模型",
     "minicpm-v-4.7-35b-a3b": "OpenBMB 的 MoE 视觉语言模型，总参数 35B，激活约 3B",
-    "minicpm5-2b": "OpenBMB 的 2B 模型 MiniCPM5",
-    "step-3.5-flash": "阶跃星辰的大型模型 Step 3.5 Flash",
-    "deepseek-v4-flash": "DeepSeek 的大型模型 V4 Flash（0731 版）",
-    "glm-5.3-flash": "智谱 Z.ai 的大型模型 GLM 5.3 Flash",
+    "minicpm5-2b": "OpenBMB MiniCPM5 系列的 2B 模型",
+    "step-3.5-flash": "阶跃星辰 Step 3.5 系列的大型模型",
+    "deepseek-v4-flash": "DeepSeek V4 系列的大型模型（0731 版）",
+    "glm-5.3-flash": "智谱 Z.ai GLM 5.3 系列的大型模型",
 }
 
 # Extra hand-written observations. Numbers here were copied from the bundle and
@@ -136,30 +137,30 @@ NOTES_ZH = {
         "只有 R9700 跑了这个模型的 vLLM。单卡 32 并发时，vLLM 总吞吐达到 1,639 tok/s，同一张卡上 llama.cpp 跑 Q4_K_M 只有 565；但单请求是 llama.cpp Q4_K_M 更快（123.8 对 70.3 tok/s）。",
     ],
     "qwen3-30b-a3b": [
-        "BF16+YaRN 这几行用的是同一份权重，只是打开了面向长上下文的 YaRN RoPE 缩放。测试提示只有 512 个 token，所以这几行反映的是短上下文下这项设置的代价：W7900 上 vLLM 双卡，单请求 69.0 对 75.5 tok/s，32 并发 308 对 498 tok/s。",
+        "BF16+YaRN 这几行用的是同一份权重，只是打开了面向长上下文的 YaRN RoPE 缩放。测试提示词只有 512 个 token，所以这几行反映的是短上下文下这项设置的代价：W7900 上 vLLM 双卡，单请求 69.0 对 75.5 tok/s，32 并发 308 对 498 tok/s。",
     ],
     "qwen3.6-27b": [
-        "在 R9700 上，vLLM 跑 Quark W8A8-INT8 并没有更快：双卡单请求 11.8 tok/s，BF16 双卡是 20.8。在 Strix Halo 上它的单请求确实快过 BF16，7.8 对 4.3 tok/s。",
+        "在 R9700 上，vLLM 跑 Quark W8A8-INT8 并不划算：双卡单请求只有 11.8 tok/s，同样双卡的 BF16 是 20.8。在 Strix Halo 上它的单请求确实快过 BF16，7.8 对 4.3 tok/s。",
     ],
     "qwen3.6-35b-a3b": [
-        "这是榜单上部署方式最多的模型：llama.cpp 跑了 BF16、Q8_0 和 UD-Q4_K_M，vLLM 跑了 BF16、AWQ-4bit、Quark W8A8-INT8 和 Intel 的 INT4 AutoRound。其中 AWQ 和 Quark 权重是第三方量化的。",
+        "这是榜单上部署组合最多的模型：llama.cpp 跑了 BF16、Q8_0 和 UD-Q4_K_M，vLLM 跑了 BF16、AWQ-4bit、Quark W8A8-INT8 和 Intel 的 INT4 AutoRound。其中 AWQ 和 Quark 权重是第三方量化的。",
         "在 Strix Halo 上，vLLM 最快的格式是 INT4 AutoRound，单请求 37.8 tok/s，32 并发 189；但单请求还是 llama.cpp 跑 UD-Q4_K_M 更快，49.3 tok/s。",
     ],
     "qwen3.8-flash-next": [
-        "只测了低比特的 UD 版本。R9700 和 W7900 上分摊到四张卡，Strix Halo 则用它唯一的集成显卡跑。",
+        "只测了低比特的 UD 版本。R9700 和 W7900 上分摊到四张卡，Strix Halo 则用自带的单块集成显卡跑。",
     ],
     "diffusiongemma-26b-a4b": [
         "DiffusionGemma 每次对一整块 token 反复细化，而不是一个接一个地生成，所以流式输出的第一个 token 来得晚：在 W7900 上，请求发出 6.3 秒后才到。它跑在 vLLM 的 main 分支上。",
-        "超过 4 个并发后，总吞吐几乎不再增长。W7900 上的服务启动时最多只允许 4 条序列。",
+        "并发超过 4 之后，总吞吐几乎不再增长。W7900 上的服务启动时把最大序列数设成了 4。",
     ],
     "gemma-4-31b": [
         "只测了 Quark W8A8-INT8 版本，用的是 vLLM。",
     ],
     "mimo-v2.6-flash": [
-        "只测了 2 比特的 IQ2_XS_M 版本，分摊到四张卡。512 token 提示的首 token 时间，W7900 是 2.7 秒，R9700 是 5.1 秒。",
+        "只测了 2 比特的 IQ2_XS_M 版本，分摊到四张卡。512 token 提示词的首 token 时延，W7900 是 2.7 秒，R9700 是 5.1 秒。",
     ],
     "deepseek-v4-flash": [
-        "只测了 2 比特的 UD-Q2_K_XL 版本。R9700 和 W7900 分摊到四张卡，Strix Halo 用它唯一的集成显卡跑。",
+        "只测了 2 比特的 UD-Q2_K_XL 版本。R9700 和 W7900 分摊到四张卡，Strix Halo 用自带的单块集成显卡跑。",
     ],
     "glm-5.3-flash": [
         "只测了 2 比特的 UD-IQ2_XXS 版本，用四张卡。没有在 Strix Halo 上测。",
@@ -261,7 +262,11 @@ def auto_points(xs, zh=False):
             best.append(f"{DEV[d]} {f1(b['c1'])} tok/s（{cfg(b, False, True)}）")
         else:
             best.append(f"{DEV[d]} {f1(b['c1'])} tok/s ({cfg(b, False)})")
-    pts.append(("各设备单请求最快：" + "；".join(best) + "。") if zh else ("Fastest single request on each device: " + "; ".join(best) + "."))
+    if len(xs) == 1:
+        x = xs[0]
+        pts.append(f"单请求 {f1(x['c1'])} tok/s。" if zh else f"Single request: {f1(x['c1'])} tok/s.")
+    else:
+        pts.append(("各设备单请求最快：" + "；".join(best) + "。") if zh else ("Fastest single request on each device: " + "; ".join(best) + "."))
     # highest total throughput
     b = max((x for x in xs if x["c32"]), key=lambda x: x["c32"])
     if len(xs) > 1:
@@ -298,8 +303,8 @@ def auto_points(xs, zh=False):
         if "vLLM" in e and "llama.cpp" in e:
             v, l = e["vLLM"], e["llama.cpp"]
             if zh:
-                loc = f"{DEV[d]} {g} 卡" if g > 1 else DEV[d]
-                pts.append(f"{loc} 上同样的 {q} 权重：vLLM 单请求 {f1(v['c1'])} tok/s，32 并发 {f0(v['c32'])}；"
+                loc = f"{DEV[d]} {g} 卡上" if g > 1 else f"{DEV[d]} 上"
+                pts.append(f"{loc}同样的 {q} 权重：vLLM 单请求 {f1(v['c1'])} tok/s，32 并发 {f0(v['c32'])}；"
                            f"llama.cpp 分别是 {f1(l['c1'])} 和 {f0(l['c32'])}。")
             else:
                 gp = f" on {g} GPUs" if g > 1 else ""
@@ -314,7 +319,7 @@ def auto_points(xs, zh=False):
         peak_c, peak = max(x["curve"].items(), key=lambda kv: kv[1])
         if peak_c < 32 and x["c32"] < 0.85 * peak:
             if zh:
-                pts.append(f"{cfg(x, True, True)} 这组配置的总吞吐在 {peak_c} 并发时到顶，为 {f0(peak)} tok/s，到 32 并发反而降到 {f0(x['c32'])}。")
+                pts.append(f"配置（{cfg(x, True, True)}）的总吞吐在 {peak_c} 并发时达到峰值 {f0(peak)} tok/s，32 并发时反而降到 {f0(x['c32'])}。")
             else:
                 pts.append(
                     f"With {cfg(x)}, total throughput peaked at {f0(peak)} tok/s with {peak_c} requests and fell to {f0(x['c32'])} at 32."
@@ -328,9 +333,9 @@ METHOD = [
     "R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page.",
 ]
 METHOD_ZH = [
-    "测试方法：用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求，提示 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个点先预热，再取三次运行的中位数。提示只有文本。",
-    "\u201c单请求\u201d是一个用户实际看到的解码速度；\u201c32 并发\u201d是 32 个请求合计的解码速度。TTFT 是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示可能部分命中前缀缓存，所以不列 TTFT。",
-    "R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的配方页上。",
+    "用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。",
+    "\u201c单请求\u201d是一个用户实际看到的解码速度；\u201c32 并发\u201d是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。",
+    "R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。",
 ]
 
 
@@ -346,7 +351,7 @@ def table(xs, zh=False):
         rows.append([DEV[x["dev"]], x["engine"], x["quant"], str(x["gpus"]),
                      f1(x["c1"]) if x["c1"] else "\u2014", f0(x["c32"]) if x["c32"] else "\u2014",
                      f0(x["ttft"]) if x["ttft"] else "\u2014", month(x["month"], zh)])
-    head = (["设备", "引擎", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"] if zh
+    head = (["设备", "引擎", "权重格式", "卡数", "单请求 tok/s", "32 并发 tok/s", "TTFT ms", "测试时间"] if zh
             else ["Device", "Engine", "Weights", "GPUs", "1 req tok/s", "32 req tok/s", "TTFT ms", "Date"])
     body = ",\n".join("        [" + ", ".join(js(c) for c in r) + "]" for r in rows)
     return (f"      <Table\n        head={{{js(head)}}}\n        numericFrom={{3}}\n        emphasis={{{js(emph)}}}\n"
@@ -378,13 +383,19 @@ def model_post(m, xs, rows_all, zh=False):
     b = max((x for x in xs if x["c1"]), key=lambda x: x["c1"])
     sources = sorted({x["source"] for x in xs if x["source"]})
     if zh:
-        title = f"{name} 在 AMD Radeon 上的全部实测部署"
+        title = f"{name} 在 AMD Radeon 上的全部实测结果"
         desc_zh = MODEL_ZH[slug]
         sp = " " if desc_zh[0].isascii() else ""
-        lead = (f"{name} 是{sp}{desc_zh}。我们在 {join_list([DEV_LONG[d] for d in devs], True)} 上测了它的 {len(xs)} 种部署，"
-                f"引擎用了 {join_list(engines, True)}，权重格式 {len(quants)} 种。本文把这些结果放在一起对比。")
-        excerpt = (f"{name} 在 {'、'.join(DEV[d] for d in devs)} 上共 {len(xs)} 种实测部署。"
-                   f"单请求最快：{f1(b['c1'])} tok/s（{cfg(b, True, True)}）。")
+        where = join_list([DEV_LONG_ZH[d] for d in devs], True)
+        where += "上" if where.endswith("）") else " 上"
+        if len(xs) > 1:
+            lead = (f"{name} 是{sp}{desc_zh}。我们在 {where}测了它的 {len(xs)} 种部署配置，"
+                    f"引擎为 {join_list(engines, True)}，共 {len(quants)} 种权重格式。本文把这些结果放在一起对比。")
+            excerpt = (f"{name} 在 {'、'.join(DEV[d] for d in devs)} 上共 {len(xs)} 种实测部署。"
+                       f"单请求最快：{f1(b['c1'])} tok/s（{cfg(b, True, True)}）。")
+        else:
+            lead = f"{name} 是{sp}{desc_zh}。我们在 {where}测了它的一种部署：{cfg(b, False, True)}。"
+            excerpt = f"{name} 在 {DEV[b['dev']]} 上的实测部署：单请求 {f1(b['c1'])} tok/s（{cfg(b, False, True)}）。"
         tags = ["模型", name] + [DEV[d] for d in devs] + engines
         h = ["全部部署", "从数据看", "权重来源", "测试方法与配方"]
         intro = "加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"
@@ -395,11 +406,15 @@ def model_post(m, xs, rows_all, zh=False):
         minutes = 3
     else:
         title = name + " on AMD Radeon: every deployment we measured"
-        lead = (f"{name} is {desc}. We measured {len(xs)} deployment{'s' if len(xs) > 1 else ''} of it on "
-                f"{join_list([DEV_LONG[d] for d in devs], False)}, "
-                f"with {' and '.join(engines)} and {len(quants)} weight format{'s' if len(quants) > 1 else ''}. This post puts them side by side.")
-        excerpt = (f"{len(xs)} measured deployment{'s' if len(xs) > 1 else ''} of {name} across "
-                   f"{', '.join(DEV[d] for d in devs)}. Fastest single request: {f1(b['c1'])} tok/s with {cfg(b)}.")
+        if len(xs) > 1:
+            lead = (f"{name} is {desc}. We measured {len(xs)} deployments of it on "
+                    f"{join_list([DEV_LONG[d] for d in devs], False)}, "
+                    f"with {' and '.join(engines)} and {len(quants)} weight format{'s' if len(quants) > 1 else ''}. This post puts them side by side.")
+            excerpt = (f"{len(xs)} measured deployments of {name} across "
+                       f"{', '.join(DEV[d] for d in devs)}. Fastest single request: {f1(b['c1'])} tok/s with {cfg(b)}.")
+        else:
+            lead = f"{name} is {desc}. We measured one deployment of it on {DEV_LONG[b['dev']]}: {cfg(b, False)}."
+            excerpt = f"One measured deployment of {name} on {DEV[b['dev']]}: {f1(b['c1'])} tok/s for a single request with {cfg(b, False)}."
         tags = ["Model", name] + [DEV[d] for d in devs] + engines
         h = ["All deployments", "What the numbers say", "Weights", "Method and recipes"]
         intro = "Bold rows are the fastest single-request setup on each device. GPUs is the number of cards the server used; req means concurrent requests."
@@ -438,12 +453,12 @@ ENGINE_INTRO = {
 }
 ENGINE_INTRO_ZH = {
     "vllm": [
-        "三台设备上都跑了 vLLM。BF16 权重用它跑，ROCm 上它支持的量化格式也用它跑：AWQ、AMD Quark W8A8-INT8 和 Intel AutoRound INT4。DiffusionGemma 需要 vLLM 的 main 分支，单独标成 vLLM (main)。",
-        "每条结果都绑定固定版本的镜像，不用会变的标签；每一行的镜像和完整启动命令都在对应设备的配方页上。R9700 上的服务加了 --attention-backend TRITON_ATTN。",
+        "三台设备都测了 vLLM，用它跑 BF16 权重，以及它在 ROCm 上支持的量化格式：AWQ、AMD Quark W8A8-INT8 和 Intel AutoRound INT4。DiffusionGemma 需要 vLLM 的 main 分支，单独标成 vLLM (main)。",
+        "每条结果都绑定固定版本的镜像，不用会变的标签；每一行的镜像和完整启动命令都在对应设备的“部署配方”页上。R9700 上的服务加了 --attention-backend TRITON_ATTN。",
     ],
     "llamacpp": [
         "榜单上所有 GGUF 结果都用 llama.cpp 的 ROCm/HIP 后端跑，三台设备都有。典型的启动命令是 llama-server -ngl 999 -fa on -c 32768 -np 32：所有层放到 GPU 上，打开 flash attention，32 个并行槽位共用 32K 上下文。多卡运行时按层切到各张卡上。在 Strix Halo 上，最大的几个模型按配方加 --no-mmap 或 --load-mode none 加载。",
-        "每条结果都绑定固定版本的镜像，不用会变的标签。Strix Halo 上 7 月测的模型，用的 llama.cpp 比 11 月新加的模型旧，跨这两批比较时要留意。每一行的镜像和命令都在对应设备的配方页上。",
+        "每条结果都绑定固定版本的镜像，不用会变的标签。Strix Halo 上 7 月测的模型所用的 llama.cpp 版本，比 11 月新增模型所用的旧，跨这两批比较时要留意。每一行的镜像和命令都在对应设备的“部署配方”页上。",
     ],
 }
 ENGINE_NOTES = {
@@ -486,7 +501,7 @@ def engine_post(key, rows_all, zh=False):
                    f"能跑什么、跑多快，{name} 在哪些情况下占优、在哪些情况下吃亏。")
         lead = f"榜单上有 {len(xs)} 条结果是用 {name} 跑的，覆盖 {len(models)} 个模型（按设备分：{counts}）。本文把它们集中到一处。"
         tags = ["引擎", name] + [DEV[d] for d in devs]
-        h_run, h_see = "我们怎么跑", "我们看到的情况"
+        h_run, h_see = "运行方式", "从数据看"
         intro, notes, method = ENGINE_INTRO_ZH[key], ENGINE_NOTES_ZH[key], METHOD_ZH
     else:
         counts = "; ".join(f"{DEV[d]} {sum(1 for x in xs if x['dev'] == d)}" for d in devs)
@@ -516,7 +531,7 @@ def engine_post(key, rows_all, zh=False):
         pairs.sort(key=lambda r: (r[0], r[1]))
         if zh:
             h2, p, head = ("vLLM 与 llama.cpp：相同权重、相同卡数", "单请求的解码 tok/s，以及 32 并发时的总 tok/s。",
-                           ["模型", "设备", "权重", "卡数", "vLLM 单请求", "llama.cpp 单请求", "vLLM 32 并发", "llama.cpp 32 并发"])
+                           ["模型", "设备", "权重格式", "卡数", "vLLM 单请求", "llama.cpp 单请求", "vLLM 32 并发", "llama.cpp 32 并发"])
         else:
             h2, p, head = ("vLLM against llama.cpp, same weights and cards", "Decode tok/s for one request and total tok/s at 32 concurrent requests.",
                            ["Model", "Device", "Weights", "GPUs", "vLLM 1 req", "llama.cpp 1 req", "vLLM 32 req", "llama.cpp 32 req"])
@@ -536,7 +551,7 @@ def engine_post(key, rows_all, zh=False):
                     qrows.append([mname[s], DEV[d], f1(full["c1"]), f1(q8["c1"]), f1(q4["c1"]), q4["quant"], f"{r:.1f} 倍" if zh else f"{r:.1f}x"])
         if zh:
             h2, p, head = ("单卡上的量化收益", "单请求解码 tok/s。最后一列是 4 比特版本相对 BF16 或 F16 的倍数。",
-                           ["模型", "设备", "BF16/F16", "Q8_0", "4 比特", "4 比特格式", "4 比特比 16 位"])
+                           ["模型", "设备", "BF16/F16", "Q8_0", "4 比特", "4 比特格式", "4 比特相对 16 比特"])
         else:
             h2, p, head = ("Quantization on one card", "Single-request decode tok/s. The last column is the 4-bit build against BF16 or F16.",
                            ["Model", "Device", "BF16/F16", "Q8_0", "4-bit", "4-bit format", "4-bit vs 16-bit"])
@@ -548,7 +563,7 @@ def engine_post(key, rows_all, zh=False):
         rows.append([mname[x["slug"]], DEV[x["dev"]], x["quant"], str(x["gpus"]), f1(x["c1"]) if x["c1"] else "\u2014", f0(x["c32"]) if x["c32"] else "\u2014"])
     if zh:
         h_all, p_all, head = (f"全部 {name} 结果", "每个模型都有单独一篇文章，列出它在各个引擎上的全部部署。",
-                              ["模型", "设备", "权重", "卡数", "单请求 tok/s", "32 并发 tok/s"])
+                              ["模型", "设备", "权重格式", "卡数", "单请求 tok/s", "32 并发 tok/s"])
         h_posts, h_method = "各模型文章", "测试方法"
     else:
         h_all, p_all, head = (f"Every {name} result", "Each model has its own post with all of its deployments on every engine.",
@@ -583,9 +598,30 @@ def check_notes(rows_all):
         raise SystemExit("numbers not found in bundle: " + repr(bad))
 
 
+def check_pairs():
+    """English and Chinese hand-written texts must use the same numbers."""
+    num = re.compile(r"(?<![A-Za-z0-9_.\-])\d+(?:,\d{3})*(?:\.\d+)?")
+
+    def nums(s, zh):
+        if zh:
+            s = re.sub(r"\d+ 月", "", s)
+        return set(num.findall(s)) - {"1"}  # "1 request" is written as 单请求
+
+    pairs = [(desc, MODEL_ZH[slug]) for slug, _, _, desc in MODELS]
+    for en, zh in ((NOTES, NOTES_ZH), (ENGINE_NOTES, ENGINE_NOTES_ZH), (ENGINE_INTRO, ENGINE_INTRO_ZH)):
+        assert set(en) == set(zh) and all(len(en[k]) == len(zh[k]) for k in en)
+        pairs += [p for k in en for p in zip(en[k], zh[k])]
+    assert len(METHOD) == len(METHOD_ZH)
+    pairs += list(zip(METHOD, METHOD_ZH))
+    bad = [(sorted(nums(e, False) ^ nums(z, True)), e[:60]) for e, z in pairs if nums(e, False) != nums(z, True)]
+    if bad:
+        raise SystemExit("English and Chinese numbers differ: " + repr(bad))
+
+
 def main():
     bundle, rows_all = load(sys.argv[1])
     check_notes(rows_all)
+    check_pairs()
     by = collections.defaultdict(list)
     for x in rows_all:
         by[x["slug"]].append(x)

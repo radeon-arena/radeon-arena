@@ -12,8 +12,8 @@ const STATUS: Record<
     cls: "border-ink-600 bg-ink-800 text-zinc-400",
     icon: "★",
     title: "Measured by RadeonArena's own runner — first-party, trusted",
-    labelZh: "自测",
-    titleZh: "Radeon Arena 自己的测试机实测",
+    labelZh: "本站实测",
+    titleZh: "由 Radeon Arena 自有测试机实测，可信",
   },
   verified: {
     label: "Verified",
@@ -21,7 +21,7 @@ const STATUS: Record<
     icon: "✓",
     title: "A runner reran this recipe and matched the reported value",
     labelZh: "已验证",
-    titleZh: "测试机重跑了这份配方，结果与提交的数值一致",
+    titleZh: "测试机复测了这份配方，结果与提交的数值一致",
   },
   pending: {
     label: "Pending",
@@ -29,7 +29,7 @@ const STATUS: Record<
     icon: "…",
     title: "User-submitted — awaiting a verification rerun",
     labelZh: "待验证",
-    titleZh: "用户提交，等待重跑验证",
+    titleZh: "用户提交，等待复测",
   },
   failed: {
     label: "Repro failed",
@@ -38,7 +38,7 @@ const STATUS: Record<
     title:
       "A rerun did not match the reported value. Kept on the board and open for discussion (not removed).",
     labelZh: "复现未通过",
-    titleZh: "重跑结果与提交的数值不一致。保留在榜单上待讨论，不删除。",
+    titleZh: "复测结果与提交的数值不一致。保留在榜单上待讨论，不删除。",
   },
 };
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { API } from "@/lib/site";
 import { alternates } from "@/lib/i18n";
-import { C, Code, CodeLink, DEVICE, Endpoint, ERROR, FOLLOW_UP, H3, POLL, PROFILE, REGISTER, Section, Table, TASK, VALIDATE } from "@/views/docsParts";
+import { C, Code, CodeLink, DEVICE_ZH, Endpoint, ERROR, FOLLOW_UP_ZH, H3, POLL, PROFILE, REGISTER_ZH, Section, Table, TASK, VALIDATE_ZH } from "@/views/docsParts";
 
 export const metadata: Metadata = {
   title: "API 文档 - Radeon Arena",
@@ -79,8 +79,8 @@ export default function ApiDocsPageZh() {
             <p className="text-sm font-medium text-radeon-500">Radeon Arena API</p>
             <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50">API 文档</h1>
             <p className="mt-4 text-lg leading-8 text-zinc-400">
-              通过 Radeon Arena API，你的应用或 AI Agent 可以调用 AMD GPU 支持助手。它回答在 AMD 显卡、Ryzen AI 和
-              ROCm 上做 AI 的问题，诊断报错，编写本地大模型部署方案，也可以直接检索支持知识库。回答引用 AMD 官方 ROCm
+              通过 Radeon Arena API，你的应用或 AI 智能体可以调用 AMD GPU 支持助手。它回答在 AMD 显卡、Ryzen AI 和
+              ROCm 上做 AI 的问题，诊断报错，编写本地大模型部署方案；你也可以直接检索它的支持知识库。回答引用 AMD 官方 ROCm
               社区支持 FAQ 和 AMD 公开文档，知识库每天收录新的官方资料。
             </p>
             <nav aria-label="本页目录" className="mt-6 lg:hidden">
@@ -110,7 +110,7 @@ export default function ApiDocsPageZh() {
 
           <Section id="quickstart" title="快速上手">
             <p><strong className="text-zinc-100">1. 拿到令牌。</strong>生成一个 UUID 作为 <C>install_id</C>，再验证邮箱。</p>
-            <Code lang="bash">{REGISTER}</Code>
+            <Code lang="bash">{REGISTER_ZH}</Code>
             <p><strong className="text-zinc-100">2. 提问。</strong></p>
             <Code lang="bash">{ASK_ZH}</Code>
             <p>
@@ -178,7 +178,7 @@ export default function ApiDocsPageZh() {
                 <span key="2"><C>400</C> <C>expired_token</C>：设备码已过期或已用过</span>,
               ]}
             />
-            <Code lang="bash">{DEVICE}</Code>
+            <Code lang="bash">{DEVICE_ZH}</Code>
             <H3>令牌有效期</H3>
             <p>
               设备授权得到的令牌 90 天不用就失效；邮箱验证得到的令牌不会按时间失效。设备令牌可以在
@@ -241,11 +241,11 @@ export default function ApiDocsPageZh() {
             <H3>示例</H3>
             <Code lang="json">{EXAMPLES_ZH}</Code>
             <p>在同一任务里追问：</p>
-            <Code lang="json">{FOLLOW_UP}</Code>
+            <Code lang="json">{FOLLOW_UP_ZH}</Code>
             <H3 id="profile">profile 对象</H3>
             <Code lang="json">{PROFILE}</Code>
             <p>
-              <C>gfx</C> 是 GPU 架构代号，如 <C>gfx1151</C> 或 <C>gfx1201</C>，最多 16 块 GPU。profile 的字段都是可选的，给得越全，助手追问越少。
+              <C>gfx</C> 是 GPU 架构代号，如 <C>gfx1151</C> 或 <C>gfx1201</C>；<C>gpus</C> 最多列 16 块 GPU。profile 的字段都是可选的，给得越全，助手追问越少。
             </p>
           </Section>
 
@@ -260,7 +260,7 @@ export default function ApiDocsPageZh() {
               ]}
             />
             <p>
-              回复在 <C>task.status.message.parts</C> 里：一个 text 部件是便于阅读的摘要，一个 data 部件的 <C>schema</C> 字段标明类型。程序请读取 data 部件。
+              回复在 <C>task.status.message.parts</C> 里：一个 text 部件是便于阅读的摘要，一个 data 部件的 <C>schema</C> 字段标明类型。程序请读取 data 部件。下面的示例是一次英文提问的回复。
             </p>
             <Code lang="json">{TASK}</Code>
             <p>错误回复的结构相同：</p>
@@ -293,7 +293,7 @@ export default function ApiDocsPageZh() {
                 [<CodeLink key="1" href={API.replySchema}>reply.v1.json</CodeLink>, <span key="2">每条回复的 data 部件。顶层匹配任意回复类型，各类型在 <C>$defs</C> 下。</span>],
               ]}
             />
-            <Code lang="python">{VALIDATE}</Code>
+            <Code lang="python">{VALIDATE_ZH}</Code>
           </Section>
 
           <Section id="errors" title="错误">
@@ -366,7 +366,7 @@ export default function ApiDocsPageZh() {
                 [<C key="1">0.2.8</C>, "每个账户都必须有已验证的邮箱。GitHub 登录读取公开邮箱或已验证的主邮箱；没有时，使用者先用验证码确认邮箱，才能批准设备。不收集手机号。"],
                 [<C key="1">0.2.4</C>, "知识库还收录 AMD 公开文档（ROCm 文档与博客、ROCm CLI、AMD Skills、AMD AI Playbooks 等），每天更新。这些条目的引用链接到原始页面。"],
                 [<C key="1">0.2.2</C>, <span key="2">部署方案以跑通接口为目标，不再引用实测 tok/s，也不再包含跑分或调优步骤。</span>],
-                [<C key="1">0.2.1</C>, <span key="2">参考配方每 15 分钟从已发布的榜单刷新。<C>based_on</C> 里的配方 id 跨设备唯一：与 Strix Halo 结果同名的其他设备结果加设备后缀，如 <C>qwen3-14b-bf16-llamacpp-w7900</C>。</span>],
+                [<C key="1">0.2.1</C>, <span key="2">方案引用的跑分数据每 15 分钟从已发布的榜单刷新。<C>based_on</C> 里的配方 id 跨设备唯一：与 Strix Halo 结果同名的其他设备结果加设备后缀，如 <C>qwen3-14b-bf16-llamacpp-w7900</C>。</span>],
                 [<C key="1">0.2.0</C>, <span key="2">新增 <C>language</C> 选项；错误码改为固定标识；提供 JSON Schema；Agent Card 附请求示例。</span>],
                 [<C key="1">0.1.0</C>, "部署方案、问答、排障和知识检索。"],
               ]}

@@ -180,7 +180,7 @@ export function RecipesView({ hw }: { hw: string }) {
             <h2 className="mt-2 text-2xl font-semibold text-zinc-100">{zh ? "部署配方" : "Recipes"}</h2>
             <p className="mt-2 max-w-3xl text-sm text-zinc-400">
               {zh
-                ? "来自 radeonrun 的可组合配置：模型、设备、启动方式和测试参数各自独立。镜像可以来自任意 OCI 仓库；仓库提供摘要时，结果会同时保留请求的镜像引用和不可变的 digest。"
+                ? "来自 radeonrun 的可组合配置：模型、设备、启动方式和测试参数各自独立。镜像可以来自任意 OCI 仓库；仓库提供摘要（digest）时，结果会同时保留请求的镜像引用和这个不可变的 digest。"
                 : "Composable model, device, launch, and benchmark specs from radeonrun. Images may come from any OCI registry; results retain the requested ref and immutable digest when the registry exposes one."}
             </p>
           </div>

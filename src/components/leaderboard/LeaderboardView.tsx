@@ -219,8 +219,6 @@ export function LeaderboardView({ hw }: { hw: string }) {
   if (error) return <p className="py-12 text-center text-zinc-500">{zh ? "榜单数据加载失败。" : "Failed to load leaderboard snapshot."}</p>;
   if (!snap) return <p className="py-12 text-center text-zinc-500">{zh ? "正在加载榜单数据…" : "Loading leaderboard snapshot…"}</p>;
 
-  const intervalMin = Math.round((snap.metadata.snapshotIntervalHours ?? 0.5) * 60);
-
   return (
     <div className="space-y-4">
       {/* Test Type + Concurrency */}
@@ -265,7 +263,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             <circle cx="12" cy="12" r="9" />
             <path d="M12 7v5l3 2" strokeLinecap="round" />
           </svg>
-          {zh ? "最近更新：" : "Last updated: "}<span className="font-medium text-zinc-200">{timeAgo(snap.generatedAt, zh)}</span>
+          {zh ? "数据生成于：" : "Data generated: "}<span className="font-medium text-zinc-200">{timeAgo(snap.generatedAt, zh)}</span>
           <span className="text-zinc-600">({fmtDateTime(snap.generatedAt, zh)})</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
@@ -273,10 +271,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             <rect x="4" y="4" width="16" height="16" rx="2" />
             <path d="M8 9h8M8 13h6" strokeLinecap="round" />
           </svg>
-          {zh ? "显示：" : "Showing: "}<span className="font-medium text-radeon-300">{rows.length}</span>{zh ? ` / ${list.length} 条跑分` : ` of ${list.length} benchmarks`}
-        </span>
-        <span>
-          {zh ? "更新间隔：" : "Update interval: "}<span className="font-medium text-zinc-200">{zh ? `每 ${intervalMin} 分钟` : `Every ${intervalMin} minutes`}</span>
+          {zh ? "显示：" : "Showing: "}<span className="font-medium text-radeon-300">{rows.length}</span>{zh ? ` / ${list.length} 条结果` : ` of ${list.length} benchmarks`}
         </span>
       </div>
 
@@ -315,7 +310,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
         <select value={verifyFilter} onChange={(e) => setVerifyFilter(e.target.value)} className="rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-200">
           <option value="all">{zh ? "全部状态" : "All Status"}</option>
           <option value="verified">{zh ? "✓ 已验证" : "✓ Verified"}</option>
-          <option value="self">{zh ? "★ 自测" : "★ First-party"}</option>
+          <option value="self">{zh ? "★ 本站实测" : "★ First-party"}</option>
           <option value="pending">{zh ? "… 待验证" : "… Pending"}</option>
           <option value="failed">{zh ? "⚠ 复现未通过" : "⚠ Repro-failed"}</option>
         </select>
@@ -344,7 +339,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
               <th className="px-4 py-3">{zh ? "量化" : "Quant."}</th>
               <th className="px-4 py-3">{zh ? "卡数" : "GPUs"}</th>
               <th className="px-4 py-3 text-right">{zh ? "tok/s" : "Tokens/sec"}</th>
-              <th className="px-4 py-3">{family === "pp" ? (zh ? "首字延迟" : "TTFT") : (zh ? "类型" : "Type")}</th>
+              <th className="px-4 py-3">{family === "pp" ? (zh ? "首 token 时延" : "TTFT") : (zh ? "类型" : "Type")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800">

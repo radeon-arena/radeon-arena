@@ -12,6 +12,12 @@ export function LangSwitch({ lang }: { lang: Lang }) {
     <a
       href={target}
       hrefLang={lang === "en" ? "zh-CN" : "en"}
+      // Keep the query string and #anchor (e.g. a docs section) when switching.
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        window.location.href = target + window.location.search + window.location.hash;
+      }}
       className="shrink-0 rounded-md border border-ink-700 px-2.5 py-1 text-zinc-300 hover:bg-ink-800"
     >
       {lang === "en" ? "中文" : "English"}

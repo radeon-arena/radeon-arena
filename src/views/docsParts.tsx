@@ -214,3 +214,19 @@ reply_schema = httpx.get("${API.replySchema}").json()
 data = next(p["data"] for p in task["status"]["message"]["parts"] if "data" in p)
 jsonschema.validate(data, reply_schema)  # raises ValidationError if the reply does not match`;
 
+
+// Chinese page: same requests, comments and sample text in Chinese. Field names
+// and values sent to the API are unchanged.
+export const REGISTER_ZH = REGISTER.replace("# After the code arrives:", "# 收到验证码后：");
+export const DEVICE_ZH = DEVICE.replace(
+  "# Show verification_uri to the person, then poll every 3 seconds:",
+  "# 把 verification_uri 给使用者打开，然后每 3 秒轮询一次：",
+).replace(
+  '# => 428 {"error": "authorization_pending"} until approved, then',
+  '# => 批准前返回 428 {"error": "authorization_pending"}，批准后返回',
+);
+export const FOLLOW_UP_ZH = FOLLOW_UP.replace("It is Ubuntu 24.04 with ROCm 7.2.1.", "系统是 Ubuntu 24.04，ROCm 7.2.1。");
+export const VALIDATE_ZH = VALIDATE.replace("# task is the result of GetTask", "# task 是 GetTask 的返回结果").replace(
+  "# raises ValidationError if the reply does not match",
+  "# 回复不符合 Schema 时抛出 ValidationError",
+);

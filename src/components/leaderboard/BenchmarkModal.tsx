@@ -84,7 +84,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
         {/* Header */}
         <div className="flex items-start justify-between gap-4 border-b border-ink-800 px-6 py-5">
           <h2 className="text-lg font-semibold text-zinc-100 break-all">
-            {data?.modelFullPath || data?.modelName || "Benchmark"}
+            {data?.modelFullPath || data?.modelName || (zh ? "跑分详情" : "Benchmark")}
           </h2>
           <button
             onClick={onClose}
@@ -95,7 +95,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
           </button>
         </div>
 
-        {error && <p className="px-6 py-10 text-center text-zinc-500">{zh ? "这条跑分加载失败。" : "Failed to load this benchmark."}</p>}
+        {error && <p className="px-6 py-10 text-center text-zinc-500">{zh ? "这条结果加载失败。" : "Failed to load this benchmark."}</p>}
         {!error && !data && <p className="px-6 py-10 text-center text-zinc-500">{zh ? "加载中…" : "Loading…"}</p>}
 
         {data && (
@@ -124,14 +124,14 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
               {data.verification && (
                 <div className="mt-3 rounded-lg border border-ink-700 bg-ink-950 p-3 text-xs text-zinc-400">
                   <p>
-                    {zh ? "复核：提交值 " : "Verification: reported "}
+                    {zh ? "复测：提交值 " : "Verification: reported "}
                     <span className="font-mono text-zinc-200">{data.verification.reportedTps ?? "—"}</span>{zh ? "，复测值 " : " vs measured "}
                     <span className="font-mono text-zinc-200">{data.verification.measuredTps ?? "—"}</span> tok/s
                     {typeof data.verification.deviationPct === "number" ? <> · Δ {data.verification.deviationPct}%</> : null}
                   </p>
                   {data.verification.runner && (
                     <p className="mt-0.5 text-zinc-600">
-                      {zh ? "复测：" : "reran by "}{data.verification.runner}
+                      {zh ? "复测方：" : "reran by "}{data.verification.runner}
                       {data.verification.verifiedAt ? ` · ${fmtDate(data.verification.verifiedAt, lang)}` : ""}
                     </p>
                   )}
@@ -163,7 +163,7 @@ export function BenchmarkModal({ id, onClose }: { id: string; onClose: () => voi
                   {zh ? "在 Hugging Face 查看 ↗" : "View on Hugging Face ↗"}
                 </a>
               )}
-              <button onClick={copyRecipe} className="btn-ghost">{zh ? "复制完整配置" : "Copy resolved configuration"}</button>
+              <button onClick={copyRecipe} className="btn-ghost">{zh ? "复制解析后的完整配置" : "Copy resolved configuration"}</button>
             </div>
 
             {/* Recipe */}
@@ -295,7 +295,7 @@ function ReproducibilitySection({ benchmark, zh }: { benchmark: Benchmark; zh: b
   }
   if (imageRequested && imageRequested !== image) rows.push({ label: zh ? "请求的镜像" : "Requested image", value: imageRequested, href: imageHref(imageRequested) });
   if (imageResolved) rows.push({ label: zh ? "解析后的镜像" : "Resolved image", value: imageResolved, href: imageHref(imageResolved) });
-  if (imageDigest) rows.push({ label: zh ? "仓库 digest" : "Registry digest", value: imageDigest });
+  if (imageDigest) rows.push({ label: zh ? "镜像 digest" : "Registry digest", value: imageDigest });
   if (imageCommit) rows.push({ label: zh ? "镜像构建 commit" : "Image build commit", value: imageCommit });
   if (imageId) rows.push({ label: zh ? "本地镜像 ID" : "Local image ID", value: imageId });
   if (engineLine.trim()) rows.push({ label: zh ? "引擎" : "Engine", value: engineLine });

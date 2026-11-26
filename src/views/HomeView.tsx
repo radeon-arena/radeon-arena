@@ -12,14 +12,14 @@ const FEATURES = [
     ],
   },
   {
-    title: ["Multiple Runtimes", "两种推理引擎"],
+    title: ["Multiple Runtimes", "多种推理引擎"],
     body: [
-      "Compare vLLM and llama.cpp across ROCm/HIP and Vulkan backends.",
-      "对比 vLLM 和 llama.cpp 在 ROCm/HIP 与 Vulkan 后端上的表现。",
+      "Compare vLLM and llama.cpp on ROCm/HIP.",
+      "对比 vLLM 和 llama.cpp 在 ROCm/HIP 上的表现。",
     ],
   },
   {
-    title: ["Full Transparency", "可复现"],
+    title: ["Full Transparency", "公开透明"],
     body: [
       "View complete recipes, engine versions, quantization, and detailed benchmark results.",
       "每条结果都附完整配方、引擎版本、量化格式和逐项测试数据。",
@@ -33,7 +33,7 @@ export function HomeView({ lang }: { lang: Lang }) {
     <div>
       <div className="border-b border-ink-800 bg-ink-950/50">
         <div className="mx-auto max-w-7xl px-4 py-2 text-center text-xs text-zinc-500 sm:px-6">
-          {t(lang, "Benchmarks run with:", "跑分用到：")}{" "}
+          {t(lang, "Benchmarks run with:", "跑分工具：")}{" "}
           <a href={PROJECTS.vllmDocker.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.vllmDocker.name}</a> ·{" "}
           <a href={PROJECTS.radeonrun.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.radeonrun.name}</a> ·{" "}
           <a href={SITE.blog} className="text-zinc-400 hover:text-radeon-400">{t(lang, "ROCm Blog", "ROCm 博客")}</a> ·{" "}
@@ -50,7 +50,7 @@ export function HomeView({ lang }: { lang: Lang }) {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href={lp(lang, "/strix/leaderboard")} className="btn-primary">{t(lang, "View Leaderboard", "查看榜单")}</Link>
           <Link href={lp(lang, "/strix/recipes")} className="btn-ghost">{t(lang, "Browse Recipes", "浏览部署配方")}</Link>
-          <Link href={lp(lang, "/strix/submit")} className="btn-ghost">{t(lang, "Submit Benchmark", "提交跑分")}</Link>
+          <Link href={lp(lang, "/strix/submit")} className="btn-ghost">{t(lang, "Submit Benchmark", "提交配方")}</Link>
         </div>
       </section>
 
@@ -77,7 +77,7 @@ export function HomeView({ lang }: { lang: Lang }) {
               {t(
                 lang,
                 "Let your AI agent ask about ROCm, drivers and local LLMs on AMD GPUs over A2A, with structured JSON in and out. Answers cite the official AMD ROCm community support FAQ. Free with an email code or GitHub sign-in.",
-                "让你的 AI Agent 通过 A2A 协议询问 AMD 显卡上的 ROCm、驱动和本地大模型问题，输入输出都是结构化 JSON。回答会注明出处，引用 AMD 官方 ROCm 社区支持 FAQ。用邮箱验证码或 GitHub 登录即可免费使用。",
+                "让你的 AI 智能体通过 A2A 协议询问 AMD 显卡上的 ROCm、驱动和本地大模型问题，输入输出都是结构化 JSON。回答会注明出处，引用 AMD 官方 ROCm 社区支持 FAQ。用邮箱验证码或 GitHub 登录即可免费使用。",
               )}
             </p>
           </div>
@@ -91,12 +91,12 @@ export function HomeView({ lang }: { lang: Lang }) {
       {/* Open-source engines that produced the data */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
         <div className="card p-8">
-          <h2 className="text-xl font-semibold text-zinc-100">{t(lang, "Benchmark Engines", "跑分用到的项目")}</h2>
+          <h2 className="text-xl font-semibold text-zinc-100">{t(lang, "Benchmark Engines", "跑分所用项目")}</h2>
           <p className="mt-2 max-w-2xl text-sm text-zinc-400">
             {t(
               lang,
               "The numbers on this leaderboard were produced by these open-source inference engines running on AMD ROCm hardware. (The leaderboard itself only collects and displays their results.)",
-              "榜单上的数字由这些开源项目在 AMD ROCm 硬件上跑出来。网站本身只收集和展示结果。",
+              "榜单上的数字是用这些开源项目在 AMD ROCm 硬件上跑出来的。网站本身只收集和展示结果。",
             )}
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
@@ -121,7 +121,7 @@ export function HomeView({ lang }: { lang: Lang }) {
             <p className="mt-1 max-w-2xl text-sm text-zinc-400">
               {t(
                 lang,
-                "Articles and benchmarking notes covering reproducibility, runtime tuning, and practical performance investigations from the community.",
+                "Articles and benchmarking notes on the AMD ROCm blog covering reproducibility, runtime tuning, and practical performance investigations.",
                 "AMD ROCm 博客上关于可复现性、引擎调优和实际性能排查的文章与跑分笔记。",
               )}
             </p>

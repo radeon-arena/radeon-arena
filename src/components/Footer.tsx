@@ -8,7 +8,7 @@ export function Footer({ lang }: { lang: Lang }) {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="grid gap-10 md:grid-cols-4">
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-zinc-200">{t(lang, "Benchmark Engines", "跑分用到的项目")}</h3>
+            <h3 className="mb-3 text-sm font-semibold text-zinc-200">{t(lang, "Benchmark Engines", "跑分所用项目")}</h3>
             <ul className="space-y-2 text-sm">
               {Object.values(PROJECTS).map((p) => (
                 <li key={p.name}>

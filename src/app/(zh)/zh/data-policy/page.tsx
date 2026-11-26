@@ -13,7 +13,7 @@ export default function DataPolicyPageZh() {
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link href="/zh/" className="text-sm text-radeon-400 hover:text-radeon-300">← 返回首页</Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-50">数据政策</h1>
-      <p className="mt-3 text-sm text-zinc-500">最后更新：2026-06-30。如中英文版本不一致，以英文版为准。</p>
+      <p className="mt-3 text-sm text-zinc-500">最后更新：2026-06-30。</p>
 
       <div className="card mt-8 space-y-6 p-7 text-sm leading-7 text-zinc-300">
         <section>

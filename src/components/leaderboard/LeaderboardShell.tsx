@@ -29,7 +29,7 @@ const PAGE_COPY: Record<Lang, Record<TabKey, { title: string; subtitle: string }
   zh: {
     leaderboard: { title: "大模型推理榜单", subtitle: "大模型在 AMD Radeon 显卡上的推理性能排名。" },
     recipes: { title: "部署配方", subtitle: "固定版本的启动命令、模型来源、引擎镜像和实测结果链接。" },
-    users: { title: "贡献者", subtitle: "按提交和验证过的跑分统计的贡献者排名。" },
+    users: { title: "贡献者", subtitle: "按提交及已验证的跑分统计贡献者排名。" },
     submit: { title: "提交配方", subtitle: "准备一份可复现的 radeonrun 配方和实测结果更新。" },
   },
 };

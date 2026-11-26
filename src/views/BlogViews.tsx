@@ -95,7 +95,8 @@ export function blogPostMetadata(lang: Lang, slug: string): Metadata {
     title: `${post.title} - ${t(lang, "Radeon Arena Blog", "Radeon Arena 博客")}`,
     description: post.excerpt,
     alternates: alternates(lang, `/blogs/${post.slug}`),
-    openGraph: { title: post.title, description: post.excerpt, type: "article" },
+    openGraph: { title: post.title, description: post.excerpt, type: "article", locale: lang === "zh" ? "zh_CN" : "en_US" },
+    twitter: { card: "summary", title: post.title, description: post.excerpt },
   };
 }
 

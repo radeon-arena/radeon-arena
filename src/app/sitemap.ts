@@ -32,7 +32,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // with hreflang links to the other.
   const zh = (route: string) => (route === "" ? "/zh" : `/zh${route}`);
   return [...routes, ...posts].flatMap((route) => {
-    const languages = { en: `${BASE_URL}${route}`, "zh-CN": `${BASE_URL}${zh(route)}` };
+    const languages = {
+      en: `${BASE_URL}${route}`,
+      "zh-CN": `${BASE_URL}${zh(route)}`,
+      "x-default": `${BASE_URL}${route}`,
+    };
     return [route, zh(route)].map((path) => ({
       url: `${BASE_URL}${path}`,
       lastModified: now,

@@ -43,7 +43,9 @@ function entryFromBenchmark(
 }
 
 /** Aggregate raw submissions into the per-test leaderboard snapshot. */
-export function buildSnapshot(benchmarks: Benchmark[]): LeaderboardSnapshot {
+// `dataTime` is when the published data was generated; without it the snapshot
+// would claim it was updated the moment the page loaded.
+export function buildSnapshot(benchmarks: Benchmark[], dataTime?: string): LeaderboardSnapshot {
   const byTest = new Map<string, SnapshotEntry[]>();
   for (const b of benchmarks) {
     for (const t of b.tests) {
@@ -71,7 +73,7 @@ export function buildSnapshot(benchmarks: Benchmark[]): LeaderboardSnapshot {
   }
 
   const availableTests = Object.keys(entriesByTest).sort();
-  const now = new Date().toISOString();
+  const now = dataTime || new Date().toISOString();
   return {
     version: 1,
     generatedAt: now,
