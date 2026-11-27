@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { CopyCode } from "../components/CopyCode";
 
 /* Typography primitives: posts are written as JSX, no markdown dependency. */
 
@@ -12,6 +13,9 @@ export function H2({ children }: { children: ReactNode }) {
       {children}
     </h2>
   );
+}
+export function H3({ children }: { children: ReactNode }) {
+  return <h3 className="mt-7 text-base font-semibold text-zinc-100">{children}</h3>;
 }
 export function P({ children }: { children: ReactNode }) {
   return <p className="mt-4 text-[15px] leading-7 text-zinc-300">{children}</p>;
@@ -35,9 +39,12 @@ export function A({ href, children }: { href: string; children: ReactNode }) {
 }
 export function Pre({ children }: { children: string }) {
   return (
-    <pre className="thin-scroll mt-4 overflow-x-auto whitespace-pre-wrap rounded-lg border border-ink-700 bg-ink-850 p-4 font-mono text-[13px] leading-6 text-zinc-200">
-      <code>{children}</code>
-    </pre>
+    <div className="relative mt-4">
+      <pre className="thin-scroll overflow-x-auto whitespace-pre rounded-lg border border-ink-700 bg-ink-850 p-4 pr-16 font-mono text-[13px] leading-6 text-zinc-200">
+        <code>{children}</code>
+      </pre>
+      <CopyCode text={children} />
+    </div>
   );
 }
 // Columns from `numericFrom` on are right-aligned; rows listed in `emphasis` are bold.

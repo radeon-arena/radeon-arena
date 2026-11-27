@@ -2,16 +2,23 @@
 """Generate src/lib/blogModels.tsx: one blog post per model and one per engine,
 in English (ENGINE_POSTS, MODEL_POSTS) and Chinese (ENGINE_POSTS_ZH, MODEL_POSTS_ZH).
 
-Every number in the generated posts comes from the radeonrun bundle passed on
-the command line (the same file the site publishes as /data/bundle.json). The
-hand-written parts below (model descriptions, notes, engine write-ups) must not
-add numbers that are not in the bundle.
+Each post is a promotional tutorial: a hook, what to run on each card, the
+exact download / docker run (or llama.cpp source build) / curl commands of one
+measured row, the results table, tips and links. The per-model angle (title,
+hook, the section that makes the post worth reading) lives in blog_stories.py.
+
+Every number comes from the radeonrun bundle passed on the command line (the
+same file the site publishes as /data/bundle.json); check_notes() rejects
+hand-written numbers that are not measurements, same-model ratios or listed
+facts, and check_pairs() makes the Chinese and English texts agree.
+check-blog-downloads.py verifies on the Hub that every weight file exists.
 
     python3 scripts/gen-blog-posts.py public/data/bundle.json > src/lib/blogModels.tsx
 """
 import collections
 import json
 import re
+import shlex
 import sys
 
 POST_DATE = "2026-11-26"
@@ -95,80 +102,10 @@ MODEL_ZH = {
     "glm-5.3-flash": "智谱 Z.ai GLM 5.3 系列的大型模型",
 }
 
-# Extra hand-written observations. Numbers here were copied from the bundle and
-# are checked against it by check_notes() below. NOTES_ZH says the same in Chinese.
-NOTES = {
-    "qwen3-4b": [
-        "R9700 is the only device with a vLLM run for this model. At 32 requests it reached 1,639 tok/s in total on one card, against 565 for llama.cpp with Q4_K_M on the same card, while llama.cpp Q4_K_M was faster for a single request (123.8 against 70.3 tok/s).",
-    ],
-    "qwen3-30b-a3b": [
-        "The BF16+YaRN rows run the same weights with YaRN rope scaling switched on for long context. The test prompt is only 512 tokens, so they show what the setting costs at short context: on W7900 with vLLM on two cards, 69.0 against 75.5 tok/s for one request and 308 against 498 tok/s at 32 requests.",
-    ],
-    "qwen3.6-27b": [
-        "Quark W8A8-INT8 in vLLM was not a shortcut on R9700: on two cards it gave 11.8 tok/s for one request against 20.8 for BF16 on two cards. On Strix Halo it did beat BF16 for one request, 7.8 against 4.3 tok/s.",
-    ],
-    "qwen3.6-35b-a3b": [
-        "This model has the most variants on the board: BF16, Q8_0 and UD-Q4_K_M in llama.cpp, and BF16, AWQ-4bit, Quark W8A8-INT8 and Intel's INT4 AutoRound in vLLM. The AWQ and Quark weights are third-party quantizations.",
-        "On Strix Halo the fastest vLLM format was INT4 AutoRound, at 37.8 tok/s for one request and 189 at 32, but llama.cpp with UD-Q4_K_M was faster for a single request, at 49.3 tok/s.",
-    ],
-    "qwen3.8-flash-next": [
-        "Only low-bit UD builds were measured. On R9700 and W7900 they are spread over four cards; Strix Halo runs them on its single integrated GPU.",
-    ],
-    "diffusiongemma-26b-a4b": [
-        "DiffusionGemma refines a block of tokens at a time instead of emitting one token after another, so the first streamed token arrives late: 6.3 seconds after the request on W7900. It runs on vLLM's main branch.",
-        "Total throughput hardly grows beyond 4 concurrent requests. The W7900 server was started with at most 4 sequences.",
-    ],
-    "gemma-4-31b": [
-        "Only the Quark W8A8-INT8 build was measured, in vLLM.",
-    ],
-    "mimo-v2.6-flash": [
-        "Only a 2-bit IQ2_XS_M build was measured, spread over four cards. The first token of a 512-token prompt took 2.7 seconds on W7900 and 5.1 seconds on R9700.",
-    ],
-    "deepseek-v4-flash": [
-        "Only the 2-bit UD-Q2_K_XL build was measured. R9700 and W7900 spread it over four cards; Strix Halo runs it on its single integrated GPU.",
-    ],
-    "glm-5.3-flash": [
-        "Only a 2-bit UD-IQ2_XXS build was measured, on four cards. It was not measured on Strix Halo.",
-    ],
-}
+sys.path.insert(0, __import__("os").path.dirname(__file__))
+from blog_stories import ALLOWED_FACTS, STORIES  # noqa: E402
 
-NOTES_ZH = {
-    "qwen3-4b": [
-        "只有 R9700 跑了这个模型的 vLLM。单卡 32 并发时，vLLM 总吞吐达到 1,639 tok/s，同一张卡上 llama.cpp 跑 Q4_K_M 只有 565；但单请求是 llama.cpp Q4_K_M 更快（123.8 对 70.3 tok/s）。",
-    ],
-    "qwen3-30b-a3b": [
-        "BF16+YaRN 这几行用的是同一份权重，只是打开了面向长上下文的 YaRN RoPE 缩放。测试提示词只有 512 个 token，所以这几行反映的是短上下文下这项设置的代价：W7900 上 vLLM 双卡，单请求 69.0 对 75.5 tok/s，32 并发 308 对 498 tok/s。",
-    ],
-    "qwen3.6-27b": [
-        "在 R9700 上，vLLM 跑 Quark W8A8-INT8 并不划算：双卡单请求只有 11.8 tok/s，同样双卡的 BF16 是 20.8。在 Strix Halo 上它的单请求确实快过 BF16，7.8 对 4.3 tok/s。",
-    ],
-    "qwen3.6-35b-a3b": [
-        "这是榜单上部署组合最多的模型：llama.cpp 跑了 BF16、Q8_0 和 UD-Q4_K_M，vLLM 跑了 BF16、AWQ-4bit、Quark W8A8-INT8 和 Intel 的 INT4 AutoRound。其中 AWQ 和 Quark 权重是第三方量化的。",
-        "在 Strix Halo 上，vLLM 最快的格式是 INT4 AutoRound，单请求 37.8 tok/s，32 并发 189；但单请求还是 llama.cpp 跑 UD-Q4_K_M 更快，49.3 tok/s。",
-    ],
-    "qwen3.8-flash-next": [
-        "只测了低比特的 UD 版本。R9700 和 W7900 上分摊到四张卡，Strix Halo 则用自带的单块集成显卡跑。",
-    ],
-    "diffusiongemma-26b-a4b": [
-        "DiffusionGemma 每次对一整块 token 反复细化，而不是一个接一个地生成，所以流式输出的第一个 token 来得晚：在 W7900 上，请求发出 6.3 秒后才到。它跑在 vLLM 的 main 分支上。",
-        "并发超过 4 之后，总吞吐几乎不再增长。W7900 上的服务启动时把最大序列数设成了 4。",
-    ],
-    "gemma-4-31b": [
-        "只测了 Quark W8A8-INT8 版本，用的是 vLLM。",
-    ],
-    "mimo-v2.6-flash": [
-        "只测了 2 比特的 IQ2_XS_M 版本，分摊到四张卡。512 token 提示词的首 token 时延，W7900 是 2.7 秒，R9700 是 5.1 秒。",
-    ],
-    "deepseek-v4-flash": [
-        "只测了 2 比特的 UD-Q2_K_XL 版本。R9700 和 W7900 分摊到四张卡，Strix Halo 用自带的单块集成显卡跑。",
-    ],
-    "glm-5.3-flash": [
-        "只测了 2 比特的 UD-IQ2_XXS 版本，用四张卡。没有在 Strix Halo 上测。",
-    ],
-}
-
-assert set(MODEL_ZH) == {m[0] for m in MODELS}
-assert set(NOTES_ZH) == set(NOTES) and all(len(NOTES_ZH[k]) == len(NOTES[k]) for k in NOTES)
+assert set(MODEL_ZH) == {m[0] for m in MODELS} == set(STORIES)
 
 
 def gpu_count(r):
@@ -197,6 +134,7 @@ def load(path):
                 curve={c: p["decode_toks_per_s"] for c, p in sorted(pts.items())},
                 ttft=pts.get(1, {}).get("ttft_ms") if meth == 2 else None,
                 month=r["data"].get("generated_at", "")[:7],
+                rec=r,
             ))
     return bundle, rows
 
@@ -375,69 +313,360 @@ def recipe_links(devs, zh=False):
     return "".join(parts)
 
 
+# ---------------------------------------------------------------- deployment commands
+
+PUBLIC_IMAGE_PREFIXES = ("ghcr.io/inferstation/", "ghcr.io/radeon-arena/halo-")
+LLAMA_REPO = "https://github.com/ggml-org/llama.cpp"
+
+
+def find(xs, spec):
+    dev, eng, quant, gpus = spec
+    hit = [x for x in xs if (x["dev"], x["engine"], x["quant"], x["gpus"]) == spec]
+    if len(hit) != 1:
+        raise SystemExit(f"story config {spec} matches {len(hit)} rows")
+    return hit[0]
+
+
+def image_of(x):
+    L = x["rec"]["launch"]
+    img = L.get("image_resolved") or L.get("image") or ""
+    return img if img.startswith(PUBLIC_IMAGE_PREFIXES) else None
+
+
+def runnable(x):
+    """Public image, or llama.cpp we can tell people to build from source."""
+    return bool(image_of(x)) or (x["engine"] == "llama.cpp" and x["rec"]["launch"].get("image_commit"))
+
+
+def parse_launch(x):
+    """argv and env of the measured server, with GPU selection normalised for a fresh machine."""
+    r = x["rec"]
+    L, R = r["launch"], r["recipe"]
+    cmd = L.get("command") or ""
+    if re.search(r"\{(host|port|ctx|nseq)\}", cmd) or not cmd:
+        d = dict(R.get("defaults") or {}, **(L.get("defaults") or {}))
+        cmd = re.sub(r"\{(host|port|ctx|nseq)\}", lambda m: str(d[m.group(1)]), R["command"])
+    cmd = re.sub(r"\\\s+", " ", cmd)
+    argv = shlex.split(cmd)
+    env = dict(L.get("env") or {})
+    while argv and (argv[0] == "env" or re.match(r"^[A-Z_][A-Z0-9_]*=", argv[0])):
+        a = argv.pop(0)
+        if a != "env":
+            k, v = a.split("=", 1)
+            env[k] = v
+    for k in ("HIP_VISIBLE_DEVICES", "ROCR_VISIBLE_DEVICES", "CUDA_VISIBLE_DEVICES"):
+        env.pop(k, None)
+    if x["dev"] != "strix":
+        env = {"HIP_VISIBLE_DEVICES": ",".join(str(i) for i in range(x["gpus"])), **env}
+    return argv, env
+
+
+def served_name(argv):
+    if "--served-model-name" in argv:
+        return argv[argv.index("--served-model-name") + 1]
+    if argv[:2] == ["vllm", "serve"]:
+        return argv[2]
+    return "local"
+
+
+def download_cmd(x, zh):
+    r = x["rec"]
+    src = r["recipe"].get("source") or r["model"].get("source")
+    path = r["recipe"].get("model") or r["model"].get("path")
+    rel = path[len("/models/"):]
+    local_dir, _, rest = rel.partition("/")
+    if rest.endswith(".gguf"):
+        sub, _, base = rest.rpartition("/")
+        if "-of-" in base:
+            pat = (sub + "/*") if sub else base.split("-00001-of-")[0] + "*"
+            what = f' --include "{pat}"'
+        else:
+            what = " " + rest
+    else:
+        what = ""
+    mirror = "# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com" if zh else \
+        "# optional mirror: export HF_ENDPOINT=https://hf-mirror.com"
+    return f"pip install -U huggingface_hub\n{mirror}\nhf download {src}{what} --local-dir ~/models/{local_dir}"
+
+
+def pair_flags(args):
+    """Keep each flag on the same line as its value."""
+    out = []
+    for a in args:
+        if out and out[-1].startswith("-") and " " not in out[-1] and not a.startswith("-") and out[-1] not in ("-lc",):
+            out[-1] += " " + a
+        else:
+            out.append(a)
+    return out
+
+
+def wrap(args, indent="  ", width=88):
+    """Join shell words into lines no longer than width, ending in ' \\'."""
+    lines, cur = [], ""
+    for a in pair_flags(args):
+        if cur and len(cur) + 1 + len(a) > width:
+            lines.append(cur)
+            cur = indent + a
+        else:
+            cur = (cur + " " + a) if cur else a
+    lines.append(cur)
+    return " \\\n".join(lines)
+
+
+def docker_cmd(x, name):
+    argv, env = parse_launch(x)
+    inner = " ".join(shlex.quote(a) for a in argv).replace('"', '\\"')
+    parts = ["docker run -d --name", name]
+    head = wrap(["docker", "run", "-d", "--name", name], "  ")
+    lines = [head,
+             "  --device /dev/kfd --device /dev/dri --group-add video --group-add render",
+             "  --security-opt seccomp=unconfined --ipc host",
+             "  -v ~/models:/models -p 8000:8000"]
+    if env:
+        lines.append("  " + " ".join(f"-e {k}={v}" for k, v in env.items()))
+    lines.append(f"  --entrypoint /bin/bash {image_of(x)}")
+    # break the server command into readable lines inside the double quotes
+    words = pair_flags(inner.split(" "))
+    body, cur = [], "-lc \"exec"
+    for w in words:
+        if len(cur) + 1 + len(w) > 84 and w.startswith("-"):
+            body.append(cur)
+            cur = "    " + w
+        else:
+            cur += " " + w
+    body.append(cur + '"')
+    lines.append("  " + " \\\n".join(body))
+    del parts
+    return " \\\n".join(lines)
+
+
+def build_cmd(x, zh):
+    commit = x["rec"]["launch"]["image_commit"]
+    argv, env = parse_launch(x)
+    env.pop("LD_LIBRARY_PATH", None)
+    argv = ["./build/bin/llama-server" if a == "llama-server" else a.replace("/models/", "~/models/", 1) if a.startswith("/models/") else a for a in argv]
+    note = "# 编译一次即可" if zh else "# build once"
+    run = wrap([f"{k}={v}" for k, v in env.items()] + [shlex.quote(a) if not a.startswith("~/") else a for a in argv], "  ")
+    return (f"{note}\ngit clone {LLAMA_REPO} && cd llama.cpp\ngit checkout {commit[:12]}\n"
+            'HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \\\n'
+            "  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release\n"
+            "cmake --build build --config Release -j\n\n" + run)
+
+
+def curl_cmd(x, zh):
+    argv, _ = parse_launch(x)
+    q = "用一句话介绍一下你自己。" if zh else "Introduce yourself in one sentence."
+    body = json.dumps({"model": served_name(argv), "messages": [{"role": "user", "content": q}], "max_tokens": 128}, ensure_ascii=False)
+    return f"curl http://localhost:8000/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{body}'"
+
+
+def ready_line(x):
+    return "Application startup complete" if x["engine"].startswith("vLLM") else "server is listening"
+
+
+def pre(s):
+    return f"      <Pre>{text(s)}</Pre>"
+
+
+def p(s):
+    return f"      <P>{text(s)}</P>"
+
+
+def h2(s):
+    return f"      <H2>{text(s)}</H2>"
+
+
+def h3(s):
+    return f"      <H3>{text(s)}</H3>"
+
+
+def where(x, zh):
+    if zh:
+        return f"{DEV[x['dev']]}{'' if x['gpus'] == 1 else ' ' + str(x['gpus']) + ' 卡'}、{x['engine']}、{x['quant']}"
+    return f"{DEV[x['dev']]}{'' if x['gpus'] == 1 else ' x' + str(x['gpus'])}, {x['engine']}, {x['quant']}"
+
+
+def tutorial(x, slug, zh, title=None):
+    """Download, start, call: the full path for one measured deployment."""
+    out = []
+    src_build = not image_of(x)
+    if zh:
+        out.append(h2(title or f"三步跑起来：{DEV_LONG_ZH[x['dev']]}"))
+        if src_build:
+            out.append(p(f"下面是榜单上这一行的原样复现：{where(x, True)}。准备一台装好 ROCm（含 hipconfig）、CMake 和 Git 的 Linux 机器。"
+                         "我们测试 W7900 用的镜像还没有公开，所以这里从源码编译同一个版本的 llama.cpp。"))
+        else:
+            out.append(p(f"下面是榜单上这一行的原样复现：{where(x, True)}。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，"
+                         "当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"))
+        out += [h3("第 1 步：下载权重"), pre(download_cmd(x, True))]
+        if src_build:
+            out += [h3("第 2 步：编译并启动 llama.cpp"),
+                    p("命令里的 commit 和启动参数与我们测试时完全一致。"),
+                    pre(build_cmd(x, True)),
+                    p(f"终端里出现 “{ready_line(x)}” 就说明服务起来了。")]
+        else:
+            out += [h3("第 2 步：启动服务"),
+                    p("镜像固定到测试时的版本，启动参数也和测试时完全一致："),
+                    pre(docker_cmd(x, slug)),
+                    p(f"用 docker logs -f {slug} 看日志，出现 “{ready_line(x)}” 就说明服务起来了。")]
+        out += [h3("第 3 步：发一个请求"), pre(curl_cmd(x, True)),
+                p("返回 JSON 里的 choices[0].message.content 就是模型的回答。这是 OpenAI 兼容接口，"
+                  "Open WebUI、Cherry Studio 或各种 Agent 框架，把接口地址填成 http://localhost:8000/v1 就能用。")]
+    else:
+        out.append(h2(title or f"Run it in three steps on {DEV_LONG[x['dev']]}"))
+        if src_build:
+            out.append(p(f"This reproduces one row of the board exactly: {where(x, False)}. You need a Linux machine with ROCm (including hipconfig), CMake and Git. "
+                         "The image we used on W7900 is not public yet, so we build the same llama.cpp version from source."))
+        else:
+            out.append(p(f"This reproduces one row of the board exactly: {where(x, False)}. You need a Linux machine with the ROCm driver and Docker, "
+                         "and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."))
+        out += [h3("Step 1: download the weights"), pre(download_cmd(x, False))]
+        if src_build:
+            out += [h3("Step 2: build and start llama.cpp"),
+                    p("The commit and server flags are exactly the ones we measured."),
+                    pre(build_cmd(x, False)),
+                    p(f"The server is up when the terminal prints \u201c{ready_line(x)}\u201d.")]
+        else:
+            out += [h3("Step 2: start the server"),
+                    p("The image is pinned to the version we measured, and the flags are the same:"),
+                    pre(docker_cmd(x, slug)),
+                    p(f"Watch docker logs -f {slug}; the server is up when it prints \u201c{ready_line(x)}\u201d.")]
+        out += [h3("Step 3: send a request"), pre(curl_cmd(x, False)),
+                p("The answer is in choices[0].message.content. The endpoint is OpenAI-compatible, so Open WebUI, Cherry Studio "
+                  "or any agent framework works once you point it at http://localhost:8000/v1.")]
+    return out
+
+
+def other_cards(xs, hero, alts, slug, zh):
+    shown = {id(hero)} | {id(a) for a in alts}
+    out = [h2("换一张卡" if zh else "On other cards")]
+    out.append(p("每张卡上单请求最快、而且能直接复现的那一行。下载命令同上，换成对应的文件即可。" if zh else
+                 "The fastest single-request setup on each card that you can reproduce directly. Download as above, with the matching file."))
+    n = 0
+    for d in DEVICES:
+        if d == hero["dev"]:
+            continue
+        cand = [x for x in xs if x["dev"] == d and x["c1"]]
+        if not cand:
+            continue
+        ok = [x for x in cand if runnable(x)]
+        best = max(cand, key=lambda x: x["c1"])
+        if not ok:
+            out.append(p(f"{DEV_LONG_ZH[d] if zh else DEV_LONG[d]}：" + (
+                f"最快是 {where(best, True)}，单请求 {f1(best['c1'])} tok/s。这台设备用的 {best['engine']} 镜像还没有公开，完整命令见部署配方页。" if zh else
+                f"fastest is {where(best, False)}, {f1(best['c1'])} tok/s for one request. The {best['engine']} image we used there is not public yet; the full command is on the Recipes page.")))
+            n += 1
+            continue
+        x = max(ok, key=lambda x: x["c1"])
+        if id(x) in shown:
+            continue
+        label = DEV_LONG_ZH[d] if zh else DEV_LONG[d]
+        if zh:
+            line = f"{label}：{where(x, True)}，单请求 {f1(x['c1'])} tok/s，32 并发 {f0(x['c32'])} tok/s。"
+            if best is not x:
+                line += f"（这台设备上最快的是 {where(best, True)}，{f1(best['c1'])} tok/s，但镜像还没有公开。）"
+        else:
+            line = f"{label}: {where(x, False)}, {f1(x['c1'])} tok/s for one request, {f0(x['c32'])} tok/s at 32."
+            if best is not x:
+                line += f" (The fastest here is {where(best, False)} at {f1(best['c1'])} tok/s, but its image is not public yet.)"
+        out += [p(line), pre(build_cmd(x, zh) if not image_of(x) else docker_cmd(x, slug))]
+        n += 1
+    return out if n else []
+
+
+def verdict(xs, zh):
+    """One line per device: what to run alone, what to run for many users."""
+    items = []
+    for d in DEVICES:
+        ds = [x for x in xs if x["dev"] == d and x["c1"]]
+        if not ds:
+            continue
+        a = max(ds, key=lambda x: x["c1"])
+        b = max(ds, key=lambda x: x["c32"] or 0)
+        cfg_a = f"{a['engine']} {a['quant']}" + ("" if a["gpus"] == 1 else (f"（{a['gpus']} 卡）" if zh else f" on {a['gpus']} cards"))
+        cfg_b = f"{b['engine']} {b['quant']}" + ("" if b["gpus"] == 1 else (f"（{b['gpus']} 卡）" if zh else f" on {b['gpus']} cards"))
+        if zh:
+            s = f"{DEV[d]}：单人用选 {cfg_a}，单请求 {f1(a['c1'])} tok/s"
+            s += (f"；扛并发选 {cfg_b}，32 并发 {f0(b['c32'])} tok/s。" if b is not a else f"，32 并发也是它最高，{f0(a['c32'])} tok/s。")
+        else:
+            s = f"{DEV[d]}: for one user, {cfg_a} at {f1(a['c1'])} tok/s"
+            s += (f"; for many, {cfg_b} at {f0(b['c32'])} tok/s with 32 requests." if b is not a else f"; it also leads at 32 requests, {f0(a['c32'])} tok/s.")
+        items.append(s)
+    return [h2("先看结论：每张卡怎么选" if zh else "The short answer: what to run on each card"), ul(items)]
+
+
+def auto_tips(xs, hero, zh):
+    tips = []
+    if any(x["gpus"] > 1 for x in xs):
+        tips.append("多卡配置要让容器看到所有卡：命令里的 HIP_VISIBLE_DEVICES 写成 0,1 或 0,1,2,3，和卡数一致。" if zh else
+                    "Multi-card setups need every card visible: set HIP_VISIBLE_DEVICES to 0,1 or 0,1,2,3 to match the card count.")
+    argv, _ = parse_launch(hero)
+    if "--max-model-len" in argv:
+        n = argv[argv.index("--max-model-len") + 1]
+        if int(n) < 8192:
+            tips.append(f"vLLM 命令里的 --max-model-len {n} 是按测试负载设的，日常使用请调大，显存占用会随之增加。" if zh else
+                        f"--max-model-len {n} in the vLLM command fits our test load only. Raise it for real use; memory use grows with it.")
+    tips.append("权重下载慢，先设置 HF_ENDPOINT=https://hf-mirror.com；提示没有权限访问 /dev/kfd，把当前用户加进 render 和 video 组后重新登录。" if zh else
+                "If you get a permission error on /dev/kfd, add your user to the render and video groups and log in again.")
+    return tips
+
+
+def readmins(parts, zh):
+    t = re.sub(r"<[^>]+>", "", "\n".join(parts))
+    if zh:
+        return max(3, round(len(re.findall(r"[\u4e00-\u9fff]", t)) / 400 + 1))
+    return max(3, round(len(t.split()) / 220 + 1))
+
+
 def model_post(m, xs, rows_all, zh=False):
-    slug, name, _, desc = m
+    slug, name, _, _ = m
+    st = STORIES[slug]
+    L = st["zh" if zh else "en"]
+    hero = find(xs, st["hero"])
+    alts = [find(xs, a) for a in st.get("alt", [])]
     devs = [d for d in DEVICES if any(x["dev"] == d for x in xs)]
     engines = sorted({x["engine"] for x in xs})
-    quants = sorted({x["quant"] for x in xs})
-    b = max((x for x in xs if x["c1"]), key=lambda x: x["c1"])
-    sources = sorted({x["source"] for x in xs if x["source"]})
-    if zh:
-        title = f"{name} 在 AMD Radeon 上的全部实测结果"
-        desc_zh = MODEL_ZH[slug]
-        sp = " " if desc_zh[0].isascii() else ""
-        where = join_list([DEV_LONG_ZH[d] for d in devs], True)
-        where += "上" if where.endswith("）") else " 上"
-        if len(xs) > 1:
-            lead = (f"{name} 是{sp}{desc_zh}。我们在 {where}测了它的 {len(xs)} 种部署配置，"
-                    f"引擎为 {join_list(engines, True)}，共 {len(quants)} 种权重格式。本文把这些结果放在一起对比。")
-            excerpt = (f"{name} 在 {'、'.join(DEV[d] for d in devs)} 上共 {len(xs)} 种实测部署。"
-                       f"单请求最快：{f1(b['c1'])} tok/s（{cfg(b, True, True)}）。")
-        else:
-            lead = f"{name} 是{sp}{desc_zh}。我们在 {where}测了它的一种部署：{cfg(b, False, True)}。"
-            excerpt = f"{name} 在 {DEV[b['dev']]} 上的实测部署：单请求 {f1(b['c1'])} tok/s（{cfg(b, False, True)}）。"
-        tags = ["模型", name] + [DEV[d] for d in devs] + engines
-        h = ["全部部署", "从数据看", "权重来源", "测试方法与配方"]
-        intro = "加粗行是每台设备上单请求最快的配置。卡数是服务用了几张显卡；并发指同时发出的请求数。"
-        method = METHOD_ZH
-        tail = (f"      <P>{text('配方：')}{recipe_links(devs, True)}{text('。榜单：')}"
-                f"<A href=\"{link('/' + devs[0] + '/leaderboard', True)}\">{text(DEV[devs[0]])}</A>{text('。')}</P>")
-        notes = NOTES_ZH.get(slug, [])
-        minutes = 3
+    tags = (["模型", name] if zh else ["Model", name]) + [DEV[d] for d in devs] + engines
+
+    lead = [f"      <Lead>{text(L['lead'][0])}</Lead>"] + [p(s) for s in L["lead"][1:]]
+    story = []
+    for h, paras in L["sections"]:
+        story += [h2(h)] + [p(s) for s in paras]
+    tut = tutorial(hero, slug, zh)
+    for a in alts:
+        t = (f"另一种跑法：{where(a, True)}" if zh else f"Another way: {where(a, False)}")
+        ta = tutorial(a, slug + "-2", zh, t)
+        ta.insert(2, p(f"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f {slug}）。" if zh else
+                       f"Both setups use port 8000; stop the first one before switching (docker rm -f {slug})."))
+        tut += ta
+    others = other_cards(xs, hero, alts, slug, zh)
+    tbl = [h2("实测数据" if zh else "Measured results"),
+           p("加粗行是每张卡上单请求最快的配置。单请求是一个用户看到的生成速度；32 并发是 32 个请求同时进来时的合计速度；TTFT 是首 token 时延。" if zh else
+             "Bold rows are the fastest single-request setup on each card. 1 req is the speed one user sees; 32 req is the combined rate of 32 requests at once; TTFT is time to first token."),
+           table(xs, zh)]
+    tips = [h2("注意事项" if zh else "Things to watch"), ul(L.get("tips", []) + auto_tips(xs, hero, zh))]
+    links = [(link(f"/{d}/recipes", zh), (f"{DEV[d]} 部署配方" if zh else f"{DEV[d]} recipes")) for d in devs]
+    links += [(link(f"/{devs[0]}/leaderboard", zh), "榜单" if zh else "Leaderboard")]
+    nxt = [h2("下一步" if zh else "Next steps"),
+           p("每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄：" if zh else
+             "Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"),
+           "      <UL>\n" + "".join(f'        <li><A href="{h}">{text(t)}</A></li>\n' for h, t in links) + "      </UL>",
+           f"      <P>{text('用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 ' if zh else 'Deploying with a coding agent such as Claude Code or Codex? Have it call the ')}"
+           f"<A href=\"{link('/docs', zh)}\">{text('AMD GPU 支持助手' if zh else 'AMD GPU Support Agent')}</A>"
+           f"{text('，我们的 A/B 测试见' if zh else ' first. Our A/B test is in ')}"
+           f"<A href=\"{link('/blog/support-agent-ab-test-windows-strix-halo', zh)}\">{text('这篇文章' if zh else 'this post')}</A>{text('。' if zh else '.')}</P>"]
+    method = [h2("测试方法" if zh else "How we measured")] + [p(s) for s in (METHOD_ZH if zh else METHOD)]
+
+    layout = st.get("layout", "tutorial")
+    if layout == "data":
+        body = lead + story + tbl + tut + others + tips + nxt + method
+    elif layout == "compare":
+        body = lead + verdict(xs, zh) + story + tbl + tut + others + tips + nxt + method
     else:
-        title = name + " on AMD Radeon: every deployment we measured"
-        if len(xs) > 1:
-            lead = (f"{name} is {desc}. We measured {len(xs)} deployments of it on "
-                    f"{join_list([DEV_LONG[d] for d in devs], False)}, "
-                    f"with {' and '.join(engines)} and {len(quants)} weight format{'s' if len(quants) > 1 else ''}. This post puts them side by side.")
-            excerpt = (f"{len(xs)} measured deployments of {name} across "
-                       f"{', '.join(DEV[d] for d in devs)}. Fastest single request: {f1(b['c1'])} tok/s with {cfg(b)}.")
-        else:
-            lead = f"{name} is {desc}. We measured one deployment of it on {DEV_LONG[b['dev']]}: {cfg(b, False)}."
-            excerpt = f"One measured deployment of {name} on {DEV[b['dev']]}: {f1(b['c1'])} tok/s for a single request with {cfg(b, False)}."
-        tags = ["Model", name] + [DEV[d] for d in devs] + engines
-        h = ["All deployments", "What the numbers say", "Weights", "Method and recipes"]
-        intro = "Bold rows are the fastest single-request setup on each device. GPUs is the number of cards the server used; req means concurrent requests."
-        method = METHOD
-        tail = (f"      <P>{text('Recipes: ')}{recipe_links(devs)}{text('. Leaderboard: ')}"
-                f"<A href=\"/{devs[0]}/leaderboard\">{text(DEV[devs[0]])}</A>{text('.')}</P>")
-        notes = NOTES.get(slug, [])
-        minutes = 3
-    out = [f"  {{\n    slug: {js('model-' + slug)},\n    title: {js(title)},",
-           f"    date: {js(POST_DATE)},\n    readingMinutes: {minutes},\n    tags: {js(tags)},\n    excerpt: {js(excerpt)},",
-           "    content: (\n      <>",
-           f"      <Lead>{text(lead)}</Lead>",
-           f"      <H2>{h[0]}</H2>",
-           f"      <P>{text(intro)}</P>",
-           table(xs, zh),
-           f"      <H2>{h[1]}</H2>",
-           ul(auto_points(xs, zh) + notes),
-           f"      <H2>{h[2]}</H2>",
-           ul(sources),
-           f"      <H2>{h[3]}</H2>",
-           *[f"      <P>{text(p)}</P>" for p in method],
-           tail,
-           "      </>\n    ),\n  },"]
+        body = lead + verdict(xs, zh) + tut + others + story + tbl + tips + nxt + method
+    out = [f"  {{\n    slug: {js('model-' + slug)},\n    title: {js(L['title'])},",
+           f"    date: {js(POST_DATE)},\n    readingMinutes: {readmins(body, zh)},\n    tags: {js(tags)},\n    excerpt: {js(L['excerpt'])},",
+           "    content: (\n      <>", *body, "      </>\n    ),\n  },"]
     return "\n".join(out)
 
 
@@ -494,27 +723,45 @@ def engine_post(key, rows_all, zh=False):
     models = {x["slug"]: x for x in xs}
     devs = [d for d in DEVICES if any(x["dev"] == d for x in xs)]
     mname = {m[0]: m[1] for m in MODELS}
+    hero_slug, hero_spec = ("qwen3-4b", ("r9700", "vLLM", "BF16", 1)) if key == "vllm" else ("qwen3-30b-a3b", ("strix", "llama.cpp", "Q4_K_M", 1))
+    hero = find([x for x in rows_all if x["slug"] == hero_slug], hero_spec)
+    hname = mname[hero["slug"]]
     if zh:
-        counts = "，".join(f"{DEV[d]} {sum(1 for x in xs if x['dev'] == d)} 条" for d in devs)
-        title = f"{name} 在 AMD Radeon 上的全部实测结果"
-        excerpt = (f"榜单上全部 {len(xs)} 条 {name} 结果，覆盖 {len(models)} 个模型，设备包括 {'、'.join(DEV[d] for d in devs)}："
-                   f"能跑什么、跑多快，{name} 在哪些情况下占优、在哪些情况下吃亏。")
-        lead = f"榜单上有 {len(xs)} 条结果是用 {name} 跑的，覆盖 {len(models)} 个模型（按设备分：{counts}）。本文把它们集中到一处。"
+        counts = "，".join(f"{DEV[d]} {sum(1 for x in xs if x['dev'] == d)} 组" for d in devs)
+        if key == "vllm":
+            title = f"用 vLLM 在 AMD Radeon 上部署大模型：单卡 32 并发 {f0(hero['c32'])} tok/s，什么时候该选它"
+            excerpt = f"一张 R9700 跑 {hname}，32 个请求同时进来总吞吐 {f0(hero['c32'])} tok/s。{len(xs)} 组实测告诉你 vLLM 在 AMD 显卡上怎么跑、什么时候比 llama.cpp 强。"
+            lead = [f"想把本地模型做成一个能同时服务很多人的 API，vLLM 是首选。一张 R9700 跑 {hname}，32 个请求同时进来，总吞吐 {f0(hero['c32'])} tok/s。",
+                    f"榜单上有 {len(xs)} 组 vLLM 实测，覆盖 {len(models)} 个模型（{counts}）。本文先给一条能直接复制的启动命令，再讲它什么时候比 llama.cpp 强、什么时候不如。"]
+        else:
+            title = f"用 llama.cpp 在 AMD Radeon 上跑大模型：{len(models)} 个模型、{len(xs)} 组实测，量化怎么选"
+            excerpt = f"一个 GGUF 文件、一条命令，从 2 比特到 BF16 都能跑。{len(xs)} 组实测，告诉你在 AMD 显卡上怎么部署、量化怎么选。"
+            lead = [f"llama.cpp 是在 AMD 显卡上跑本地模型最省事的方式：一个 GGUF 文件、一条命令，从 2 比特到 BF16 都能跑，单机跑不下的超大模型也能切到多张卡上。",
+                    f"榜单上有 {len(xs)} 组 llama.cpp 实测，覆盖 {len(models)} 个模型（{counts}）。比如在 Strix Halo 迷你主机上，{hname} 的 Q4_K_M 单请求 {f1(hero['c1'])} tok/s。下面先给命令，再讲量化怎么选。"]
         tags = ["引擎", name] + [DEV[d] for d in devs]
-        h_run, h_see = "运行方式", "从数据看"
+        h_run, h_see = "我们怎么跑", "从数据看"
         intro, notes, method = ENGINE_INTRO_ZH[key], ENGINE_NOTES_ZH[key], METHOD_ZH
     else:
         counts = "; ".join(f"{DEV[d]} {sum(1 for x in xs if x['dev'] == d)}" for d in devs)
-        title = name + " on AMD Radeon: all our results in one place"
-        excerpt = f"All {len(xs)} {name} results on the board, {len(models)} models across {', '.join(DEV[d] for d in devs)}: what runs, how fast, and where {name} wins or loses."
-        lead = f"{len(xs)} of the board's results run on {name}, covering {len(models)} models (results per device: {counts}). This post collects them in one place."
+        if key == "vllm":
+            title = f"Serving LLMs with vLLM on AMD Radeon: {f0(hero['c32'])} tok/s at 32 requests on one card, and when to choose it"
+            excerpt = f"One R9700 serves {hname} at {f0(hero['c32'])} tok/s with 32 requests in flight. {len(xs)} measured setups show how to run vLLM on AMD GPUs and when it beats llama.cpp."
+            lead = [f"To turn a local model into an API that serves many people at once, vLLM is the first choice. One R9700 running {hname} delivers {f0(hero['c32'])} tok/s in total with 32 requests in flight.",
+                    f"The board has {len(xs)} measured vLLM setups covering {len(models)} models (per device: {counts}). Here is a command you can paste, then when vLLM beats llama.cpp and when it does not."]
+        else:
+            title = f"Running LLMs with llama.cpp on AMD Radeon: {len(models)} models, {len(xs)} measured setups, and how to pick a quantization"
+            excerpt = f"One GGUF file and one command, from 2-bit to BF16. {len(xs)} measured setups show how to deploy on AMD GPUs and which quantization to pick."
+            lead = [f"llama.cpp is the simplest way to run local models on AMD GPUs: one GGUF file, one command, anything from 2-bit to BF16, and models too large for one card can be split across several.",
+                    f"The board has {len(xs)} measured llama.cpp setups covering {len(models)} models (per device: {counts}). On a Strix Halo mini PC, for example, {hname} Q4_K_M decodes {f1(hero['c1'])} tok/s for one request. Commands first, then quantization."]
         tags = ["Engine", name] + [DEV[d] for d in devs]
         h_run, h_see = "How we run it", "What we see"
         intro, notes, method = ENGINE_INTRO[key], ENGINE_NOTES[key], METHOD
     out = [f"  {{\n    slug: {js('engine-' + ('vllm' if key == 'vllm' else 'llama-cpp'))},\n    title: {js(title)},",
-           f"    date: {js(POST_DATE)},\n    readingMinutes: 5,\n    tags: {js(tags)},\n    excerpt: {js(excerpt)},",
+           f"    date: {js(POST_DATE)},\n    readingMinutes: 6,\n    tags: {js(tags)},\n    excerpt: {js(excerpt)},",
            "    content: (\n      <>",
-           f"      <Lead>{text(lead)}</Lead>",
+           f"      <Lead>{text(lead[0])}</Lead>",
+           f"      <P>{text(lead[1])}</P>",
+           *tutorial(hero, "engine-" + key, zh, (f"三步跑起来：{hname} 示例" if zh else f"Run it in three steps: {hname} as the example")),
            f"      <H2>{h_run}</H2>",
            *[f"      <P>{text(p)}</P>" for p in intro],
            f"      <H2>{h_see}</H2>",
@@ -581,41 +828,59 @@ def engine_post(key, rows_all, zh=False):
     return "\n".join(out)
 
 
+def story_texts(slug, lang):
+    L = STORIES[slug][lang]
+    return [L["title"], L["excerpt"], *L["lead"], *[t for h, ps in L["sections"] for t in [h, *ps]], *L.get("tips", [])]
+
+
+NUM = re.compile(r"(?<![\w.\-])\d+(?:,\d{3})*(?:\.\d+)?(?![\w])|(?<=-)\d+(?:\.\d+)?(?![\w.])")
+
+
 def check_notes(rows_all):
-    """Every number written by hand in NOTES/ENGINE_NOTES must appear in the bundle (rounded)."""
+    """Every number written by hand must be a measurement (rounded), a ratio of two
+    measurements of the same model, or an allowed hardware/version fact."""
     vals = set()
+    by = collections.defaultdict(list)
     for x in rows_all:
+        by[x["slug"]].append(x)
         for v in list(x["curve"].values()) + [x["ttft"] or 0]:
             vals |= {f"{v:.1f}", f"{v:,.0f}", f"{v:.0f}", f"{v/1000:.1f}"}
-    allowed = {"1", "2", "4", "8", "16", "32", "512", "100", "0", "3", "5"}
+    ratios = collections.defaultdict(set)
+    for slug, xs in by.items():
+        ms = [v for x in xs for v in (x["c1"], x["c32"]) if v]
+        ratios[slug] = {f"{a / b:.1f}" for a in ms for b in ms if b}
+    allowed = {"1", "2", "4", "8", "16", "32", "512", "100", "0", "3", "5"} | ALLOWED_FACTS
     bad = []
-    texts = [t for d in (NOTES, NOTES_ZH, ENGINE_NOTES, ENGINE_NOTES_ZH) for ts in d.values() for t in ts]
-    for t in texts:
-        for n in re.findall(r"(?<![\w.])\d+(?:,\d{3})*(?:\.\d+)?", t):
-            if n not in vals and n not in allowed:
-                bad.append((n, t[:80]))
+    texts = [("", t) for d in (ENGINE_NOTES, ENGINE_NOTES_ZH) for ts in d.values() for t in ts]
+    texts += [(slug, t) for slug in STORIES for lang in ("zh", "en") for t in story_texts(slug, lang)]
+    for slug, t in texts:
+        for n in NUM.findall(re.sub(r"(\d)x\b", r"\1 x", t)):
+            if n not in vals and n not in allowed and n not in ratios.get(slug, ()):
+                bad.append((slug, n, t[:70]))
     if bad:
-        raise SystemExit("numbers not found in bundle: " + repr(bad))
+        raise SystemExit("numbers not found in bundle:\n" + "\n".join(map(repr, bad)))
 
 
 def check_pairs():
     """English and Chinese hand-written texts must use the same numbers."""
-    num = re.compile(r"(?<![A-Za-z0-9_.\-])\d+(?:,\d{3})*(?:\.\d+)?")
-
     def nums(s, zh):
         if zh:
             s = re.sub(r"\d+ 月", "", s)
-        return set(num.findall(s)) - {"1"}  # "1 request" is written as 单请求
+        return set(NUM.findall(re.sub(r"(\d)x\b", r"\1 x", s))) - {"1"}  # "1 request" is written as 单请求
 
     pairs = [(desc, MODEL_ZH[slug]) for slug, _, _, desc in MODELS]
-    for en, zh in ((NOTES, NOTES_ZH), (ENGINE_NOTES, ENGINE_NOTES_ZH), (ENGINE_INTRO, ENGINE_INTRO_ZH)):
+    for en, zh in ((ENGINE_NOTES, ENGINE_NOTES_ZH), (ENGINE_INTRO, ENGINE_INTRO_ZH)):
         assert set(en) == set(zh) and all(len(en[k]) == len(zh[k]) for k in en)
         pairs += [p for k in en for p in zip(en[k], zh[k])]
     assert len(METHOD) == len(METHOD_ZH)
     pairs += list(zip(METHOD, METHOD_ZH))
+    for slug in STORIES:
+        e, z = story_texts(slug, "en"), story_texts(slug, "zh")
+        assert len(e) == len(z), slug
+        pairs += list(zip(e, z))
     bad = [(sorted(nums(e, False) ^ nums(z, True)), e[:60]) for e, z in pairs if nums(e, False) != nums(z, True)]
     if bad:
-        raise SystemExit("English and Chinese numbers differ: " + repr(bad))
+        raise SystemExit("English and Chinese numbers differ:\n" + "\n".join(map(repr, bad)))
 
 
 def main():
@@ -627,7 +892,7 @@ def main():
         by[x["slug"]].append(x)
     print("// Generated by scripts/gen-blog-posts.py from radeonrun bundle "
           f"{bundle.get('short_commit')} ({bundle.get('generated_at', '')[:10]}). Do not edit by hand.")
-    print('import { A, H2, Lead, P, Table, UL, type BlogPost } from "./blogUi";\n')
+    print('import { A, H2, H3, Lead, P, Pre, Table, UL, type BlogPost } from "./blogUi";\n')
     for zh, suffix in ((False, ""), (True, "_ZH")):
         print(f"export const ENGINE_POSTS{suffix}: BlogPost[] = [")
         print(engine_post("vllm", rows_all, zh))
