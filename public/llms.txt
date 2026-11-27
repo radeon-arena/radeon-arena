@@ -4,6 +4,10 @@
 
 The public leaderboard currently shows the Radeon 8060S (Strix Halo), the Radeon AI PRO R9700 and the Radeon PRO W7900. The API takes and returns structured JSON and needs a free account with a verified email address, created with an email code or a GitHub sign-in. Each account can send 30 messages per minute.
 
+## Windows app
+
+- [AMD Local LLM Helper](https://radeon-arena.com/local-helper): a Windows app that deploys local LLMs on AMD GPUs through a chat with the support agent, runs each confirmed step on the PC and ends with a local OpenAI-compatible endpoint; download and usage
+
 ## API
 
 - [API Docs](https://radeon-arena.com/docs): authentication, actions, reply types, errors and limits
@@ -27,7 +31,7 @@ The public leaderboard currently shows the Radeon 8060S (Strix Halo), the Radeon
 
 ## 中文
 
-Every public page also has a Chinese version under /zh, for example [API 文档](https://radeon-arena.com/zh/docs), [Strix Halo 榜单](https://radeon-arena.com/zh/strix/leaderboard) and [博客](https://radeon-arena.com/zh/blog). Blog posts have the same slugs in both languages.
+Every public page also has a Chinese version under /zh, for example [AMD 本地助手](https://radeon-arena.com/zh/local-helper), [API 文档](https://radeon-arena.com/zh/docs), [Strix Halo 榜单](https://radeon-arena.com/zh/strix/leaderboard) and [博客](https://radeon-arena.com/zh/blog). Blog posts have the same slugs in both languages.
 
 ## Open source
 

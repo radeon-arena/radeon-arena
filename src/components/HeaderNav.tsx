@@ -113,11 +113,11 @@ export function HeaderNav({
       </div>
 
       <Link
-        href={lp(lang, "/docs")}
-        aria-current={section === "docs" ? "page" : undefined}
-        className={`${LINK_BASE} order-4 lg:order-3 ${section === "docs" ? LINK_ACTIVE : LINK_IDLE}`}
+        href={lp(lang, "/local-helper")}
+        aria-current={section === "local-helper" ? "page" : undefined}
+        className={`${LINK_BASE} order-4 lg:order-3 ${section === "local-helper" ? LINK_ACTIVE : LINK_IDLE}`}
       >
-        {t(lang, "API Docs", "API 文档")}
+        {t(lang, "AMD Local Helper", "AMD 本地助手")}
       </Link>
     </div>
   );
