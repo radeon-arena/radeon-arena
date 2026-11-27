@@ -12,7 +12,7 @@ export const HELPER_INSTALLER = {
   version: "0.1.0",
   file: "RadeonLocalHelper-Setup-0.1.0.exe",
   sizeMB: "4.4",
-  sha256: "8ffd64184e414a5f4510c97047e71e324e700418a3dfebd9149d26b36dd306a0",
+  sha256: "232e12a5be780fd307bdeb57c6605818d324a56a7ef9071129a5c95b435ed06e",
 };
 
 export function localHelperMetadata(lang: Lang): Metadata {
