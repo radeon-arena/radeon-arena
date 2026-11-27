@@ -11,19 +11,11 @@ export type HeaderHardware = {
   disabled: boolean;
 };
 
-// Sections that exist under every hardware tab; switching tabs keeps the
-// current section when it is one of these.
-const HW_SECTIONS = ["leaderboard", "recipes", "submit"];
-
 const LINK_BASE =
   "inline-flex h-8 shrink-0 items-center rounded-md px-3 transition-colors";
 const LINK_ACTIVE = "font-medium text-zinc-50 shadow-[inset_0_-2px_0_#ED1C24]";
 const LINK_IDLE = "text-zinc-300 hover:bg-ink-800 hover:text-zinc-50";
 
-const SEG_BASE =
-  "inline-flex h-7 shrink-0 items-center rounded-md px-2.5 text-sm transition-colors";
-const SEG_ACTIVE = "bg-white font-semibold text-radeon-600 shadow-sm";
-const SEG_IDLE = "text-zinc-300 hover:text-zinc-50";
 
 export function HeaderNav({
   lang,
@@ -56,12 +48,16 @@ export function HeaderNav({
       active: section === "recipes",
     },
     {
+      href: lp(lang, "/local-helper"),
+      label: t(lang, "AMD Local Helper", "AMD 本地助手"),
+      active: section === "local-helper",
+    },
+    {
       href: lp(lang, "/blog"),
       label: t(lang, "Blog", "博客"),
       active: section === "blog",
     },
   ];
-  const hwSection = HW_SECTIONS.includes(section) ? section : "leaderboard";
 
   return (
     <div className="order-3 flex h-11 w-full min-w-0 items-center gap-1 overflow-x-auto border-t border-ink-700 thin-scroll lg:order-none lg:contents">
@@ -80,45 +76,6 @@ export function HeaderNav({
           </Link>
         ))}
       </nav>
-
-      <span aria-hidden="true" className="order-2 mx-1 h-5 w-px shrink-0 bg-ink-700 lg:hidden" />
-
-      <div
-        role="group"
-        aria-label={t(lang, "Hardware", "硬件")}
-        className="order-3 flex shrink-0 items-center gap-0.5 rounded-lg bg-ink-800 p-0.5 lg:order-3"
-      >
-        {hardware.map((h) =>
-          h.disabled ? (
-            <span
-              key={h.key}
-              title={`${h.label} — ${t(lang, "coming soon", "即将上线")}`}
-              aria-disabled="true"
-              className={`${SEG_BASE} cursor-not-allowed text-zinc-500`}
-            >
-              {h.short}
-            </span>
-          ) : (
-            <Link
-              key={h.key}
-              href={lp(lang, `/${h.key}/${hwSection}`)}
-              title={h.label}
-              aria-current={activeHw === h.key ? "page" : undefined}
-              className={`${SEG_BASE} ${activeHw === h.key ? SEG_ACTIVE : SEG_IDLE}`}
-            >
-              {h.short}
-            </Link>
-          ),
-        )}
-      </div>
-
-      <Link
-        href={lp(lang, "/local-helper")}
-        aria-current={section === "local-helper" ? "page" : undefined}
-        className={`${LINK_BASE} order-4 lg:order-3 ${section === "local-helper" ? LINK_ACTIVE : LINK_IDLE}`}
-      >
-        {t(lang, "AMD Local Helper", "AMD 本地助手")}
-      </Link>
     </div>
   );
 }

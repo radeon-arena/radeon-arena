@@ -13,8 +13,9 @@ export function Header({ lang }: { lang: Lang }) {
     disabled: Boolean(h.disabled),
   }));
 
-  // One row on wide screens (logo · nav · hardware · language). Below `lg` the
-  // nav and hardware tabs move to a second, horizontally scrollable row.
+  // One row on wide screens (logo · nav · language · account). Below `lg` the
+  // nav moves to a second, horizontally scrollable row. The hardware switch
+  // lives on the leaderboard / recipes pages (LeaderboardShell).
   return (
     <header className="sticky top-0 z-40 border-b border-ink-700 bg-ink-950/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-2 px-4 sm:px-6 lg:flex-nowrap lg:gap-x-4">

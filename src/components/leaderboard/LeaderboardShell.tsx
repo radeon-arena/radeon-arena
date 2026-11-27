@@ -1,6 +1,8 @@
 "use client";
 
-import { hwLabel } from "@/lib/hardware";
+import Link from "next/link";
+import { HARDWARE, hwLabel } from "@/lib/hardware";
+import { lp, t } from "@/lib/i18n";
 import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
 import { UsersView } from "@/components/leaderboard/UsersView";
 import { SubmitView } from "@/components/leaderboard/SubmitView";
@@ -35,6 +37,44 @@ const PAGE_COPY: Record<Lang, Record<TabKey, { title: string; subtitle: string }
   },
 };
 
+const SEG_BASE = "inline-flex h-8 shrink-0 items-center rounded-md px-3 text-sm transition-colors";
+const SEG_ACTIVE = "bg-white font-semibold text-radeon-600 shadow-sm";
+const SEG_IDLE = "text-zinc-300 hover:text-zinc-50";
+
+// Switches the GPU while staying on the same tab (leaderboard, recipes, ...).
+function HardwareSwitch({ hw, tab, lang }: { hw: string; tab: TabKey; lang: Lang }) {
+  return (
+    <div
+      role="group"
+      aria-label={t(lang, "GPU", "显卡")}
+      className="flex w-fit shrink-0 items-center gap-0.5 rounded-lg bg-ink-800 p-0.5"
+    >
+      {HARDWARE.map((h) =>
+        h.disabled ? (
+          <span
+            key={h.key}
+            title={`${h.label} — ${t(lang, "coming soon", "即将上线")}`}
+            aria-disabled="true"
+            className={`${SEG_BASE} cursor-not-allowed text-zinc-500`}
+          >
+            {h.short}
+          </span>
+        ) : (
+          <Link
+            key={h.key}
+            href={lp(lang, `/${h.key}/${tab}`)}
+            title={h.label}
+            aria-current={hw === h.key ? "page" : undefined}
+            className={`${SEG_BASE} ${hw === h.key ? SEG_ACTIVE : SEG_IDLE}`}
+          >
+            {h.short}
+          </Link>
+        ),
+      )}
+    </div>
+  );
+}
+
 export function LeaderboardShell({ hw, tab, lang }: { hw: string; tab: TabKey; lang: Lang }) {
   const copy = PAGE_COPY[lang][tab];
   // 中文榜单标题写明是哪款显卡，避免只看到“大模型推理榜单”不知道是哪一块卡的数据
@@ -43,8 +83,13 @@ export function LeaderboardShell({ hw, tab, lang }: { hw: string; tab: TabKey; l
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight text-radeon-400">{title}</h1>
-      <p className="mt-1 text-sm text-zinc-400">{subtitle}</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-3xl font-bold tracking-tight text-radeon-400">{title}</h1>
+          <p className="mt-1 text-sm text-zinc-400">{subtitle}</p>
+        </div>
+        <HardwareSwitch hw={hw} tab={tab} lang={lang} />
+      </div>
 
       <div className="mt-6">
         {tab === "leaderboard" && <LeaderboardView hw={hw} />}
