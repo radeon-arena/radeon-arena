@@ -512,7 +512,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -581,7 +581,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -645,7 +645,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -724,7 +724,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -795,7 +795,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -892,7 +892,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -994,7 +994,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1087,7 +1087,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1164,7 +1164,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1227,7 +1227,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1315,7 +1315,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1379,7 +1379,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1445,7 +1445,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1520,7 +1520,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1592,7 +1592,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1668,7 +1668,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1743,7 +1743,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1818,7 +1818,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1893,7 +1893,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -1969,7 +1969,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2031,7 +2031,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2089,7 +2089,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2164,7 +2164,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2238,7 +2238,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2315,7 +2315,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2390,7 +2390,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2465,7 +2465,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2541,7 +2541,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2629,7 +2629,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2686,7 +2686,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
         <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2768,7 +2768,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -2834,7 +2834,7 @@ export const MODEL_POSTS: BlogPost[] = [
         <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
         <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
       <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
@@ -3355,7 +3355,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3424,7 +3424,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3488,7 +3488,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3567,7 +3567,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3638,7 +3638,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3735,7 +3735,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3837,7 +3837,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -3930,7 +3930,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4007,7 +4007,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4070,7 +4070,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4158,7 +4158,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4222,7 +4222,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4288,7 +4288,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4363,7 +4363,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4435,7 +4435,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4511,7 +4511,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4586,7 +4586,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4661,7 +4661,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4736,7 +4736,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4812,7 +4812,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4874,7 +4874,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -4932,7 +4932,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5007,7 +5007,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5081,7 +5081,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5158,7 +5158,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5233,7 +5233,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5308,7 +5308,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5384,7 +5384,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5472,7 +5472,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5529,7 +5529,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
         <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5611,7 +5611,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
@@ -5677,7 +5677,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
         <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
         <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
       <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>

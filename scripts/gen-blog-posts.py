@@ -657,8 +657,7 @@ def model_post(m, xs, rows_all, zh=False):
            "      <UL>\n" + "".join(f'        <li><A href="{h}">{text(t)}</A></li>\n' for h, t in links) + "      </UL>",
            f"      <P>{text('用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 ' if zh else 'Deploying with a coding agent such as Claude Code or Codex? Have it call the ')}"
            f"<A href=\"{link('/docs', zh)}\">{text('AMD GPU 支持助手' if zh else 'AMD GPU Support Agent')}</A>"
-           f"{text('，我们的 A/B 测试见' if zh else ' first. Our A/B test is in ')}"
-           f"<A href=\"{link('/blog/support-agent-ab-test-windows-strix-halo', zh)}\">{text('这篇文章' if zh else 'this post')}</A>{text('。' if zh else '.')}</P>"]
+           f"{text('。' if zh else ' first.')}</P>"]
     method = [h2("测试方法" if zh else "How we measured")] + [p(s) for s in (METHOD_ZH if zh else METHOD)]
 
     layout = st.get("layout", "tutorial")
