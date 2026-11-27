@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
     "/docs",
-    "/blogs",
+    "/blog",
     "/terms",
     "/privacy",
     "/data-policy",
@@ -26,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/w7900/submit",
   ];
   // Blog posts keep the trailing slash their canonical URL has always had.
-  const posts = allPosts().map((p) => `/blogs/${p.slug}/`);
+  const posts = allPosts().map((p) => `/blog/${p.slug}/`);
 
   // Every page exists in English (root) and Chinese (/zh); list both, each
   // with hreflang links to the other.

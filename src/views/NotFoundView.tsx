@@ -16,7 +16,7 @@ export function NotFoundView({ lang }: { lang: Lang }) {
     { href: lp(lang, "/"), label: t(lang, "Home", "首页") },
     { href: lp(lang, "/strix/leaderboard"), label: t(lang, "Leaderboard", "榜单") },
     { href: lp(lang, "/docs"), label: t(lang, "API Docs", "API 文档") },
-    { href: lp(lang, "/blogs"), label: t(lang, "Blog", "博客") },
+    { href: lp(lang, "/blog"), label: t(lang, "Blog", "博客") },
   ];
   return (
     <section className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">

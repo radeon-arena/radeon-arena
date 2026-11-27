@@ -23,12 +23,12 @@ export function enPath(pathname: string): string {
 /**
  * canonical + hreflang for page metadata. Only blog posts use this: Next adds
  * a trailing slash to these URLs, which matches how posts have always been
- * served. Every other public page (/, /docs, /blogs, the device tabs, the
+ * served. Every other public page (/, /docs, /blog, the device tabs, the
  * policies, and their /zh twins) gets canonical and hreflang from nginx Link
  * headers without a trailing slash, so it must not declare its own here.
  */
 export function alternates(lang: Lang, path: string) {
-  if (!path.startsWith("/blogs/")) return undefined;
+  if (!path.startsWith("/blog/")) return undefined;
   // Spell out the slash: Next skips it for slugs with a dot (model-glm-5.3-flash).
   const p = path.endsWith("/") ? path : `${path}/`;
   return {

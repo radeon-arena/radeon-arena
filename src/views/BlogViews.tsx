@@ -7,7 +7,7 @@ import { HARDWARE } from "@/lib/hardware";
 import { BlogList, type BlogListItem } from "@/components/BlogList";
 import { alternates, lp, t, type Lang } from "@/lib/i18n";
 
-// Shared by /blogs (English) and /zh/blogs (Chinese). Both languages have the
+// Shared by /blog (English) and /zh/blog (Chinese). Both languages have the
 // same posts under the same slugs.
 
 export function blogIndexMetadata(lang: Lang): Metadata {
@@ -82,7 +82,7 @@ export function blogPostMetadata(lang: Lang, slug: string): Metadata {
   return {
     title: `${post.title} - ${t(lang, "Radeon Arena Blog", "Radeon Arena 博客")}`,
     description: post.excerpt,
-    alternates: alternates(lang, `/blogs/${post.slug}`),
+    alternates: alternates(lang, `/blog/${post.slug}`),
     openGraph: { title: post.title, description: post.excerpt, type: "article", locale: lang === "zh" ? "zh_CN" : "en_US" },
     twitter: { card: "summary", title: post.title, description: post.excerpt },
   };
@@ -94,7 +94,7 @@ export function BlogPostView({ lang, slug }: { lang: Lang; slug: string }) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-      <Link href={lp(lang, "/blogs")} className="inline-flex items-center gap-1 text-sm text-radeon-400 hover:text-radeon-300">
+      <Link href={lp(lang, "/blog")} className="inline-flex items-center gap-1 text-sm text-radeon-400 hover:text-radeon-300">
         <span aria-hidden>←</span> {t(lang, "All posts", "全部文章")}
       </Link>
 

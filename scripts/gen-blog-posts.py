@@ -574,7 +574,7 @@ def engine_post(key, rows_all, zh=False):
             "      <Table\n        head={" + js(head) + "}\n        numericFrom={3}\n        rows={[\n"
             + ",\n".join("        [" + ", ".join(js(c) for c in r) + "]" for r in rows) + ",\n        ]}\n      />",
             f"      <H2>{h_posts}</H2>",
-            "      <UL>\n" + "".join(f'        <li><A href="{link("/blogs/model-" + s, zh)}">{text(mname[s])}</A></li>\n' for s in [m[0] for m in MODELS] if s in models) + "      </UL>",
+            "      <UL>\n" + "".join(f'        <li><A href="{link("/blog/model-" + s, zh)}">{text(mname[s])}</A></li>\n' for s in [m[0] for m in MODELS] if s in models) + "      </UL>",
             f"      <H2>{h_method}</H2>",
             *[f"      <P>{text(p)}</P>" for p in method],
             "      </>\n    ),\n  },"]

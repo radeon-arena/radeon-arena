@@ -56,9 +56,9 @@ export function HeaderNav({
       active: section === "recipes",
     },
     {
-      href: lp(lang, "/blogs"),
+      href: lp(lang, "/blog"),
       label: t(lang, "Blog", "博客"),
-      active: section === "blogs",
+      active: section === "blog",
     },
   ];
   const hwSection = HW_SECTIONS.includes(section) ? section : "leaderboard";

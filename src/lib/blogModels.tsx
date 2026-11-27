@@ -85,14 +85,14 @@ export const ENGINE_POSTS: BlogPost[] = [
       />
       <H2>Model posts</H2>
       <UL>
-        <li><A href="/blogs/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/blogs/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/blogs/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/blogs/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/blogs/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/blogs/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
-        <li><A href="/blogs/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/blogs/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
+        <li><A href="/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
+        <li><A href="/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/blog/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
+        <li><A href="/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/blog/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
       </UL>
       <H2>Method</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
@@ -367,36 +367,36 @@ export const ENGINE_POSTS: BlogPost[] = [
       />
       <H2>Model posts</H2>
       <UL>
-        <li><A href="/blogs/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/blogs/model-qwen3-8b">{"Qwen3-8B"}</A></li>
-        <li><A href="/blogs/model-qwen3-14b">{"Qwen3-14B"}</A></li>
-        <li><A href="/blogs/model-qwen3-32b">{"Qwen3-32B"}</A></li>
-        <li><A href="/blogs/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/blogs/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/blogs/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/blogs/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/blogs/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
-        <li><A href="/blogs/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/blogs/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
-        <li><A href="/blogs/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
-        <li><A href="/blogs/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
-        <li><A href="/blogs/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
-        <li><A href="/blogs/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
-        <li><A href="/blogs/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
-        <li><A href="/blogs/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
-        <li><A href="/blogs/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
-        <li><A href="/blogs/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
-        <li><A href="/blogs/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
-        <li><A href="/blogs/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
-        <li><A href="/blogs/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
-        <li><A href="/blogs/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
-        <li><A href="/blogs/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
-        <li><A href="/blogs/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
-        <li><A href="/blogs/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
-        <li><A href="/blogs/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
-        <li><A href="/blogs/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
-        <li><A href="/blogs/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
-        <li><A href="/blogs/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
+        <li><A href="/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
+        <li><A href="/blog/model-qwen3-8b">{"Qwen3-8B"}</A></li>
+        <li><A href="/blog/model-qwen3-14b">{"Qwen3-14B"}</A></li>
+        <li><A href="/blog/model-qwen3-32b">{"Qwen3-32B"}</A></li>
+        <li><A href="/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/blog/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
+        <li><A href="/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/blog/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
+        <li><A href="/blog/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
+        <li><A href="/blog/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
+        <li><A href="/blog/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
+        <li><A href="/blog/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
+        <li><A href="/blog/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
+        <li><A href="/blog/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
+        <li><A href="/blog/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
+        <li><A href="/blog/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
+        <li><A href="/blog/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
+        <li><A href="/blog/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
+        <li><A href="/blog/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
+        <li><A href="/blog/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
+        <li><A href="/blog/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
+        <li><A href="/blog/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
+        <li><A href="/blog/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
       </UL>
       <H2>Method</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
@@ -1935,14 +1935,14 @@ export const ENGINE_POSTS_ZH: BlogPost[] = [
       />
       <H2>各模型文章</H2>
       <UL>
-        <li><A href="/zh/blogs/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/zh/blogs/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
-        <li><A href="/zh/blogs/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/zh/blogs/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/zh/blog/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
+        <li><A href="/zh/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/zh/blog/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
       </UL>
       <H2>测试方法</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
@@ -2217,36 +2217,36 @@ export const ENGINE_POSTS_ZH: BlogPost[] = [
       />
       <H2>各模型文章</H2>
       <UL>
-        <li><A href="/zh/blogs/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3-8b">{"Qwen3-8B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3-14b">{"Qwen3-14B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3-32b">{"Qwen3-32B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/zh/blogs/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
-        <li><A href="/zh/blogs/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/zh/blogs/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
-        <li><A href="/zh/blogs/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
-        <li><A href="/zh/blogs/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
-        <li><A href="/zh/blogs/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
-        <li><A href="/zh/blogs/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
-        <li><A href="/zh/blogs/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
-        <li><A href="/zh/blogs/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
-        <li><A href="/zh/blogs/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
-        <li><A href="/zh/blogs/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
-        <li><A href="/zh/blogs/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
-        <li><A href="/zh/blogs/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
-        <li><A href="/zh/blogs/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
-        <li><A href="/zh/blogs/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
-        <li><A href="/zh/blogs/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
-        <li><A href="/zh/blogs/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
-        <li><A href="/zh/blogs/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
-        <li><A href="/zh/blogs/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
-        <li><A href="/zh/blogs/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
-        <li><A href="/zh/blogs/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
-        <li><A href="/zh/blogs/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-8b">{"Qwen3-8B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-14b">{"Qwen3-14B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-32b">{"Qwen3-32B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
+        <li><A href="/zh/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/zh/blog/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
+        <li><A href="/zh/blog/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
+        <li><A href="/zh/blog/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
+        <li><A href="/zh/blog/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
+        <li><A href="/zh/blog/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
+        <li><A href="/zh/blog/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
+        <li><A href="/zh/blog/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
+        <li><A href="/zh/blog/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
+        <li><A href="/zh/blog/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
+        <li><A href="/zh/blog/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
+        <li><A href="/zh/blog/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
+        <li><A href="/zh/blog/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
+        <li><A href="/zh/blog/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
+        <li><A href="/zh/blog/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
+        <li><A href="/zh/blog/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
       </UL>
       <H2>测试方法</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>

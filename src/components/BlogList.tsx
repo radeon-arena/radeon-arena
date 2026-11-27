@@ -81,7 +81,7 @@ export function BlogList({ lang, posts, hardware }: { lang: Lang; posts: BlogLis
           return (
             <li key={p.slug} className="border-b border-ink-700">
               <Link
-                href={lp(lang, `/blogs/${p.slug}`)}
+                href={lp(lang, `/blog/${p.slug}`)}
                 className="group grid gap-x-10 gap-y-2 py-7 md:grid-cols-[9rem_minmax(0,1fr)]"
               >
                 <div className="text-sm text-zinc-500">

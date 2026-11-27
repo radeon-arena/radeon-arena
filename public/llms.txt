@@ -21,14 +21,14 @@ The public leaderboard currently shows the Radeon 8060S (Strix Halo), the Radeon
 
 ## Blog
 
-- [A/B test: does the AMD GPU Support Agent help a coding agent deploy a local model?](https://radeon-arena.com/blogs/support-agent-ab-test-windows-strix-halo/): Claude Code deploying Qwen3.8-27B on a Windows Strix Halo laptop, three runs with and three without the support agent; time, tokens and failures on both sides
-- [vLLM on AMD Radeon](https://radeon-arena.com/blogs/engine-vllm/): every vLLM result on the board, and vLLM against llama.cpp with the same weights and cards
-- [llama.cpp on AMD Radeon](https://radeon-arena.com/blogs/engine-llama-cpp/): every llama.cpp result on the board, and what quantization does to decode speed
-- [Blog index](https://radeon-arena.com/blogs): one post per model with all of its measured deployments across devices, engines and weight formats
+- [A/B test: does the AMD GPU Support Agent help a coding agent deploy a local model?](https://radeon-arena.com/blog/support-agent-ab-test-windows-strix-halo/): Claude Code deploying Qwen3.8-27B on a Windows Strix Halo laptop, three runs with and three without the support agent; time, tokens and failures on both sides
+- [vLLM on AMD Radeon](https://radeon-arena.com/blog/engine-vllm/): every vLLM result on the board, and vLLM against llama.cpp with the same weights and cards
+- [llama.cpp on AMD Radeon](https://radeon-arena.com/blog/engine-llama-cpp/): every llama.cpp result on the board, and what quantization does to decode speed
+- [Blog index](https://radeon-arena.com/blog): one post per model with all of its measured deployments across devices, engines and weight formats
 
 ## 中文
 
-Every public page also has a Chinese version under /zh, for example [API 文档](https://radeon-arena.com/zh/docs), [Strix Halo 榜单](https://radeon-arena.com/zh/strix/leaderboard) and [博客](https://radeon-arena.com/zh/blogs). Blog posts have the same slugs in both languages.
+Every public page also has a Chinese version under /zh, for example [API 文档](https://radeon-arena.com/zh/docs), [Strix Halo 榜单](https://radeon-arena.com/zh/strix/leaderboard) and [博客](https://radeon-arena.com/zh/blog). Blog posts have the same slugs in both languages.
 
 ## Open source
 
