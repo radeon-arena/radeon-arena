@@ -29,26 +29,39 @@ export const API = {
 };
 
 // The real open-source projects that produce the benchmark results.
+// `engine: true` marks the inference engines; the rest are the harness and platform.
 export const PROJECTS = {
-  vllmDocker: {
-    name: "ROCm vLLM",
-    url: "https://github.com/ROCm/vllm",
-    blurb: "AMD's ROCm build of vLLM — the engine behind the vLLM results on Radeon.",
-    blurbZh: "AMD 为 ROCm 维护的 vLLM，Radeon 上 vLLM 结果用的就是它。",
-    short: "Inference engine for AMD Radeon",
-    shortZh: "AMD Radeon 上的推理引擎",
+  llamacpp: {
+    name: "llama.cpp",
+    url: "https://github.com/ggml-org/llama.cpp",
+    engine: true,
+    blurb: "GGUF inference with the ROCm/HIP backend. Most results on the board, from 2-bit to BF16, run on it.",
+    blurbZh: "用 ROCm/HIP 后端跑 GGUF 模型。榜单上大部分结果（2 比特到 BF16）都是它跑的。",
+    short: "Inference engine (GGUF, ROCm/HIP)",
+    shortZh: "推理引擎（GGUF，ROCm/HIP）",
   },
-  benchy: {
-    name: "radeonrun",
-    url: "https://github.com/radeon-arena/radeonrun",
-    blurb: "Docker images + recipes for running vLLM and llama.cpp on AMD Radeon GPUs (Strix Halo / W7900 / R9700, ROCm).",
-    blurbZh: "在 AMD Radeon 显卡（Strix Halo、W7900、R9700，ROCm）上运行 vLLM 和 llama.cpp 的镜像与配方。",
-    short: "ROCm containers & recipes (Radeon)",
-    shortZh: "面向 Radeon 的 ROCm 镜像与配方",
+  vllm: {
+    name: "vLLM",
+    url: "https://github.com/vllm-project/vllm",
+    engine: true,
+    blurb: "High-throughput serving engine on ROCm: BF16, AWQ, AMD Quark and AutoRound weights.",
+    blurbZh: "ROCm 上的高吞吐推理服务引擎，跑 BF16、AWQ、AMD Quark 和 AutoRound 权重。",
+    short: "Inference engine (serving)",
+    shortZh: "推理引擎（推理服务）",
   },
   radeonrun: {
+    name: "radeonrun",
+    url: "https://github.com/radeon-arena/radeonrun",
+    engine: false,
+    blurb: "Pinned engine images, recipes and the benchmark harness for Radeon GPUs (Strix Halo, R9700, W7900).",
+    blurbZh: "面向 Radeon 显卡（Strix Halo、R9700、W7900）的固定版本引擎镜像、配方和跑分工具。",
+    short: "Images, recipes & benchmark harness",
+    shortZh: "镜像、配方与跑分工具",
+  },
+  rocm: {
     name: "AMD ROCm",
     url: "https://github.com/ROCm/ROCm",
+    engine: false,
     blurb: "The AMD ROCm platform that powers GPU compute on Radeon hardware.",
     blurbZh: "AMD ROCm 平台，为 Radeon 硬件提供 GPU 计算能力。",
     short: "GPU compute platform",

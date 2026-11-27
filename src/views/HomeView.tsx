@@ -34,10 +34,10 @@ export function HomeView({ lang }: { lang: Lang }) {
       <div className="border-b border-ink-800 bg-ink-950/50">
         <div className="mx-auto max-w-7xl px-4 py-2 text-center text-xs text-zinc-500 sm:px-6">
           {t(lang, "Benchmarks run with:", "跑分工具：")}{" "}
-          <a href={PROJECTS.vllmDocker.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.vllmDocker.name}</a> ·{" "}
+          <a href={PROJECTS.llamacpp.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.llamacpp.name}</a> ·{" "}
+          <a href={PROJECTS.vllm.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.vllm.name}</a> ·{" "}
           <a href={PROJECTS.radeonrun.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.radeonrun.name}</a> ·{" "}
-          <a href={SITE.blog} className="text-zinc-400 hover:text-radeon-400">{t(lang, "ROCm Blog", "ROCm 博客")}</a> ·{" "}
-          <a href={PROJECTS.benchy.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.benchy.name}</a>
+          <a href={PROJECTS.rocm.url} className="text-zinc-400 hover:text-radeon-400">{PROJECTS.rocm.name}</a>
         </div>
       </div>
 
@@ -91,16 +91,16 @@ export function HomeView({ lang }: { lang: Lang }) {
       {/* Open-source engines that produced the data */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
         <div className="card p-8">
-          <h2 className="text-xl font-semibold text-zinc-100">{t(lang, "Benchmark Engines", "跑分所用项目")}</h2>
+          <h2 className="text-xl font-semibold text-zinc-100">{t(lang, "Inference Engines", "推理引擎")}</h2>
           <p className="mt-2 max-w-2xl text-sm text-zinc-400">
             {t(
               lang,
-              "The numbers on this leaderboard were produced by these open-source inference engines running on AMD ROCm hardware. (The leaderboard itself only collects and displays their results.)",
-              "榜单上的数字是用这些开源项目在 AMD ROCm 硬件上跑出来的。网站本身只收集和展示结果。",
+              "Every number on the leaderboard was measured with these open-source inference engines on AMD ROCm, using pinned images and recipes from radeonrun. The site itself only collects and displays the results.",
+              "榜单上的每个数字都是用这些开源推理引擎在 AMD ROCm 上实测的，镜像和配方来自 radeonrun 并固定版本。网站本身只收集和展示结果。",
             )}
           </p>
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
-            {Object.values(PROJECTS).map((p) => (
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
+            {Object.values(PROJECTS).filter((p) => p.engine).map((p) => (
               <div key={p.name} className="rounded-lg border border-ink-700 bg-ink-850 p-5">
                 <h3 className="font-medium text-zinc-100">{p.name}</h3>
                 <p className="mt-1 text-sm text-zinc-500">{t(lang, p.blurb, p.blurbZh)}</p>

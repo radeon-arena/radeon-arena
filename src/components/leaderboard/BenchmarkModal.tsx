@@ -9,7 +9,7 @@ import { VerificationBadge } from "./VerificationBadge";
 import { getGithubBenchmark } from "@/lib/githubData";
 import { useLang } from "@/components/LangProvider";
 
-const HALO = PROJECTS.benchy; // radeonrun
+const HALO = PROJECTS.radeonrun;
 
 function clusterLabel(n: number, zh: boolean): string {
   if (zh) return `${Math.max(1, n)} 卡`;
