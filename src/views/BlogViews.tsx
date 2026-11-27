@@ -15,8 +15,8 @@ export function blogIndexMetadata(lang: Lang): Metadata {
     title: t(lang, "Blog - Radeon Arena", "博客 - Radeon Arena"),
     description: t(
       lang,
-      "Engineering notes, benchmark write-ups, and tuning logs for running LLMs on AMD Radeon hardware.",
-      "在 AMD Radeon 硬件上跑大模型的工程笔记、跑分解读和调优记录。",
+      "Step-by-step guides and measured results for running LLMs on AMD Radeon: copy the commands and go.",
+      "在 AMD Radeon 上部署大模型的教程和实测：复制命令就能跑。",
     ),
   };
 }
@@ -52,8 +52,8 @@ export function BlogIndex({ lang }: { lang: Lang }) {
         <p className="mt-3 text-lg leading-8 text-zinc-400">
           {t(
             lang,
-            "Engineering notes and benchmark write-ups for running LLMs on AMD Radeon hardware. Every number comes from our own measurements.",
-            "在 AMD Radeon 硬件上跑大模型的工程笔记和跑分解读。文中数字都来自本站实测。",
+            "How to run popular LLMs on AMD Radeon, with commands you can paste. Every number comes from our own measurements.",
+            "在 AMD Radeon 上部署热门大模型的教程，命令复制就能跑。文中数字都来自本站实测。",
           )}
         </p>
       </header>
