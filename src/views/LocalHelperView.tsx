@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { lp, t, type Lang } from "@/lib/i18n";
 
-// Product page for AMD Local LLM Helper, the Windows app that deploys local
+// Product page for Radeon Local Helper, the Windows app that deploys local
 // LLMs through a chat with the Radeon Arena support agent. Shared by
 // /local-helper and /zh/local-helper.
 
@@ -10,14 +10,14 @@ import { lp, t, type Lang } from "@/lib/i18n";
 // these three values together with the file.
 export const HELPER_INSTALLER = {
   version: "0.1.0",
-  file: "AMDLocalLLMHelper-Setup-0.1.0.exe",
+  file: "RadeonLocalHelper-Setup-0.1.0.exe",
   sizeMB: "4.4",
-  sha256: "b009f20be9fa9e85f3013c67720adf0a80872671af28012441ff9e41fc3bb40f",
+  sha256: "8ffd64184e414a5f4510c97047e71e324e700418a3dfebd9149d26b36dd306a0",
 };
 
 export function localHelperMetadata(lang: Lang): Metadata {
   return {
-    title: t(lang, "AMD Local LLM Helper - Radeon Arena", "AMD 本地助手 - Radeon Arena"),
+    title: t(lang, "Radeon Local Helper - Radeon Arena", "Radeon 本地助手 - Radeon Arena"),
     description: t(
       lang,
       "A Windows app that deploys local LLMs on AMD GPUs through a chat: it recommends a framework and model, runs each step on your PC after you confirm, and ends with a local OpenAI-compatible endpoint.",
@@ -158,7 +158,7 @@ export function LocalHelperView({ lang }: { lang: Lang }) {
       <section className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)]">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-50 sm:text-5xl">
-            {t(lang, "AMD Local LLM Helper", "AMD 本地助手")}
+            {t(lang, "Radeon Local Helper", "Radeon 本地助手")}
           </h1>
           <p className="mt-5 text-lg leading-8 text-zinc-400">
             {t(

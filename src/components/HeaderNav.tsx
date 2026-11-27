@@ -49,7 +49,7 @@ export function HeaderNav({
     },
     {
       href: lp(lang, "/local-helper"),
-      label: t(lang, "AMD Local Helper", "AMD 本地助手"),
+      label: t(lang, "Radeon Local Helper", "Radeon 本地助手"),
       active: section === "local-helper",
     },
     {
