@@ -42,7 +42,7 @@ export default function PrivacyPageZh() {
         <section>
           <h2 className="text-lg font-semibold text-zinc-100">支持助手与模型处理</h2>
           <p className="mt-2 text-zinc-400">
-            支持助手的任务（部署方案、问答或排障）会保存以下内容：结构化的机器配置、问题或请求的任务、追问、回复、生成的方案、打码后的排障记录、回复语言，以及你明确上报的结果。这些数据用于多轮任务、你的历史记录和排障。问题、方案和诊断会发送给AMD RadeonCloud 提供的大模型服务。为了作答，助手可能向
+            支持助手的任务（部署方案、问答或排障）会保存以下内容：结构化的机器配置、问题或请求的任务、追问、回复、生成的方案、打码后的排障记录、回复语言，以及你明确上报的结果。这些数据用于多轮任务、你的历史记录和排障。问题、方案和诊断会发送给 AMD RadeonCloud 提供的大模型服务。为了作答，助手可能向
             DuckDuckGo 和 GitHub 发送搜索词，并抓取公开网页。知识库检索在 Radeon Arena 服务器上完成，不经过大模型。请不要附带凭据或无关的个人信息。
           </p>
           <p className="mt-2 text-zinc-400">
