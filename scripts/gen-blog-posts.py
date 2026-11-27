@@ -186,6 +186,7 @@ def join_list(items, zh):
 
 
 def link(path, zh):
+    path = path if path.endswith("/") else path + "/"  # canonical URLs end in a slash
     return ("/zh" + path) if zh else path
 
 
@@ -267,12 +268,12 @@ def auto_points(xs, zh=False):
 
 METHOD = [
     "How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only.",
-    "\u201c1 request\u201d is the decode speed one user sees. \u201c32 requests\u201d is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown.",
+    "\u201c1 request\u201d is the decode speed one user sees. \u201c32 requests\u201d is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown.",
     "R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page.",
 ]
 METHOD_ZH = [
     "用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。",
-    "\u201c单请求\u201d是一个用户实际看到的解码速度；\u201c32 并发\u201d是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。",
+    "\u201c单请求\u201d是一个用户实际看到的解码速度；\u201c32 并发\u201d是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。",
     "R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。",
 ]
 
@@ -317,6 +318,7 @@ def recipe_links(devs, zh=False):
 
 PUBLIC_IMAGE_PREFIXES = ("ghcr.io/inferstation/", "ghcr.io/radeon-arena/halo-")
 LLAMA_REPO = "https://github.com/ggml-org/llama.cpp"
+GFX = {"w7900": "gfx1100", "r9700": "gfx1201", "strix": "gfx1151"}
 
 
 def find(xs, spec):
@@ -386,7 +388,9 @@ def download_cmd(x, zh):
         what = ""
     mirror = "# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com" if zh else \
         "# optional mirror: export HF_ENDPOINT=https://hf-mirror.com"
-    return f"pip install -U huggingface_hub\n{mirror}\nhf download {src}{what} --local-dir ~/models/{local_dir}"
+    pipx = "pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub" if zh else \
+        "pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv"
+    return f"{pipx}\n{mirror}\nhf download {src}{what} --local-dir ~/models/{local_dir}"
 
 
 def pair_flags(args):
@@ -449,7 +453,7 @@ def build_cmd(x, zh):
     run = wrap([f"{k}={v}" for k, v in env.items()] + [shlex.quote(a) if not a.startswith("~/") else a for a in argv], "  ")
     return (f"{note}\ngit clone {LLAMA_REPO} && cd llama.cpp\ngit checkout {commit[:12]}\n"
             'HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \\\n'
-            "  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release\n"
+            f"  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS={GFX[x['dev']]} -DCMAKE_BUILD_TYPE=Release\n"
             "cmake --build build --config Release -j\n\n" + run)
 
 
@@ -494,7 +498,7 @@ def tutorial(x, slug, zh, title=None):
         out.append(h2(title or f"三步跑起来：{DEV_LONG_ZH[x['dev']]}"))
         if src_build:
             out.append(p(f"下面是榜单上这一行的原样复现：{where(x, True)}。准备一台装好 ROCm（含 hipconfig）、CMake 和 Git 的 Linux 机器。"
-                         "我们测试 W7900 用的镜像还没有公开，所以这里从源码编译同一个版本的 llama.cpp。"))
+                         f"我们测试 {DEV[x['dev']]} 用的镜像还没有公开，所以这里从源码编译同一个版本的 llama.cpp。"))
         else:
             out.append(p(f"下面是榜单上这一行的原样复现：{where(x, True)}。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，"
                          "当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"))
@@ -516,7 +520,7 @@ def tutorial(x, slug, zh, title=None):
         out.append(h2(title or f"Run it in three steps on {DEV_LONG[x['dev']]}"))
         if src_build:
             out.append(p(f"This reproduces one row of the board exactly: {where(x, False)}. You need a Linux machine with ROCm (including hipconfig), CMake and Git. "
-                         "The image we used on W7900 is not public yet, so we build the same llama.cpp version from source."))
+                         f"The image we used on {DEV[x['dev']]} is not public yet, so we build the same llama.cpp version from source."))
         else:
             out.append(p(f"This reproduces one row of the board exactly: {where(x, False)}. You need a Linux machine with the ROCm driver and Docker, "
                          "and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."))
@@ -847,8 +851,9 @@ def check_notes(rows_all):
             vals |= {f"{v:.1f}", f"{v:,.0f}", f"{v:.0f}", f"{v/1000:.1f}"}
     ratios = collections.defaultdict(set)
     for slug, xs in by.items():
-        ms = [v for x in xs for v in (x["c1"], x["c32"]) if v]
-        ratios[slug] = {f"{a / b:.1f}" for a in ms for b in ms if b}
+        for key in ("c1", "c32"):
+            ms = [x[key] for x in xs if x[key]]
+            ratios[slug] |= {f"{a / b:.1f}" for a in ms for b in ms} | {f"{a / b:.0f}" for a in ms for b in ms if 2.5 <= a / b}
     allowed = {"1", "2", "4", "8", "16", "32", "512", "100", "0", "3", "5"} | ALLOWED_FACTS
     bad = []
     texts = [("", t) for d in (ENGINE_NOTES, ENGINE_NOTES_ZH) for ts in d.values() for t in ts]

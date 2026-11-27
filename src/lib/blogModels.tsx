@@ -16,7 +16,7 @@ export const ENGINE_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps: Qwen3-4B as the example"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, vLLM, BF16. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name engine-vllm \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3-4B-BF16 --served-model-name qwen3-4b \\\n    --host 0.0.0.0 --port 8000 --trust-remote-code --dtype bfloat16 \\\n    --max-model-len 8192 --max-num-seqs 32 --gpu-memory-utilization 0.85 \\\n    --attention-backend TRITON_ATTN\""}</Pre>
@@ -97,18 +97,18 @@ export const ENGINE_POSTS: BlogPost[] = [
       />
       <H2>Model posts</H2>
       <UL>
-        <li><A href="/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/blog/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
-        <li><A href="/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/blog/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
+        <li><A href="/blog/model-qwen3-4b/">{"Qwen3-4B"}</A></li>
+        <li><A href="/blog/model-qwen3-30b-a3b/">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-27b/">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-35b-a3b/">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.8-27b/">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/blog/model-diffusiongemma-26b-a4b/">{"DiffusionGemma-26B-A4B"}</A></li>
+        <li><A href="/blog/model-gemma-4-26b-a4b/">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/blog/model-gemma-4-31b/">{"Gemma-4-31B"}</A></li>
       </UL>
       <H2>Method</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -127,7 +127,7 @@ export const ENGINE_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps: Qwen3-30B-A3B as the example"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name engine-llamacpp \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-30B-A3B/Qwen3-30B-A3B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -391,40 +391,40 @@ export const ENGINE_POSTS: BlogPost[] = [
       />
       <H2>Model posts</H2>
       <UL>
-        <li><A href="/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/blog/model-qwen3-8b">{"Qwen3-8B"}</A></li>
-        <li><A href="/blog/model-qwen3-14b">{"Qwen3-14B"}</A></li>
-        <li><A href="/blog/model-qwen3-32b">{"Qwen3-32B"}</A></li>
-        <li><A href="/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/blog/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
-        <li><A href="/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/blog/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
-        <li><A href="/blog/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
-        <li><A href="/blog/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
-        <li><A href="/blog/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
-        <li><A href="/blog/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
-        <li><A href="/blog/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
-        <li><A href="/blog/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
-        <li><A href="/blog/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
-        <li><A href="/blog/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
-        <li><A href="/blog/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
-        <li><A href="/blog/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
-        <li><A href="/blog/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
-        <li><A href="/blog/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
-        <li><A href="/blog/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
-        <li><A href="/blog/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
-        <li><A href="/blog/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
-        <li><A href="/blog/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
-        <li><A href="/blog/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
-        <li><A href="/blog/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
-        <li><A href="/blog/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
+        <li><A href="/blog/model-qwen3-4b/">{"Qwen3-4B"}</A></li>
+        <li><A href="/blog/model-qwen3-8b/">{"Qwen3-8B"}</A></li>
+        <li><A href="/blog/model-qwen3-14b/">{"Qwen3-14B"}</A></li>
+        <li><A href="/blog/model-qwen3-32b/">{"Qwen3-32B"}</A></li>
+        <li><A href="/blog/model-qwen3-30b-a3b/">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-27b/">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/blog/model-qwen3.6-35b-a3b/">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/blog/model-qwen3.8-27b/">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/blog/model-qwen3.8-flash-next/">{"Qwen3.8-Flash-Next"}</A></li>
+        <li><A href="/blog/model-gemma-4-26b-a4b/">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/blog/model-llama-3.1-8b/">{"Llama-3.1-8B-Instruct"}</A></li>
+        <li><A href="/blog/model-granite-4.2-8b/">{"Granite 4.2 8B"}</A></li>
+        <li><A href="/blog/model-granite-4.2-30b/">{"Granite 4.2 30B"}</A></li>
+        <li><A href="/blog/model-lfm2.5-24b-a2b/">{"LFM2.5-24B-A2B"}</A></li>
+        <li><A href="/blog/model-lfm3-1.7b/">{"LFM3-1.7B"}</A></li>
+        <li><A href="/blog/model-ling-3.0-flash/">{"Ling-3.0-flash"}</A></li>
+        <li><A href="/blog/model-ling-3.0-tiny/">{"Ling-3.0-tiny"}</A></li>
+        <li><A href="/blog/model-mimo-v2.6-distill-qwen-9b/">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
+        <li><A href="/blog/model-mimo-v2.6-flash/">{"MiMo-V2.6-Flash"}</A></li>
+        <li><A href="/blog/model-mimo-v2.5/">{"MiMo-V2.5"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-bolt-e4b/">{"Nemotron 3.5 Bolt E4B"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-bolt-74b-a9b/">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-lightning-30b-a3b/">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
+        <li><A href="/blog/model-nemotron-3.5-super-vl-120b-a12b/">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
+        <li><A href="/blog/model-minicpm-v-4.7-1b/">{"MiniCPM-V 4.7 1B"}</A></li>
+        <li><A href="/blog/model-minicpm-v-4.7-35b-a3b/">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
+        <li><A href="/blog/model-minicpm5-2b/">{"MiniCPM5-2B"}</A></li>
+        <li><A href="/blog/model-step-3.5-flash/">{"Step-3.5-Flash"}</A></li>
+        <li><A href="/blog/model-deepseek-v4-flash/">{"DeepSeek-V4-Flash-0731"}</A></li>
+        <li><A href="/blog/model-glm-5.3-flash/">{"GLM-5.3-Flash"}</A></li>
       </UL>
       <H2>Method</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -473,7 +473,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-4B-GGUF Qwen3-4B-Q4_K_M.gguf --local-dir ~/models/Qwen3-4B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-4B-GGUF Qwen3-4B-Q4_K_M.gguf --local-dir ~/models/Qwen3-4B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3-4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3-4B/Qwen3-4B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -485,7 +485,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700, vLLM, BF16. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f qwen3-4b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3-4b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3-4B-BF16 --served-model-name qwen3-4b \\\n    --host 0.0.0.0 --port 8000 --trust-remote-code --dtype bfloat16 \\\n    --max-model-len 8192 --max-num-seqs 32 --gpu-memory-utilization 0.85 \\\n    --attention-backend TRITON_ATTN\""}</Pre>
@@ -507,15 +507,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -539,7 +539,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-8B-GGUF Qwen3-8B-Q4_K_M.gguf --local-dir ~/models/Qwen3-8B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-8B-GGUF Qwen3-8B-Q4_K_M.gguf --local-dir ~/models/Qwen3-8B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3-8b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-8B/Qwen3-8B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -577,21 +577,21 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
   },
   {
     slug: "model-qwen3-14b",
-    title: "Don't run Qwen3-14B in BF16: on Strix Halo, Q4_K_M is 3.1x faster",
+    title: "Don't run Qwen3-14B in BF16: on Strix Halo, Q4_K_M is 3x faster",
     date: "2026-11-26",
     readingMinutes: 4,
     tags: ["Model", "Qwen3-14B", "Strix Halo", "W7900", "llama.cpp"],
@@ -599,7 +599,7 @@ export const MODEL_POSTS: BlogPost[] = [
     content: (
       <>
       <Lead>{"Many people reach for the original weights by reflex. At 14B that habit is expensive."}</Lead>
-      <P>{"On Strix Halo, Qwen3-14B in BF16 decodes a single request at 7.7 tok/s. Q4_K_M does 23.5 tok/s, 3.1x faster. Below are the three formats side by side and the commands to deploy."}</P>
+      <P>{"On Strix Halo, Qwen3-14B in BF16 decodes a single request at 7.7 tok/s. Q4_K_M does 23.5 tok/s, 3x faster. Below are the three formats side by side and the commands to deploy."}</P>
       <H2>{"Why quantization is so much faster"}</H2>
       <P>{"Every generated token reads all the weights from memory once. BF16 is 2 bytes per parameter, Q8_0 about 1, Q4_K_M about half a byte. Fewer bytes, faster tokens."}</P>
       <P>{"The three Strix Halo numbers line up: BF16 7.7, Q8_0 14.4, Q4_K_M 23.5 tok/s. W7900 follows the same pattern: BF16 23.5, Q8_0 38.0, Q4_K_M 48.1."}</P>
@@ -622,7 +622,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-14B-GGUF Qwen3-14B-Q4_K_M.gguf --local-dir ~/models/Qwen3-14B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-14B-GGUF Qwen3-14B-Q4_K_M.gguf --local-dir ~/models/Qwen3-14B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3-14b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-14B/Qwen3-14B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -641,14 +641,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -691,7 +691,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3-32b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-32B/Qwen3-32B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -703,7 +703,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: W7900, llama.cpp, Q4_K_M. You need a Linux machine with ROCm (including hipconfig), CMake and Git. The image we used on W7900 is not public yet, so we build the same llama.cpp version from source."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f qwen3-32b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
       <H3>{"Step 2: build and start llama.cpp"}</H3>
       <P>{"The commit and server flags are exactly the ones we measured."}</P>
       <Pre>{"# build once\ngit clone https://github.com/ggml-org/llama.cpp && cd llama.cpp\ngit checkout fe7c8b2414bb\nHIPCXX=\"$(hipconfig -l)/clang\" HIP_PATH=\"$(hipconfig -R)\" \\\n  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release -j\n\nHIP_VISIBLE_DEVICES=0 ./build/bin/llama-server \\\n  -m ~/models/Qwen3-32B/Qwen3-32B-Q4_K_M.gguf -ngl 999 -fa on --host 0.0.0.0 --port 8000 \\\n  -c 32768 -np 32"}</Pre>
@@ -720,14 +720,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -771,7 +771,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3-30b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-30B-A3B/Qwen3-30B-A3B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -791,14 +791,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -823,7 +823,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-27B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.6-27b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3.6-27B/Qwen3.6-27B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -835,7 +835,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700 x4, vLLM, BF16. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f qwen3.6-27b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.6-27B --local-dir ~/models/Qwen3.6-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.6-27B --local-dir ~/models/Qwen3.6-27B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.6-27b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e NCCL_PROTO=Simple -e NCCL_P2P_DISABLE=1 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3.6-27B --served-model-name q27b --host 0.0.0.0 \\\n    --port 8000 --trust-remote-code --dtype bfloat16 --max-model-len 2304 \\\n    --max-num-seqs 32 --gpu-memory-utilization 0.85 --attention-backend TRITON_ATTN \\\n    --tensor-parallel-size 4\""}</Pre>
@@ -887,15 +887,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -909,7 +909,7 @@ export const MODEL_POSTS: BlogPost[] = [
     excerpt: "BF16, Q8_0, 4-bit, AWQ, Quark, AutoRound; vLLM and llama.cpp; one to four cards. What to pick after 20 measured setups, with commands.",
     content: (
       <>
-      <Lead>{"Qwen3.6-35B-A3B has more measured setups than any other model on the board: two engines, seven weight formats, one to four cards, 20 in all."}</Lead>
+      <Lead>{"Qwen3.6-35B-A3B has more measured setups than any other model on the board: two engines, six weight formats, one to four cards, 20 in all."}</Lead>
       <P>{"With one R9700, the answer is vLLM with AWQ-4bit: 69.7 tok/s for one request and 384 tok/s at 32, both better than llama.cpp on the same card. Other hardware has other answers, below."}</P>
       <H2>{"The short answer: what to run on each card"}</H2>
       <UL>
@@ -953,7 +953,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, vLLM, AWQ-4bit. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/Qwen3.6-35B-A3B-AWQ-4bit --local-dir ~/models/Qwen3.6-35B-A3B-AWQ-4bit"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/Qwen3.6-35B-A3B-AWQ-4bit --local-dir ~/models/Qwen3.6-35B-A3B-AWQ-4bit"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.6-35b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3.6-35B-A3B-AWQ-4bit --served-model-name q35awq \\\n    --host 0.0.0.0 --port 8000 --trust-remote-code --dtype float16 \\\n    --max-model-len 4096 --max-num-seqs 32 --gpu-memory-utilization 0.95 \\\n    --attention-backend TRITON_ATTN\""}</Pre>
@@ -965,7 +965,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, UD-Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f qwen3.6-35b-a3b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-35B-A3B-GGUF Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-35B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-35B-A3B-GGUF Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-35B-A3B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.6-35b-a3b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3.6-35B-A3B/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -989,15 +989,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1022,7 +1022,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, UD-Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.8-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.8-27B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.8-27b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3.8-27B/Qwen3.8-27B-UD-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -1034,7 +1034,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700 x4, vLLM, BF16. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f qwen3.8-27b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.8-27B --local-dir ~/models/Qwen3.8-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.8-27B --local-dir ~/models/Qwen3.8-27B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.8-27b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e NCCL_PROTO=Simple -e NCCL_P2P_DISABLE=1 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3.8-27B --served-model-name q38b --host 0.0.0.0 \\\n    --port 8000 --trust-remote-code --dtype bfloat16 --max-model-len 2304 \\\n    --max-num-seqs 32 --gpu-memory-utilization 0.85 --attention-backend TRITON_ATTN \\\n    --tensor-parallel-size 4\""}</Pre>
@@ -1082,15 +1082,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1104,12 +1104,12 @@ export const MODEL_POSTS: BlogPost[] = [
     excerpt: "A large MoE model usually needs several cards. Strix Halo runs it on one box with 128GB of unified memory, at 20.8 tok/s for one request.",
     content: (
       <>
-      <Lead>{"Qwen3.8-Flash-Next is a large MoE model. Even at 3 bits it needs four R9700 or four W7900 cards."}</Lead>
+      <Lead>{"Qwen3.8-Flash-Next is a large MoE model. On discrete cards we measured it with four R9700 or four W7900 cards."}</Lead>
       <P>{"Strix Halo is the other route: one mini PC, one integrated GPU, 20.8 tok/s for one request. Four R9700 cards give 30.4 tok/s, a bit faster, at a very different cost, power draw and size."}</P>
       <H2>{"One box against four cards"}</H2>
       <P>{"One request: four R9700 30.4, four W7900 30.3, Strix Halo 20.8 tok/s."}</P>
       <P>{"Concurrency: four W7900 cards give 114 tok/s at 32, four R9700 63, Strix Halo 48. For many users at once, four W7900 cards hold up best."}</P>
-      <P>{"W7900 also ran UD-Q4_K_XL: 29.0 tok/s for one request, almost the same as 3-bit, with better quality. If memory allows, choose 4-bit."}</P>
+      <P>{"W7900 also ran UD-Q4_K_XL: 29.0 tok/s for one request, almost the same as 3-bit. 4-bit loses less to quantization, so pick it if memory allows."}</P>
       <H2>{"Measured results"}</H2>
       <P>{"Bold rows are the fastest single-request setup on each card. 1 req is the speed one user sees; 32 req is the combined rate of 32 requests at once; TTFT is time to first token."}</P>
       <Table
@@ -1126,7 +1126,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, UD-Q3_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.8-flash-next \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/Qwen3.8-Flash-Next/UD-Q3_K_XL/Qwen3.8-Flash-Next-UD-Q3_K_XL-00001-of-00004.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -1138,7 +1138,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700 x4, llama.cpp, UD-Q3_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f qwen3.8-flash-next)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name qwen3.8-flash-next-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/Qwen3.8-Flash-Next/UD-Q3_K_XL/Qwen3.8-Flash-Next-UD-Q3_K_XL-00001-of-00004.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -1159,15 +1159,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1203,7 +1203,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, vLLM (main), AWQ-INT4. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4 --local-dir ~/models/diffusiongemma-26B-A4B-it-AWQ-INT4"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4 --local-dir ~/models/diffusiongemma-26B-A4B-it-AWQ-INT4"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name diffusiongemma-26b-a4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-vllm-main:92221485a \\\n  -lc \"exec vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\\n    --served-model-name diffawq --host 0.0.0.0 --port 8000 --max-model-len 896 \\\n    --max-num-seqs 4 --gpu-memory-utilization 0.6 --generation-config vllm \\\n    --hf-overrides '{\\\"diffusion_sampler\\\":\\\"entropy_bound\\\",\\\"diffusion_entropy_bound\\\":0.1}' \\\n    --diffusion-config '{\\\"canvas_length\\\":256}'\""}</Pre>
@@ -1223,14 +1223,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1277,7 +1277,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, vLLM, AWQ-4bit. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit --local-dir ~/models/gemma-4-26B-A4B-it-AWQ-4bit"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit --local-dir ~/models/gemma-4-26B-A4B-it-AWQ-4bit"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name gemma-4-26b-a4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-vllm:f5fa386fe \\\n  -lc \"exec vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port 8000 \\\n    --served-model-name g26bawq --max-num-seqs 32 --dtype float16 \\\n    --max-model-len 2304 --gpu-memory-utilization 0.85\""}</Pre>
@@ -1289,7 +1289,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, UD-Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f gemma-4-26b-a4b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/gemma-4-26B-A4B-it-GGUF gemma-4-26B-A4B-it-UD-Q4_K_M.gguf --local-dir ~/models/Gemma-4-26B-A4B-it-smoke"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/gemma-4-26B-A4B-it-GGUF gemma-4-26B-A4B-it-UD-Q4_K_M.gguf --local-dir ~/models/Gemma-4-26B-A4B-it-smoke"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name gemma-4-26b-a4b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/Gemma-4-26B-A4B-it-smoke/gemma-4-26B-A4B-it-UD-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -1311,14 +1311,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1342,7 +1342,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, vLLM, Quark-W8A8-INT8. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8 --local-dir ~/models/Gemma-4-31B-it-Quark-W8A8-INT8"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8 --local-dir ~/models/Gemma-4-31B-it-Quark-W8A8-INT8"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name gemma-4-31b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-vllm:f5fa386fe \\\n  -lc \"exec vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 \\\n    --port 8000 --served-model-name g31q --max-num-seqs 32 --quantization quark \\\n    --max-model-len 2304 --gpu-memory-utilization 0.85\""}</Pre>
@@ -1375,14 +1375,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1406,7 +1406,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Llama-3.1-8B-Instruct-GGUF Llama-3.1-8B-Instruct-Q4_K_M.gguf --local-dir ~/models/Llama-3.1-8B-Instruct"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Llama-3.1-8B-Instruct-GGUF Llama-3.1-8B-Instruct-Q4_K_M.gguf --local-dir ~/models/Llama-3.1-8B-Instruct"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name llama-3.1-8b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/Llama-3.1-8B-Instruct/Llama-3.1-8B-Instruct-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -1441,14 +1441,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1473,7 +1473,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-8b-GGUF granite-4.2-8b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-8b"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-8b-GGUF granite-4.2-8b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-8b"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name granite-4.2-8b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/granite-4.2-8b/granite-4.2-8b-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -1515,15 +1515,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1532,7 +1532,7 @@ export const MODEL_POSTS: BlogPost[] = [
     slug: "model-granite-4.2-30b",
     title: "Granite 4.2 30B: four R9700 cards in BF16 lose to one card with Q4_K_M",
     date: "2026-11-26",
-    readingMinutes: 4,
+    readingMinutes: 5,
     tags: ["Model", "Granite 4.2 30B", "R9700", "Strix Halo", "W7900", "llama.cpp"],
     excerpt: "BF16 on four cards decodes 9.7 tok/s; Q4_K_M on one card does 26.7, 2.8x faster. More GPUs are not faster; pick the right quantization first.",
     content: (
@@ -1564,7 +1564,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-30b-GGUF granite-4.2-30b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-30b"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-30b-GGUF granite-4.2-30b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-30b"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name granite-4.2-30b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/granite-4.2-30b/granite-4.2-30b-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -1587,15 +1587,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1620,7 +1620,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, UD-Q4_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/LFM2.5-24B-A2B-GGUF LFM2.5-24B-A2B-UD-Q4_K_XL.gguf --local-dir ~/models/LFM2.5-24B-A2B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/LFM2.5-24B-A2B-GGUF LFM2.5-24B-A2B-UD-Q4_K_XL.gguf --local-dir ~/models/LFM2.5-24B-A2B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name lfm2.5-24b-a2b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/LFM2.5-24B-A2B/LFM2.5-24B-A2B-UD-Q4_K_XL.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -1663,15 +1663,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1696,7 +1696,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download LiquidAI/LFM3-1.7B-GGUF LFM3-1.7B-Q4_K_M.gguf --local-dir ~/models/LFM3-1.7B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download LiquidAI/LFM3-1.7B-GGUF LFM3-1.7B-Q4_K_M.gguf --local-dir ~/models/LFM3-1.7B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name lfm3-1.7b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server -m /models/LFM3-1.7B/LFM3-1.7B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -1738,15 +1738,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1780,7 +1780,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name ling-3.0-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/Ling-3.0-flash/Ling-3.0-flash-Q4_K_M/Ling-3.0-flash-Q4_K_M-00001-of-00002.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -1792,7 +1792,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: W7900 x2, llama.cpp, Q4_K_M. You need a Linux machine with ROCm (including hipconfig), CMake and Git. The image we used on W7900 is not public yet, so we build the same llama.cpp version from source."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f ling-3.0-flash)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
       <H3>{"Step 2: build and start llama.cpp"}</H3>
       <P>{"The commit and server flags are exactly the ones we measured."}</P>
       <Pre>{"# build once\ngit clone https://github.com/ggml-org/llama.cpp && cd llama.cpp\ngit checkout 29b52d398b29\nHIPCXX=\"$(hipconfig -l)/clang\" HIP_PATH=\"$(hipconfig -R)\" \\\n  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release -j\n\nHIP_VISIBLE_DEVICES=0,1 HSA_NO_SCRATCH_RECLAIM=1 HIP_FORCE_DEV_KERNARG=1 \\\n  ./build/bin/llama-server \\\n  -m ~/models/Ling-3.0-flash/Ling-3.0-flash-Q4_K_M/Ling-3.0-flash-Q4_K_M-00001-of-00002.gguf \\\n  -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0"}</Pre>
@@ -1813,15 +1813,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1846,7 +1846,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download inclusionAI/Ling-3.0-tiny-GGUF Ling-3.0-tiny-Q4_K_M.gguf --local-dir ~/models/Ling-3.0-tiny"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download inclusionAI/Ling-3.0-tiny-GGUF Ling-3.0-tiny-Q4_K_M.gguf --local-dir ~/models/Ling-3.0-tiny"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name ling-3.0-tiny \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server -m /models/Ling-3.0-tiny/Ling-3.0-tiny-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -1888,15 +1888,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -1921,7 +1921,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF MiMo-V2.6-Distill-Qwen-9B-Q4_K_M.gguf --local-dir ~/models/MiMo-V2.6-Distill-Qwen-9B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF MiMo-V2.6-Distill-Qwen-9B-Q4_K_M.gguf --local-dir ~/models/MiMo-V2.6-Distill-Qwen-9B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name mimo-v2.6-distill-qwen-9b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/MiMo-V2.6-Distill-Qwen-9B/MiMo-V2.6-Distill-Qwen-9B-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -1964,15 +1964,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2006,7 +2006,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700 x4, llama.cpp, IQ2_XS_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download TrevorJS/MiMo-V2.6-Flash-RL-GGUF --include \"MiMo-V2.6-Flash-RL-IQ2_XS_M-v2.1*\" --local-dir ~/models/MiMo-V2.6-Flash-RL"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download TrevorJS/MiMo-V2.6-Flash-RL-GGUF --include \"MiMo-V2.6-Flash-RL-IQ2_XS_M-v2.1*\" --local-dir ~/models/MiMo-V2.6-Flash-RL"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name mimo-v2.6-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/MiMo-V2.6-Flash-RL/MiMo-V2.6-Flash-RL-IQ2_XS_M-v2.1-00001-of-00010.gguf \\\n    -ngl 999 -fa off --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32 \\\n    --cache-ram 0\""}</Pre>
@@ -2027,14 +2027,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2057,7 +2057,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, UD-Q2_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/MiMo-V2.5-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/MiMo-V2.5-GGUF"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/MiMo-V2.5-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/MiMo-V2.5-GGUF"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name mimo-v2.5 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/MiMo-V2.5-GGUF/UD-Q2_K_XL/MiMo-V2.5-UD-Q2_K_XL-00001-of-00004.gguf \\\n    -ngl 999 -fa off --no-mmap --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -2086,13 +2086,13 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2117,7 +2117,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, UD-Q4_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-GGUF NVIDIA-Nemotron-3.5-Bolt-E4B-UD-Q4_K_XL.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-E4B-unsloth"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-GGUF NVIDIA-Nemotron-3.5-Bolt-E4B-UD-Q4_K_XL.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-E4B-unsloth"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name nemotron-3.5-bolt-e4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Bolt-E4B-unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-UD-Q4_K_XL.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2159,15 +2159,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2192,7 +2192,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700 x2, llama.cpp, UD-Q4_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name nemotron-3.5-bolt-74b-a9b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B/UD-Q4_K_XL/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-UD-Q4_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2233,15 +2233,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2266,7 +2266,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_0. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Lightning-30B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Lightning-30B-A3B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name nemotron-3.5-lightning-30b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Lightning-30B-A3B/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2310,15 +2310,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2352,7 +2352,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, UD-Q4_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name nemotron-3.5-super-vl-120b-a12b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B/UD-Q4_K_XL/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-Q4_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -2364,7 +2364,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700 x4, llama.cpp, UD-Q4_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f nemotron-3.5-super-vl-120b-a12b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name nemotron-3.5-super-vl-120b-a12b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B/UD-Q4_K_XL/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-Q4_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2385,15 +2385,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2418,7 +2418,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-1B-gguf MiniCPM-V-4_7-1B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-1B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-1B-gguf MiniCPM-V-4_7-1B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-1B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name minicpm-v-4.7-1b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/MiniCPM-V-4.7-1B/MiniCPM-V-4_7-1B-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2460,15 +2460,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2493,7 +2493,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-35B-A3B-gguf MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-35B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-35B-A3B-gguf MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-35B-A3B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name minicpm-v-4.7-35b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/MiniCPM-V-4.7-35B-A3B/MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2536,15 +2536,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2591,7 +2591,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, Q4_K_M. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-Q4_K_M.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-Q4_K_M.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name minicpm5-2b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/MiniCPM5-2B/MiniCPM5-2B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2603,7 +2603,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: R9700, llama.cpp, F16. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f minicpm5-2b)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-F16.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-F16.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name minicpm5-2b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/MiniCPM5-2B/MiniCPM5-2B-F16.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2624,15 +2624,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2655,7 +2655,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Strix Halo (Radeon 8060S)"}</H2>
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, Q4_K_S. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download stepfun-ai/Step-3.5-Flash-GGUF-Q4_K_S --include \"step3p5_flash_Q4_K_S*\" --local-dir ~/models/Step-3.5-Flash-GGUF-Q4_K_S"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download stepfun-ai/Step-3.5-Flash-GGUF-Q4_K_S --include \"step3p5_flash_Q4_K_S*\" --local-dir ~/models/Step-3.5-Flash-GGUF-Q4_K_S"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name step-3.5-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/Step-3.5-Flash-GGUF-Q4_K_S/step3p5_flash_Q4_K_S-00001-of-00012.gguf \\\n    -ngl 999 -fa on --no-mmap --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -2683,13 +2683,13 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/strix/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/strix/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2698,7 +2698,7 @@ export const MODEL_POSTS: BlogPost[] = [
     slug: "model-deepseek-v4-flash",
     title: "DeepSeek-V4-Flash at home: four R9700 cards or one Strix Halo?",
     date: "2026-11-26",
-    readingMinutes: 5,
+    readingMinutes: 6,
     tags: ["Model", "DeepSeek-V4-Flash-0731", "R9700", "Strix Halo", "W7900", "llama.cpp"],
     excerpt: "DeepSeek-V4-Flash at 2 bits decodes 19.6 tok/s on four R9700 cards and 11.5 on one Strix Halo. Full commands for both.",
     content: (
@@ -2730,7 +2730,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700 x4, llama.cpp, UD-Q2_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name deepseek-v4-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/DeepSeek-V4-Flash-0731/UD-Q2_K_XL/DeepSeek-V4-Flash-0731-UD-Q2_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2742,7 +2742,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <P>{"This reproduces one row of the board exactly: Strix Halo, llama.cpp, UD-Q2_K_XL. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <P>{"Both setups use port 8000; stop the first one before switching (docker rm -f deepseek-v4-flash)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name deepseek-v4-flash-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/DeepSeek-V4-Flash-0731/UD-Q2_K_XL/DeepSeek-V4-Flash-0731-UD-Q2_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -2763,15 +2763,15 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/strix/recipes">{"Strix Halo recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/strix/recipes/">{"Strix Halo recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2795,7 +2795,7 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Run it in three steps on Radeon AI PRO R9700"}</H2>
       <P>{"This reproduces one row of the board exactly: R9700 x4, llama.cpp, UD-IQ2_XXS. You need a Linux machine with the ROCm driver and Docker, and your user must be able to open /dev/kfd and /dev/dri (usually by joining the video and render groups)."}</P>
       <H3>{"Step 1: download the weights"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/GLM-5.3-Flash-GGUF --include \"UD-IQ2_XXS/*\" --local-dir ~/models/GLM-5.3-Flash"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # or pip install -U huggingface_hub inside a venv\n# optional mirror: export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/GLM-5.3-Flash-GGUF --include \"UD-IQ2_XXS/*\" --local-dir ~/models/GLM-5.3-Flash"}</Pre>
       <H3>{"Step 2: start the server"}</H3>
       <P>{"The image is pinned to the version we measured, and the flags are the same:"}</P>
       <Pre>{"docker run -d --name glm-5.3-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/GLM-5.3-Flash/UD-IQ2_XXS/GLM-5.3-Flash-UD-IQ2_XXS-00001-of-00004.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -2830,14 +2830,14 @@ export const MODEL_POSTS: BlogPost[] = [
       <H2>{"Next steps"}</H2>
       <P>{"Every measured row's image and full command is on the Recipes pages; copy from there for other models and cards:"}</P>
       <UL>
-        <li><A href="/r9700/recipes">{"R9700 recipes"}</A></li>
-        <li><A href="/w7900/recipes">{"W7900 recipes"}</A></li>
-        <li><A href="/r9700/leaderboard">{"Leaderboard"}</A></li>
+        <li><A href="/r9700/recipes/">{"R9700 recipes"}</A></li>
+        <li><A href="/w7900/recipes/">{"W7900 recipes"}</A></li>
+        <li><A href="/r9700/leaderboard/">{"Leaderboard"}</A></li>
       </UL>
-      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo">{"this post"}</A>{"."}</P>
+      <P>{"Deploying with a coding agent such as Claude Code or Codex? Have it call the "}<A href="/docs/">{"AMD GPU Support Agent"}</A>{" first. Our A/B test is in "}<A href="/blog/support-agent-ab-test-windows-strix-halo/">{"this post"}</A>{"."}</P>
       <H2>{"How we measured"}</H2>
       <P>{"How we measure: llama-benchy sends streaming requests with a 512-token prompt and 128 generated tokens to the server's OpenAI-compatible endpoint, at 1, 4, 16 and 32 concurrent requests. Each point is the median of three runs after a warm-up. Prompts are text only."}</P>
-      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Strix Halo runs from July 2026 used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
+      <P>{"“1 request” is the decode speed one user sees. “32 requests” is the combined decode rate of all 32. TTFT is the time to the first token for a single request. Some July 2026 runs (Strix Halo and part of R9700) used an earlier version of the harness, whose prompts could partly hit the prefix cache, so their TTFT is not shown."}</P>
       <P>{"R9700 numbers are the best of the runs we made with the same image and command. All numbers are on the leaderboard, and every row's engine image and full command are on the device's Recipes page."}</P>
       </>
     ),
@@ -2859,7 +2859,7 @@ export const ENGINE_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Qwen3-4B 示例"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、vLLM、BF16。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name engine-vllm \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3-4B-BF16 --served-model-name qwen3-4b \\\n    --host 0.0.0.0 --port 8000 --trust-remote-code --dtype bfloat16 \\\n    --max-model-len 8192 --max-num-seqs 32 --gpu-memory-utilization 0.85 \\\n    --attention-backend TRITON_ATTN\""}</Pre>
@@ -2940,18 +2940,18 @@ export const ENGINE_POSTS_ZH: BlogPost[] = [
       />
       <H2>各模型文章</H2>
       <UL>
-        <li><A href="/zh/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/zh/blog/model-diffusiongemma-26b-a4b">{"DiffusionGemma-26B-A4B"}</A></li>
-        <li><A href="/zh/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/zh/blog/model-gemma-4-31b">{"Gemma-4-31B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-4b/">{"Qwen3-4B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-30b-a3b/">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-27b/">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-35b-a3b/">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.8-27b/">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/zh/blog/model-diffusiongemma-26b-a4b/">{"DiffusionGemma-26B-A4B"}</A></li>
+        <li><A href="/zh/blog/model-gemma-4-26b-a4b/">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/zh/blog/model-gemma-4-31b/">{"Gemma-4-31B"}</A></li>
       </UL>
       <H2>测试方法</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -2970,7 +2970,7 @@ export const ENGINE_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Qwen3-30B-A3B 示例"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name engine-llamacpp \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-30B-A3B/Qwen3-30B-A3B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3234,40 +3234,40 @@ export const ENGINE_POSTS_ZH: BlogPost[] = [
       />
       <H2>各模型文章</H2>
       <UL>
-        <li><A href="/zh/blog/model-qwen3-4b">{"Qwen3-4B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3-8b">{"Qwen3-8B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3-14b">{"Qwen3-14B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3-32b">{"Qwen3-32B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3-30b-a3b">{"Qwen3-30B-A3B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.6-27b">{"Qwen3.6-27B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.6-35b-a3b">{"Qwen3.6-35B-A3B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.8-27b">{"Qwen3.8-27B"}</A></li>
-        <li><A href="/zh/blog/model-qwen3.8-flash-next">{"Qwen3.8-Flash-Next"}</A></li>
-        <li><A href="/zh/blog/model-gemma-4-26b-a4b">{"Gemma-4-26B-A4B"}</A></li>
-        <li><A href="/zh/blog/model-llama-3.1-8b">{"Llama-3.1-8B-Instruct"}</A></li>
-        <li><A href="/zh/blog/model-granite-4.2-8b">{"Granite 4.2 8B"}</A></li>
-        <li><A href="/zh/blog/model-granite-4.2-30b">{"Granite 4.2 30B"}</A></li>
-        <li><A href="/zh/blog/model-lfm2.5-24b-a2b">{"LFM2.5-24B-A2B"}</A></li>
-        <li><A href="/zh/blog/model-lfm3-1.7b">{"LFM3-1.7B"}</A></li>
-        <li><A href="/zh/blog/model-ling-3.0-flash">{"Ling-3.0-flash"}</A></li>
-        <li><A href="/zh/blog/model-ling-3.0-tiny">{"Ling-3.0-tiny"}</A></li>
-        <li><A href="/zh/blog/model-mimo-v2.6-distill-qwen-9b">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
-        <li><A href="/zh/blog/model-mimo-v2.6-flash">{"MiMo-V2.6-Flash"}</A></li>
-        <li><A href="/zh/blog/model-mimo-v2.5">{"MiMo-V2.5"}</A></li>
-        <li><A href="/zh/blog/model-nemotron-3.5-bolt-e4b">{"Nemotron 3.5 Bolt E4B"}</A></li>
-        <li><A href="/zh/blog/model-nemotron-3.5-bolt-74b-a9b">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
-        <li><A href="/zh/blog/model-nemotron-3.5-lightning-30b-a3b">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
-        <li><A href="/zh/blog/model-nemotron-3.5-super-vl-120b-a12b">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
-        <li><A href="/zh/blog/model-minicpm-v-4.7-1b">{"MiniCPM-V 4.7 1B"}</A></li>
-        <li><A href="/zh/blog/model-minicpm-v-4.7-35b-a3b">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
-        <li><A href="/zh/blog/model-minicpm5-2b">{"MiniCPM5-2B"}</A></li>
-        <li><A href="/zh/blog/model-step-3.5-flash">{"Step-3.5-Flash"}</A></li>
-        <li><A href="/zh/blog/model-deepseek-v4-flash">{"DeepSeek-V4-Flash-0731"}</A></li>
-        <li><A href="/zh/blog/model-glm-5.3-flash">{"GLM-5.3-Flash"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-4b/">{"Qwen3-4B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-8b/">{"Qwen3-8B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-14b/">{"Qwen3-14B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-32b/">{"Qwen3-32B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3-30b-a3b/">{"Qwen3-30B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-27b/">{"Qwen3.6-27B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.6-35b-a3b/">{"Qwen3.6-35B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.8-27b/">{"Qwen3.8-27B"}</A></li>
+        <li><A href="/zh/blog/model-qwen3.8-flash-next/">{"Qwen3.8-Flash-Next"}</A></li>
+        <li><A href="/zh/blog/model-gemma-4-26b-a4b/">{"Gemma-4-26B-A4B"}</A></li>
+        <li><A href="/zh/blog/model-llama-3.1-8b/">{"Llama-3.1-8B-Instruct"}</A></li>
+        <li><A href="/zh/blog/model-granite-4.2-8b/">{"Granite 4.2 8B"}</A></li>
+        <li><A href="/zh/blog/model-granite-4.2-30b/">{"Granite 4.2 30B"}</A></li>
+        <li><A href="/zh/blog/model-lfm2.5-24b-a2b/">{"LFM2.5-24B-A2B"}</A></li>
+        <li><A href="/zh/blog/model-lfm3-1.7b/">{"LFM3-1.7B"}</A></li>
+        <li><A href="/zh/blog/model-ling-3.0-flash/">{"Ling-3.0-flash"}</A></li>
+        <li><A href="/zh/blog/model-ling-3.0-tiny/">{"Ling-3.0-tiny"}</A></li>
+        <li><A href="/zh/blog/model-mimo-v2.6-distill-qwen-9b/">{"MiMo-V2.6-Distill-Qwen-9B"}</A></li>
+        <li><A href="/zh/blog/model-mimo-v2.6-flash/">{"MiMo-V2.6-Flash"}</A></li>
+        <li><A href="/zh/blog/model-mimo-v2.5/">{"MiMo-V2.5"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-bolt-e4b/">{"Nemotron 3.5 Bolt E4B"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-bolt-74b-a9b/">{"Nemotron 3.5 Bolt 74B-A9B"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-lightning-30b-a3b/">{"Nemotron 3.5 Lightning 30B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-nemotron-3.5-super-vl-120b-a12b/">{"Nemotron 3.5 Super VL 120B-A12B"}</A></li>
+        <li><A href="/zh/blog/model-minicpm-v-4.7-1b/">{"MiniCPM-V 4.7 1B"}</A></li>
+        <li><A href="/zh/blog/model-minicpm-v-4.7-35b-a3b/">{"MiniCPM-V 4.7 35B-A3B"}</A></li>
+        <li><A href="/zh/blog/model-minicpm5-2b/">{"MiniCPM5-2B"}</A></li>
+        <li><A href="/zh/blog/model-step-3.5-flash/">{"Step-3.5-Flash"}</A></li>
+        <li><A href="/zh/blog/model-deepseek-v4-flash/">{"DeepSeek-V4-Flash-0731"}</A></li>
+        <li><A href="/zh/blog/model-glm-5.3-flash/">{"GLM-5.3-Flash"}</A></li>
       </UL>
       <H2>测试方法</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3316,7 +3316,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-4B-GGUF Qwen3-4B-Q4_K_M.gguf --local-dir ~/models/Qwen3-4B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-4B-GGUF Qwen3-4B-Q4_K_M.gguf --local-dir ~/models/Qwen3-4B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3-4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3-4B/Qwen3-4B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3328,7 +3328,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700、vLLM、BF16。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f qwen3-4b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3-4B --local-dir ~/models/Qwen3-4B-BF16"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3-4b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3-4B-BF16 --served-model-name qwen3-4b \\\n    --host 0.0.0.0 --port 8000 --trust-remote-code --dtype bfloat16 \\\n    --max-model-len 8192 --max-num-seqs 32 --gpu-memory-utilization 0.85 \\\n    --attention-backend TRITON_ATTN\""}</Pre>
@@ -3350,15 +3350,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3382,7 +3382,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-8B-GGUF Qwen3-8B-Q4_K_M.gguf --local-dir ~/models/Qwen3-8B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-8B-GGUF Qwen3-8B-Q4_K_M.gguf --local-dir ~/models/Qwen3-8B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3-8b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-8B/Qwen3-8B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3420,21 +3420,21 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
   },
   {
     slug: "model-qwen3-14b",
-    title: "Qwen3-14B 别直接上 BF16：在 Strix Halo 上，Q4_K_M 快 3.1 倍",
+    title: "Qwen3-14B 别直接上 BF16：在 Strix Halo 上，Q4_K_M 快 3 倍",
     date: "2026-11-26",
     readingMinutes: 3,
     tags: ["模型", "Qwen3-14B", "Strix Halo", "W7900", "llama.cpp"],
@@ -3442,7 +3442,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
     content: (
       <>
       <Lead>{"很多人下载模型的第一反应是“要原版、不要量化”。在 14B 这个尺寸上，这个习惯代价很大。"}</Lead>
-      <P>{"在 Strix Halo 上，Qwen3-14B 的 BF16 单请求只有 7.7 tok/s，换成 Q4_K_M 是 23.5 tok/s，快了 3.1 倍。下面是三种格式的对比和部署命令。"}</P>
+      <P>{"在 Strix Halo 上，Qwen3-14B 的 BF16 单请求只有 7.7 tok/s，换成 Q4_K_M 是 23.5 tok/s，快了 3 倍。下面是三种格式的对比和部署命令。"}</P>
       <H2>{"为什么量化快这么多"}</H2>
       <P>{"生成每个 token，都要把全部权重从显存里读一遍。BF16 每个参数 2 字节，Q8_0 大约 1 字节，Q4_K_M 大约半个字节，读的数据越少，出字越快。"}</P>
       <P>{"Strix Halo 的三个数字正好排成一条线：BF16 7.7，Q8_0 14.4，Q4_K_M 23.5 tok/s。W7900 上也是一样的规律：BF16 23.5，Q8_0 38.0，Q4_K_M 48.1。"}</P>
@@ -3465,7 +3465,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-14B-GGUF Qwen3-14B-Q4_K_M.gguf --local-dir ~/models/Qwen3-14B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-14B-GGUF Qwen3-14B-Q4_K_M.gguf --local-dir ~/models/Qwen3-14B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3-14b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-14B/Qwen3-14B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3484,14 +3484,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3534,7 +3534,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3-32b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-32B/Qwen3-32B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3546,7 +3546,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：W7900、llama.cpp、Q4_K_M。准备一台装好 ROCm（含 hipconfig）、CMake 和 Git 的 Linux 机器。我们测试 W7900 用的镜像还没有公开，所以这里从源码编译同一个版本的 llama.cpp。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f qwen3-32b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-32B-GGUF Qwen3-32B-Q4_K_M.gguf --local-dir ~/models/Qwen3-32B"}</Pre>
       <H3>{"第 2 步：编译并启动 llama.cpp"}</H3>
       <P>{"命令里的 commit 和启动参数与我们测试时完全一致。"}</P>
       <Pre>{"# 编译一次即可\ngit clone https://github.com/ggml-org/llama.cpp && cd llama.cpp\ngit checkout fe7c8b2414bb\nHIPCXX=\"$(hipconfig -l)/clang\" HIP_PATH=\"$(hipconfig -R)\" \\\n  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release -j\n\nHIP_VISIBLE_DEVICES=0 ./build/bin/llama-server \\\n  -m ~/models/Qwen3-32B/Qwen3-32B-Q4_K_M.gguf -ngl 999 -fa on --host 0.0.0.0 --port 8000 \\\n  -c 32768 -np 32"}</Pre>
@@ -3563,14 +3563,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3614,7 +3614,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q4_K_M.gguf --local-dir ~/models/Qwen3-30B-A3B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3-30b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server -m /models/Qwen3-30B-A3B/Qwen3-30B-A3B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3634,14 +3634,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3666,7 +3666,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-27B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.6-27b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3.6-27B/Qwen3.6-27B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -3678,7 +3678,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、vLLM、BF16。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f qwen3.6-27b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.6-27B --local-dir ~/models/Qwen3.6-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.6-27B --local-dir ~/models/Qwen3.6-27B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.6-27b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e NCCL_PROTO=Simple -e NCCL_P2P_DISABLE=1 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3.6-27B --served-model-name q27b --host 0.0.0.0 \\\n    --port 8000 --trust-remote-code --dtype bfloat16 --max-model-len 2304 \\\n    --max-num-seqs 32 --gpu-memory-utilization 0.85 --attention-backend TRITON_ATTN \\\n    --tensor-parallel-size 4\""}</Pre>
@@ -3730,15 +3730,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3752,7 +3752,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
     excerpt: "BF16、Q8_0、4 比特、AWQ、Quark、AutoRound，vLLM 和 llama.cpp，单卡到四卡。20 组实测后的选型建议和一键命令。",
     content: (
       <>
-      <Lead>{"Qwen3.6-35B-A3B 是榜单上部署组合最多的模型：两个引擎、七种权重格式、一到四张卡，一共 20 组实测。"}</Lead>
+      <Lead>{"Qwen3.6-35B-A3B 是榜单上部署组合最多的模型：两个引擎、六种权重格式、一到四张卡，一共 20 组实测。"}</Lead>
       <P>{"如果你只有一张 R9700，答案是 vLLM 跑 AWQ-4bit：单请求 69.7 tok/s，32 并发 384 tok/s，两项都比同卡 llama.cpp 好。其他硬件的答案不同，下面逐一说。"}</P>
       <H2>{"先看结论：每张卡怎么选"}</H2>
       <UL>
@@ -3796,7 +3796,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、vLLM、AWQ-4bit。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/Qwen3.6-35B-A3B-AWQ-4bit --local-dir ~/models/Qwen3.6-35B-A3B-AWQ-4bit"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/Qwen3.6-35B-A3B-AWQ-4bit --local-dir ~/models/Qwen3.6-35B-A3B-AWQ-4bit"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.6-35b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3.6-35B-A3B-AWQ-4bit --served-model-name q35awq \\\n    --host 0.0.0.0 --port 8000 --trust-remote-code --dtype float16 \\\n    --max-model-len 4096 --max-num-seqs 32 --gpu-memory-utilization 0.95 \\\n    --attention-backend TRITON_ATTN\""}</Pre>
@@ -3808,7 +3808,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、UD-Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f qwen3.6-35b-a3b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-35B-A3B-GGUF Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-35B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.6-35B-A3B-GGUF Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.6-35B-A3B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.6-35b-a3b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3.6-35B-A3B/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -3832,15 +3832,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3865,7 +3865,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、UD-Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.8-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf --local-dir ~/models/Qwen3.8-27B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.8-27b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:5096deff2b8a02aa0b48b02e572bdbaf9bdc4e877da02252fca74a263a82f3b5 \\\n  -lc \"exec llama-server -m /models/Qwen3.8-27B/Qwen3.8-27B-UD-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -3877,7 +3877,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、vLLM、BF16。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f qwen3.8-27b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.8-27B --local-dir ~/models/Qwen3.8-27B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download Qwen/Qwen3.8-27B --local-dir ~/models/Qwen3.8-27B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.8-27b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e NCCL_PROTO=Simple -e NCCL_P2P_DISABLE=1 -e TRITON_CACHE_DIR=/models/.triton-cache \\\n  --entrypoint /bin/bash ghcr.io/inferstation/vllm-rocm-r9700-main@sha256:2d3a6275b1000cc9dce4c105dae899edd95d77875ede0c4d5d9b9c53a29faaf1 \\\n  -lc \"exec vllm serve /models/Qwen3.8-27B --served-model-name q38b --host 0.0.0.0 \\\n    --port 8000 --trust-remote-code --dtype bfloat16 --max-model-len 2304 \\\n    --max-num-seqs 32 --gpu-memory-utilization 0.85 --attention-backend TRITON_ATTN \\\n    --tensor-parallel-size 4\""}</Pre>
@@ -3925,15 +3925,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -3947,12 +3947,12 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
     excerpt: "大型 MoE 模型，一般要多卡。Strix Halo 靠 128GB 统一内存单机跑起来，单请求 20.8 tok/s。",
     content: (
       <>
-      <Lead>{"Qwen3.8-Flash-Next 是一个大型 MoE 模型，就算是 3 比特量化，也得四张 R9700 或四张 W7900 才放得下。"}</Lead>
+      <Lead>{"Qwen3.8-Flash-Next 是一个大型 MoE 模型。我们在独立显卡上测它时，R9700 和 W7900 都用了四张卡。"}</Lead>
       <P>{"Strix Halo 是另一条路：一台迷你主机、一块集成显卡，单请求 20.8 tok/s。四张 R9700 是 30.4 tok/s，快一些，但成本、功耗和体积都不在一个量级。"}</P>
       <H2>{"一台盒子对四张卡"}</H2>
       <P>{"单请求：R9700 四卡 30.4，W7900 四卡 30.3，Strix Halo 20.8 tok/s。"}</P>
       <P>{"并发：W7900 四卡 32 并发 114 tok/s，R9700 四卡 63，Strix Halo 48。要同时服务多人，W7900 四卡更稳。"}</P>
-      <P>{"W7900 上还测了 UD-Q4_K_XL：单请求 29.0 tok/s，和 3 比特几乎一样，质量更好。如果显存够，选 4 比特。"}</P>
+      <P>{"W7900 上还测了 UD-Q4_K_XL：单请求 29.0 tok/s，和 3 比特几乎一样。4 比特量化损失更小，显存够就选它。"}</P>
       <H2>{"实测数据"}</H2>
       <P>{"加粗行是每张卡上单请求最快的配置。单请求是一个用户看到的生成速度；32 并发是 32 个请求同时进来时的合计速度；TTFT 是首 token 时延。"}</P>
       <Table
@@ -3969,7 +3969,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、UD-Q3_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.8-flash-next \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/Qwen3.8-Flash-Next/UD-Q3_K_XL/Qwen3.8-Flash-Next-UD-Q3_K_XL-00001-of-00004.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -3981,7 +3981,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、llama.cpp、UD-Q3_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f qwen3.8-flash-next）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Qwen3.8-Flash-Next-GGUF --include \"UD-Q3_K_XL/*\" --local-dir ~/models/Qwen3.8-Flash-Next"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name qwen3.8-flash-next-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/Qwen3.8-Flash-Next/UD-Q3_K_XL/Qwen3.8-Flash-Next-UD-Q3_K_XL-00001-of-00004.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -4002,15 +4002,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4046,7 +4046,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、vLLM (main)、AWQ-INT4。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4 --local-dir ~/models/diffusiongemma-26B-A4B-it-AWQ-INT4"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/diffusiongemma-26B-A4B-it-AWQ-INT4 --local-dir ~/models/diffusiongemma-26B-A4B-it-AWQ-INT4"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name diffusiongemma-26b-a4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-vllm-main:92221485a \\\n  -lc \"exec vllm serve /models/diffusiongemma-26B-A4B-it-AWQ-INT4 \\\n    --served-model-name diffawq --host 0.0.0.0 --port 8000 --max-model-len 896 \\\n    --max-num-seqs 4 --gpu-memory-utilization 0.6 --generation-config vllm \\\n    --hf-overrides '{\\\"diffusion_sampler\\\":\\\"entropy_bound\\\",\\\"diffusion_entropy_bound\\\":0.1}' \\\n    --diffusion-config '{\\\"canvas_length\\\":256}'\""}</Pre>
@@ -4066,14 +4066,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4082,7 +4082,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
     slug: "model-gemma-4-26b-a4b",
     title: "Gemma 4 26B 上 Strix Halo：一个人用选 llama.cpp 还是 vLLM？",
     date: "2026-11-26",
-    readingMinutes: 3,
+    readingMinutes: 4,
     tags: ["模型", "Gemma-4-26B-A4B", "Strix Halo", "W7900", "llama.cpp", "vLLM"],
     excerpt: "单请求打平（42.5 对 43.3 tok/s），32 并发 vLLM 是 llama.cpp 的 2.1 倍。Google Gemma 4 MoE 在 AMD 迷你主机上的选型和部署。",
     content: (
@@ -4120,7 +4120,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、vLLM、AWQ-4bit。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit --local-dir ~/models/gemma-4-26B-A4B-it-AWQ-4bit"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit --local-dir ~/models/gemma-4-26B-A4B-it-AWQ-4bit"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name gemma-4-26b-a4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-vllm:f5fa386fe \\\n  -lc \"exec vllm serve /models/gemma-4-26B-A4B-it-AWQ-4bit --host 0.0.0.0 --port 8000 \\\n    --served-model-name g26bawq --max-num-seqs 32 --dtype float16 \\\n    --max-model-len 2304 --gpu-memory-utilization 0.85\""}</Pre>
@@ -4132,7 +4132,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、UD-Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f gemma-4-26b-a4b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/gemma-4-26B-A4B-it-GGUF gemma-4-26B-A4B-it-UD-Q4_K_M.gguf --local-dir ~/models/Gemma-4-26B-A4B-it-smoke"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/gemma-4-26B-A4B-it-GGUF gemma-4-26B-A4B-it-UD-Q4_K_M.gguf --local-dir ~/models/Gemma-4-26B-A4B-it-smoke"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name gemma-4-26b-a4b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/Gemma-4-26B-A4B-it-smoke/gemma-4-26B-A4B-it-UD-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -4154,14 +4154,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4185,7 +4185,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、vLLM、Quark-W8A8-INT8。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8 --local-dir ~/models/Gemma-4-31B-it-Quark-W8A8-INT8"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download nameistoken/Gemma-4-31B-it-Quark-W8A8-INT8 --local-dir ~/models/Gemma-4-31B-it-Quark-W8A8-INT8"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name gemma-4-31b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-vllm:f5fa386fe \\\n  -lc \"exec vllm serve /models/Gemma-4-31B-it-Quark-W8A8-INT8 --host 0.0.0.0 \\\n    --port 8000 --served-model-name g31q --max-num-seqs 32 --quantization quark \\\n    --max-model-len 2304 --gpu-memory-utilization 0.85\""}</Pre>
@@ -4218,14 +4218,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4249,7 +4249,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Llama-3.1-8B-Instruct-GGUF Llama-3.1-8B-Instruct-Q4_K_M.gguf --local-dir ~/models/Llama-3.1-8B-Instruct"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/Llama-3.1-8B-Instruct-GGUF Llama-3.1-8B-Instruct-Q4_K_M.gguf --local-dir ~/models/Llama-3.1-8B-Instruct"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name llama-3.1-8b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/Llama-3.1-8B-Instruct/Llama-3.1-8B-Instruct-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -4284,14 +4284,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4316,7 +4316,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-8b-GGUF granite-4.2-8b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-8b"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-8b-GGUF granite-4.2-8b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-8b"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name granite-4.2-8b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/granite-4.2-8b/granite-4.2-8b-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -4358,15 +4358,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4407,7 +4407,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-30b-GGUF granite-4.2-30b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-30b"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download ibm-granite/granite-4.2-30b-GGUF granite-4.2-30b-Q4_K_M.gguf --local-dir ~/models/granite-4.2-30b"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name granite-4.2-30b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/granite-4.2-30b/granite-4.2-30b-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -4430,15 +4430,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4463,7 +4463,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、UD-Q4_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/LFM2.5-24B-A2B-GGUF LFM2.5-24B-A2B-UD-Q4_K_XL.gguf --local-dir ~/models/LFM2.5-24B-A2B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/LFM2.5-24B-A2B-GGUF LFM2.5-24B-A2B-UD-Q4_K_XL.gguf --local-dir ~/models/LFM2.5-24B-A2B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name lfm2.5-24b-a2b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/LFM2.5-24B-A2B/LFM2.5-24B-A2B-UD-Q4_K_XL.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -4506,15 +4506,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4539,7 +4539,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download LiquidAI/LFM3-1.7B-GGUF LFM3-1.7B-Q4_K_M.gguf --local-dir ~/models/LFM3-1.7B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download LiquidAI/LFM3-1.7B-GGUF LFM3-1.7B-Q4_K_M.gguf --local-dir ~/models/LFM3-1.7B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name lfm3-1.7b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server -m /models/LFM3-1.7B/LFM3-1.7B-Q4_K_M.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -4581,15 +4581,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4623,7 +4623,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name ling-3.0-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/Ling-3.0-flash/Ling-3.0-flash-Q4_K_M/Ling-3.0-flash-Q4_K_M-00001-of-00002.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -4635,7 +4635,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：W7900 2 卡、llama.cpp、Q4_K_M。准备一台装好 ROCm（含 hipconfig）、CMake 和 Git 的 Linux 机器。我们测试 W7900 用的镜像还没有公开，所以这里从源码编译同一个版本的 llama.cpp。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f ling-3.0-flash）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/Ling-3.0-flash-GGUF --include \"Ling-3.0-flash-Q4_K_M/*\" --local-dir ~/models/Ling-3.0-flash"}</Pre>
       <H3>{"第 2 步：编译并启动 llama.cpp"}</H3>
       <P>{"命令里的 commit 和启动参数与我们测试时完全一致。"}</P>
       <Pre>{"# 编译一次即可\ngit clone https://github.com/ggml-org/llama.cpp && cd llama.cpp\ngit checkout 29b52d398b29\nHIPCXX=\"$(hipconfig -l)/clang\" HIP_PATH=\"$(hipconfig -R)\" \\\n  cmake -S . -B build -DGGML_HIP=ON -DGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release -j\n\nHIP_VISIBLE_DEVICES=0,1 HSA_NO_SCRATCH_RECLAIM=1 HIP_FORCE_DEV_KERNARG=1 \\\n  ./build/bin/llama-server \\\n  -m ~/models/Ling-3.0-flash/Ling-3.0-flash-Q4_K_M/Ling-3.0-flash-Q4_K_M-00001-of-00002.gguf \\\n  -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0"}</Pre>
@@ -4656,15 +4656,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4689,7 +4689,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download inclusionAI/Ling-3.0-tiny-GGUF Ling-3.0-tiny-Q4_K_M.gguf --local-dir ~/models/Ling-3.0-tiny"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download inclusionAI/Ling-3.0-tiny-GGUF Ling-3.0-tiny-Q4_K_M.gguf --local-dir ~/models/Ling-3.0-tiny"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name ling-3.0-tiny \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server -m /models/Ling-3.0-tiny/Ling-3.0-tiny-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -4731,15 +4731,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4764,7 +4764,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF MiMo-V2.6-Distill-Qwen-9B-Q4_K_M.gguf --local-dir ~/models/MiMo-V2.6-Distill-Qwen-9B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF MiMo-V2.6-Distill-Qwen-9B-Q4_K_M.gguf --local-dir ~/models/MiMo-V2.6-Distill-Qwen-9B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name mimo-v2.6-distill-qwen-9b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/MiMo-V2.6-Distill-Qwen-9B/MiMo-V2.6-Distill-Qwen-9B-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -4807,15 +4807,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4849,7 +4849,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、llama.cpp、IQ2_XS_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download TrevorJS/MiMo-V2.6-Flash-RL-GGUF --include \"MiMo-V2.6-Flash-RL-IQ2_XS_M-v2.1*\" --local-dir ~/models/MiMo-V2.6-Flash-RL"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download TrevorJS/MiMo-V2.6-Flash-RL-GGUF --include \"MiMo-V2.6-Flash-RL-IQ2_XS_M-v2.1*\" --local-dir ~/models/MiMo-V2.6-Flash-RL"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name mimo-v2.6-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/MiMo-V2.6-Flash-RL/MiMo-V2.6-Flash-RL-IQ2_XS_M-v2.1-00001-of-00010.gguf \\\n    -ngl 999 -fa off --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32 \\\n    --cache-ram 0\""}</Pre>
@@ -4870,14 +4870,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4900,7 +4900,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、UD-Q2_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/MiMo-V2.5-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/MiMo-V2.5-GGUF"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/MiMo-V2.5-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/MiMo-V2.5-GGUF"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name mimo-v2.5 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/MiMo-V2.5-GGUF/UD-Q2_K_XL/MiMo-V2.5-UD-Q2_K_XL-00001-of-00004.gguf \\\n    -ngl 999 -fa off --no-mmap --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -4929,13 +4929,13 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -4960,7 +4960,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、UD-Q4_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-GGUF NVIDIA-Nemotron-3.5-Bolt-E4B-UD-Q4_K_XL.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-E4B-unsloth"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-GGUF NVIDIA-Nemotron-3.5-Bolt-E4B-UD-Q4_K_XL.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-E4B-unsloth"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name nemotron-3.5-bolt-e4b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Bolt-E4B-unsloth/NVIDIA-Nemotron-3.5-Bolt-E4B-UD-Q4_K_XL.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5002,15 +5002,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5035,7 +5035,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700 2 卡、llama.cpp、UD-Q4_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name nemotron-3.5-bolt-74b-a9b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B/UD-Q4_K_XL/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-UD-Q4_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5076,15 +5076,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5109,7 +5109,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_0。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Lightning-30B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf --local-dir ~/models/NVIDIA-Nemotron-3.5-Lightning-30B-A3B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name nemotron-3.5-lightning-30b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Lightning-30B-A3B/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5153,15 +5153,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5195,7 +5195,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、UD-Q4_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name nemotron-3.5-super-vl-120b-a12b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B/UD-Q4_K_XL/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-Q4_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -5207,7 +5207,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、llama.cpp、UD-Q4_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f nemotron-3.5-super-vl-120b-a12b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF --include \"UD-Q4_K_XL/*\" --local-dir ~/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name nemotron-3.5-super-vl-120b-a12b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B/UD-Q4_K_XL/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-Q4_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5228,15 +5228,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5261,7 +5261,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-1B-gguf MiniCPM-V-4_7-1B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-1B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-1B-gguf MiniCPM-V-4_7-1B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-1B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name minicpm-v-4.7-1b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/MiniCPM-V-4.7-1B/MiniCPM-V-4_7-1B-Q4_K_M.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5303,15 +5303,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5336,7 +5336,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-35B-A3B-gguf MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-35B-A3B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM-V-4.7-35B-A3B-gguf MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf --local-dir ~/models/MiniCPM-V-4.7-35B-A3B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name minicpm-v-4.7-35b-a3b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/MiniCPM-V-4.7-35B-A3B/MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5379,15 +5379,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5434,7 +5434,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、Q4_K_M。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-Q4_K_M.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-Q4_K_M.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name minicpm5-2b \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/MiniCPM5-2B/MiniCPM5-2B-Q4_K_M.gguf -ngl 999 \\\n    -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5446,7 +5446,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：R9700、llama.cpp、F16。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f minicpm5-2b）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-F16.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download openbmb/MiniCPM5-2B-GGUF MiniCPM5-2B-F16.gguf --local-dir ~/models/MiniCPM5-2B"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name minicpm5-2b-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server -m /models/MiniCPM5-2B/MiniCPM5-2B-F16.gguf -ngl 999 -fa on \\\n    --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5467,15 +5467,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5498,7 +5498,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon 8060S（Strix Halo）"}</H2>
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、Q4_K_S。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download stepfun-ai/Step-3.5-Flash-GGUF-Q4_K_S --include \"step3p5_flash_Q4_K_S*\" --local-dir ~/models/Step-3.5-Flash-GGUF-Q4_K_S"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download stepfun-ai/Step-3.5-Flash-GGUF-Q4_K_S --include \"step3p5_flash_Q4_K_S*\" --local-dir ~/models/Step-3.5-Flash-GGUF-Q4_K_S"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name step-3.5-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  --entrypoint /bin/bash ghcr.io/radeon-arena/halo-llamacpp:fe7c8b2414 \\\n  -lc \"exec llama-server \\\n    -m /models/Step-3.5-Flash-GGUF-Q4_K_S/step3p5_flash_Q4_K_S-00001-of-00012.gguf \\\n    -ngl 999 -fa on --no-mmap --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -5526,13 +5526,13 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/strix/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/strix/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5573,7 +5573,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、llama.cpp、UD-Q2_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name deepseek-v4-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/DeepSeek-V4-Flash-0731/UD-Q2_K_XL/DeepSeek-V4-Flash-0731-UD-Q2_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5585,7 +5585,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <P>{"下面是榜单上这一行的原样复现：Strix Halo、llama.cpp、UD-Q2_K_XL。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <P>{"两种跑法都用 8000 端口，换之前先停掉上一个服务（docker rm -f deepseek-v4-flash）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/DeepSeek-V4-Flash-0731-GGUF --include \"UD-Q2_K_XL/*\" --local-dir ~/models/DeepSeek-V4-Flash-0731"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name deepseek-v4-flash-2 \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-halo@sha256:00bbff0cae14fd6020294c01e6091b49f5b7e7fa2718e89be0a02ed40548a8ca \\\n  -lc \"exec llama-server \\\n    -m /models/DeepSeek-V4-Flash-0731/UD-Q2_K_XL/DeepSeek-V4-Flash-0731-UD-Q2_K_XL-00001-of-00003.gguf \\\n    -ngl 999 -fa on --load-mode none --host 0.0.0.0 --port 8000 -c 32768 -np 32\""}</Pre>
@@ -5606,15 +5606,15 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/strix/recipes">{"Strix Halo 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/strix/recipes/">{"Strix Halo 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),
@@ -5638,7 +5638,7 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"三步跑起来：Radeon AI PRO R9700"}</H2>
       <P>{"下面是榜单上这一行的原样复现：R9700 4 卡、llama.cpp、UD-IQ2_XXS。准备一台装好 ROCm 驱动和 Docker 的 Linux 机器，当前用户需要能访问 /dev/kfd 和 /dev/dri（通常把用户加进 video 和 render 组）。"}</P>
       <H3>{"第 1 步：下载权重"}</H3>
-      <Pre>{"pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/GLM-5.3-Flash-GGUF --include \"UD-IQ2_XXS/*\" --local-dir ~/models/GLM-5.3-Flash"}</Pre>
+      <Pre>{"pipx install huggingface_hub  # 或在虚拟环境里 pip install -U huggingface_hub\n# 国内网络可先设置镜像：export HF_ENDPOINT=https://hf-mirror.com\nhf download unsloth/GLM-5.3-Flash-GGUF --include \"UD-IQ2_XXS/*\" --local-dir ~/models/GLM-5.3-Flash"}</Pre>
       <H3>{"第 2 步：启动服务"}</H3>
       <P>{"镜像固定到测试时的版本，启动参数也和测试时完全一致："}</P>
       <Pre>{"docker run -d --name glm-5.3-flash \\\n  --device /dev/kfd --device /dev/dri --group-add video --group-add render \\\n  --security-opt seccomp=unconfined --ipc host \\\n  -v ~/models:/models -p 8000:8000 \\\n  -e HIP_VISIBLE_DEVICES=0,1,2,3 -e LD_LIBRARY_PATH=/app:/opt/rocm/lib \\\n  --entrypoint /bin/bash ghcr.io/inferstation/llama-rocm-r9700@sha256:3aca429eea682400c8b6539d6839cd1706bd7c5aa3d2d4bbd6b036cd7bbd559b \\\n  -lc \"exec llama-server \\\n    -m /models/GLM-5.3-Flash/UD-IQ2_XXS/GLM-5.3-Flash-UD-IQ2_XXS-00001-of-00004.gguf \\\n    -ngl 999 -fa on --host 0.0.0.0 --port 8000 -c 32768 -np 32 --cache-ram 0\""}</Pre>
@@ -5673,14 +5673,14 @@ export const MODEL_POSTS_ZH: BlogPost[] = [
       <H2>{"下一步"}</H2>
       <P>{"每一行实测的完整镜像和命令都在部署配方页，换模型、换卡时直接照抄："}</P>
       <UL>
-        <li><A href="/zh/r9700/recipes">{"R9700 部署配方"}</A></li>
-        <li><A href="/zh/w7900/recipes">{"W7900 部署配方"}</A></li>
-        <li><A href="/zh/r9700/leaderboard">{"榜单"}</A></li>
+        <li><A href="/zh/r9700/recipes/">{"R9700 部署配方"}</A></li>
+        <li><A href="/zh/w7900/recipes/">{"W7900 部署配方"}</A></li>
+        <li><A href="/zh/r9700/leaderboard/">{"榜单"}</A></li>
       </UL>
-      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo">{"这篇文章"}</A>{"。"}</P>
+      <P>{"用 Claude Code、Codex 这类编码 Agent 部署？让它先调用 "}<A href="/zh/docs/">{"AMD GPU 支持助手"}</A>{"，我们的 A/B 测试见"}<A href="/zh/blog/support-agent-ab-test-windows-strix-halo/">{"这篇文章"}</A>{"。"}</P>
       <H2>{"测试方法"}</H2>
       <P>{"用 llama-benchy 向服务的 OpenAI 兼容接口发流式请求：提示词 512 个 token，生成 128 个 token，并发数分别为 1、4、16 和 32。每个测点先预热，再取三次运行的中位数。提示词均为纯文本。"}</P>
-      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。Strix Halo 在 2026 年 7 月的结果用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
+      <P>{"“单请求”是一个用户实际看到的解码速度；“32 并发”是 32 个请求合计的解码速度。TTFT 即首 token 时延，是单请求时等到第一个 token 的时间。2026 年 7 月的部分结果（Strix Halo 和一部分 R9700）用的是早期版本的测试工具，提示词可能部分命中前缀缓存，所以不列 TTFT。"}</P>
       <P>{"R9700 的数字取同一镜像、同一命令多次运行中最好的一次。所有数字都能在榜单上查到，每一行用的引擎镜像和完整命令都在对应设备的“部署配方”页上。"}</P>
       </>
     ),

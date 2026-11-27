@@ -46,12 +46,12 @@ export function HeaderNav({
 
   const navItems = [
     {
-      href: lp(lang, `/${defaultHw}/leaderboard`),
+      href: lp(lang, `/${activeHw ?? defaultHw}/leaderboard`),
       label: t(lang, "Leaderboard", "榜单"),
       active: section === "leaderboard",
     },
     {
-      href: lp(lang, `/${defaultHw}/recipes`),
+      href: lp(lang, `/${activeHw ?? defaultHw}/recipes`),
       label: t(lang, "Recipes", "部署配方"),
       active: section === "recipes",
     },

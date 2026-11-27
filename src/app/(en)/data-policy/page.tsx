@@ -19,7 +19,7 @@ export default function DataPolicyPage() {
         <section>
           <h2 className="text-lg font-semibold text-zinc-100">Source of truth</h2>
           <p className="mt-2 text-zinc-400">
-            The benchmark source of truth is the public radeonrun repository: recipes live under
+            The benchmark source of truth is the public radeonrun repository: recipes live under{" "}
             <code>recipes/*.yaml</code>, measured results live under <code>results/&lt;device&gt;/*.json</code>,
             and the website reads the generated <code>results/bundle.json</code> as a static data file.
           </p>
@@ -29,7 +29,7 @@ export default function DataPolicyPage() {
           <h2 className="text-lg font-semibold text-zinc-100">Reproducibility requirements</h2>
           <p className="mt-2 text-zinc-400">
             A result should be tied to a recipe, benchmark profile, model source, runtime/container image,
-            image tag or digest, hardware label, and measured output. Moving tags such as
+            image tag or digest, hardware label, and measured output. Moving tags such as{" "}
             <code>:latest</code> should not be used as the identity of a leaderboard result.
           </p>
         </section>

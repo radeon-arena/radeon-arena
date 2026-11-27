@@ -50,7 +50,7 @@ export function HomeView({ lang }: { lang: Lang }) {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href={lp(lang, "/strix/leaderboard")} className="btn-primary">{t(lang, "View Leaderboard", "查看榜单")}</Link>
           <Link href={lp(lang, "/strix/recipes")} className="btn-ghost">{t(lang, "Browse Recipes", "浏览部署配方")}</Link>
-          <Link href={lp(lang, "/strix/submit")} className="btn-ghost">{t(lang, "Submit Benchmark", "提交配方")}</Link>
+          <Link href={lp(lang, "/strix/submit")} className="btn-ghost">{t(lang, "Submit Recipe", "提交配方")}</Link>
         </div>
       </section>
 

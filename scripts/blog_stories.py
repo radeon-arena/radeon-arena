@@ -92,11 +92,11 @@ STORIES = {
         hero=("strix", "llama.cpp", "Q4_K_M", 1),
         layout="data",
         zh=dict(
-            title="Qwen3-14B 别直接上 BF16：在 Strix Halo 上，Q4_K_M 快 3.1 倍",
+            title="Qwen3-14B 别直接上 BF16：在 Strix Halo 上，Q4_K_M 快 3 倍",
             excerpt="同一台 Strix Halo，BF16 单请求 7.7 tok/s，Q4_K_M 23.5 tok/s。14B 模型选对量化格式，比换硬件还管用。",
             lead=[
                 "很多人下载模型的第一反应是“要原版、不要量化”。在 14B 这个尺寸上，这个习惯代价很大。",
-                "在 Strix Halo 上，Qwen3-14B 的 BF16 单请求只有 7.7 tok/s，换成 Q4_K_M 是 23.5 tok/s，快了 3.1 倍。下面是三种格式的对比和部署命令。",
+                "在 Strix Halo 上，Qwen3-14B 的 BF16 单请求只有 7.7 tok/s，换成 Q4_K_M 是 23.5 tok/s，快了 3 倍。下面是三种格式的对比和部署命令。",
             ],
             sections=[
                 ("为什么量化快这么多", [
@@ -108,11 +108,11 @@ STORIES = {
             tips=[],
         ),
         en=dict(
-            title="Don't run Qwen3-14B in BF16: on Strix Halo, Q4_K_M is 3.1x faster",
+            title="Don't run Qwen3-14B in BF16: on Strix Halo, Q4_K_M is 3x faster",
             excerpt="On the same Strix Halo, BF16 decodes 7.7 tok/s and Q4_K_M 23.5. At 14B, choosing the right quantization matters more than new hardware.",
             lead=[
                 "Many people reach for the original weights by reflex. At 14B that habit is expensive.",
-                "On Strix Halo, Qwen3-14B in BF16 decodes a single request at 7.7 tok/s. Q4_K_M does 23.5 tok/s, 3.1x faster. Below are the three formats side by side and the commands to deploy.",
+                "On Strix Halo, Qwen3-14B in BF16 decodes a single request at 7.7 tok/s. Q4_K_M does 23.5 tok/s, 3x faster. Below are the three formats side by side and the commands to deploy.",
             ],
             sections=[
                 ("Why quantization is so much faster", [
@@ -254,7 +254,7 @@ STORIES = {
             title="Qwen3.6-35B-A3B 怎么部署最快？我们在三种 AMD 显卡上试了 20 种组合",
             excerpt="BF16、Q8_0、4 比特、AWQ、Quark、AutoRound，vLLM 和 llama.cpp，单卡到四卡。20 组实测后的选型建议和一键命令。",
             lead=[
-                "Qwen3.6-35B-A3B 是榜单上部署组合最多的模型：两个引擎、七种权重格式、一到四张卡，一共 20 组实测。",
+                "Qwen3.6-35B-A3B 是榜单上部署组合最多的模型：两个引擎、六种权重格式、一到四张卡，一共 20 组实测。",
                 "如果你只有一张 R9700，答案是 vLLM 跑 AWQ-4bit：单请求 69.7 tok/s，32 并发 384 tok/s，两项都比同卡 llama.cpp 好。其他硬件的答案不同，下面逐一说。",
             ],
             sections=[
@@ -270,7 +270,7 @@ STORIES = {
             title="What's the fastest way to deploy Qwen3.6-35B-A3B? We tried 20 setups on three AMD GPUs",
             excerpt="BF16, Q8_0, 4-bit, AWQ, Quark, AutoRound; vLLM and llama.cpp; one to four cards. What to pick after 20 measured setups, with commands.",
             lead=[
-                "Qwen3.6-35B-A3B has more measured setups than any other model on the board: two engines, seven weight formats, one to four cards, 20 in all.",
+                "Qwen3.6-35B-A3B has more measured setups than any other model on the board: two engines, six weight formats, one to four cards, 20 in all.",
                 "With one R9700, the answer is vLLM with AWQ-4bit: 69.7 tok/s for one request and 384 tok/s at 32, both better than llama.cpp on the same card. Other hardware has other answers, below.",
             ],
             sections=[
@@ -328,14 +328,14 @@ STORIES = {
             title="Qwen3.8-Flash-Next：四张显卡 30.4 tok/s，一台 Strix Halo 迷你主机 20.8",
             excerpt="大型 MoE 模型，一般要多卡。Strix Halo 靠 128GB 统一内存单机跑起来，单请求 20.8 tok/s。",
             lead=[
-                "Qwen3.8-Flash-Next 是一个大型 MoE 模型，就算是 3 比特量化，也得四张 R9700 或四张 W7900 才放得下。",
+                "Qwen3.8-Flash-Next 是一个大型 MoE 模型。我们在独立显卡上测它时，R9700 和 W7900 都用了四张卡。",
                 "Strix Halo 是另一条路：一台迷你主机、一块集成显卡，单请求 20.8 tok/s。四张 R9700 是 30.4 tok/s，快一些，但成本、功耗和体积都不在一个量级。",
             ],
             sections=[
                 ("一台盒子对四张卡", [
                     "单请求：R9700 四卡 30.4，W7900 四卡 30.3，Strix Halo 20.8 tok/s。",
                     "并发：W7900 四卡 32 并发 114 tok/s，R9700 四卡 63，Strix Halo 48。要同时服务多人，W7900 四卡更稳。",
-                    "W7900 上还测了 UD-Q4_K_XL：单请求 29.0 tok/s，和 3 比特几乎一样，质量更好。如果显存够，选 4 比特。",
+                    "W7900 上还测了 UD-Q4_K_XL：单请求 29.0 tok/s，和 3 比特几乎一样。4 比特量化损失更小，显存够就选它。",
                 ]),
             ],
             tips=["Strix Halo 的配方用 --load-mode none 加载这个模型，照抄即可。"],
@@ -344,14 +344,14 @@ STORIES = {
             title="Qwen3.8-Flash-Next: 30.4 tok/s on four GPUs, 20.8 on one Strix Halo mini PC",
             excerpt="A large MoE model usually needs several cards. Strix Halo runs it on one box with 128GB of unified memory, at 20.8 tok/s for one request.",
             lead=[
-                "Qwen3.8-Flash-Next is a large MoE model. Even at 3 bits it needs four R9700 or four W7900 cards.",
+                "Qwen3.8-Flash-Next is a large MoE model. On discrete cards we measured it with four R9700 or four W7900 cards.",
                 "Strix Halo is the other route: one mini PC, one integrated GPU, 20.8 tok/s for one request. Four R9700 cards give 30.4 tok/s, a bit faster, at a very different cost, power draw and size.",
             ],
             sections=[
                 ("One box against four cards", [
                     "One request: four R9700 30.4, four W7900 30.3, Strix Halo 20.8 tok/s.",
                     "Concurrency: four W7900 cards give 114 tok/s at 32, four R9700 63, Strix Halo 48. For many users at once, four W7900 cards hold up best.",
-                    "W7900 also ran UD-Q4_K_XL: 29.0 tok/s for one request, almost the same as 3-bit, with better quality. If memory allows, choose 4-bit.",
+                    "W7900 also ran UD-Q4_K_XL: 29.0 tok/s for one request, almost the same as 3-bit. 4-bit loses less to quantization, so pick it if memory allows.",
                 ]),
             ],
             tips=["The Strix Halo recipe loads this model with --load-mode none; keep it."],

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { resolveCommand } from "@/lib/command";
 import { useEffect, useMemo, useState } from "react";
 import { hwLabel } from "@/lib/hardware";
 import { loadGithubData, type Bundle } from "@/lib/githubData";
@@ -60,7 +61,10 @@ function launchAxis(record: BundleRecord, recipe: Record<string, any>, meta: Rec
     imageRequested: text(record.launch?.image_requested, text(meta.image_requested, "")),
     imageResolved: text(record.launch?.image_resolved, text(meta.image_resolved, "")),
     imageDigest: text(record.launch?.image_digest, text(meta.image_digest, "")),
-    command: text(record.launch?.command, text(meta.command, text(recipe.command, ""))),
+    command: resolveCommand(
+      text(record.launch?.command, text(meta.command, text(recipe.command, ""))),
+      { ...(recipe.defaults ?? {}), ...(record.launch?.defaults ?? {}) },
+    ),
     defaults: (record.launch?.defaults ?? recipe.defaults ?? {}) as Record<string, any>,
     env: (record.launch?.env ?? recipe.env ?? {}) as Record<string, any>,
     mods: (record.launch?.mods ?? recipe.mods ?? []) as unknown[],

@@ -170,10 +170,14 @@ export function LeaderboardView({ hw }: { hw: string }) {
     [parsed, testType],
   );
 
-  const list: SnapshotEntry[] = useMemo(
-    () => (snap && rawName ? snap.entriesByTest[rawName] ?? [] : []),
-    [snap, rawName],
-  );
+  // Rank within the selected card: the snapshot ranks all devices together.
+  const list: SnapshotEntry[] = useMemo(() => {
+    const all = snap && rawName ? snap.entriesByTest[rawName] ?? [] : [];
+    return all
+      .filter((e) => hwMatches(hw, e.gpu))
+      .sort((a, b) => (b.tokensPerSec ?? 0) - (a.tokensPerSec ?? 0))
+      .map((e, i) => ({ ...e, rank: i + 1 }));
+  }, [snap, rawName, hw]);
 
   const runtimeOptions = useMemo(() => [...new Set(list.map((e) => e.runtime))].sort(), [list]);
   const clusterOptions = useMemo(
@@ -183,7 +187,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
   const quantOptions = useMemo(() => [...new Set(list.map((e) => e.quantization))].sort(), [list]);
 
   const rows = useMemo(() => {
-    let r = list.filter((e) => hwMatches(hw, e.gpu));
+    let r = list;
     const q = search.trim().toLowerCase();
     if (q) r = r.filter((e) => `${e.modelName} ${e.modelFullPath}`.toLowerCase().includes(q));
     if (runtimeFilter !== "all") r = r.filter((e) => e.runtime === runtimeFilter);
@@ -389,7 +393,7 @@ export function LeaderboardView({ hw }: { hw: string }) {
             {rows.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-4 py-10 text-center text-zinc-600">
-                  {!list.some((e) => hwMatches(hw, e.gpu)) ? (
+                  {!list.length ? (
                     <>
                       {zh ? `${hwLabel(hw)} 还没有跑分。` : `No benchmarks yet for ${hwLabel(hw)}.`}
                       <span className="block text-xs text-zinc-700">{zh ? "测完后结果会显示在这里。" : "Results will appear here once this GPU is benchmarked."}</span>

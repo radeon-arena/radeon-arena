@@ -1,4 +1,5 @@
 import { buildCarousel, buildSnapshot } from "./aggregate";
+import { resolveCommand } from "./command";
 import { benchmarksFromRawRuns, type RawRun } from "./benchmarkMapping";
 import { computeOrgLeaderboard, computeUserLeaderboard } from "./scoring";
 import { hwMatches } from "./hardware";
@@ -118,7 +119,10 @@ function rowsFromBundle(bundle: Bundle): RawRun[] {
           host: { slug: `radeonrun-${device}`, name: device === "strix" ? "Strix Halo" : gpu, vendor: "AMD", chip: gpu, vram_gb: device === "strix" ? 128 : undefined },
           model: { slug: String(recipe.name ?? modelName).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), name: String(recipe.name ?? modelName), params_b: null, quantization: quant, source_url: modelPath && !modelPath.startsWith("/models/") ? `https://huggingface.co/${modelPath}` : undefined },
           engine: { slug: engineSlug, name: engineName, version: tag, commit: String(launchAxis.image_commit ?? meta.image_commit ?? tag ?? ""), backend, build_flags: buildFlags(device, engineName) },
-          command: typeof launchAxis.command === "string" ? launchAxis.command : typeof meta.command === "string" ? meta.command : typeof recipe.command === "string" ? recipe.command : "",
+          command: resolveCommand(
+            typeof launchAxis.command === "string" ? launchAxis.command : typeof meta.command === "string" ? meta.command : typeof recipe.command === "string" ? recipe.command : "",
+            { ...(recipe.defaults ?? {}), ...(launchAxis.defaults ?? {}) },
+          ),
           pp: mm.pp,
           pp_toks_per_s: mm.prefill_toks_per_s,
           tg: mm.tg,
