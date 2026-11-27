@@ -46,17 +46,9 @@ export function BlogIndex({ lang }: { lang: Lang }) {
   const posts = allPosts(lang).map(toListItem);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-20 pt-14 sm:px-6">
-      <header className="max-w-2xl">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-50">{t(lang, "Blog", "博客")}</h1>
-        <p className="mt-3 text-lg leading-8 text-zinc-400">
-          {t(
-            lang,
-            "How to run popular LLMs on AMD Radeon, with commands you can paste. Every number comes from our own measurements.",
-            "在 AMD Radeon 上部署热门大模型的教程，命令复制就能跑。文中数字都来自本站实测。",
-          )}
-        </p>
-      </header>
+    <div className="mx-auto max-w-7xl px-4 pb-20 pt-2 sm:px-6">
+      {/* No visible page title: the header's Blog tab already says where you are. */}
+      <h1 className="sr-only">{t(lang, "Blog", "博客")}</h1>
 
       {posts.length === 0 ? (
         <p className="mt-12 border-t border-ink-700 pt-8 text-zinc-400">
