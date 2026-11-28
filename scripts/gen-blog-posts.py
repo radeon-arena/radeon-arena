@@ -696,7 +696,7 @@ ENGINE_INTRO_ZH = {
 ENGINE_NOTES = {
     "vllm": [
         "vLLM's advantage is concurrency. In every pairing below with the same weights, device and card count, vLLM delivered more total throughput at 32 requests than llama.cpp, often several times more.",
-        "For a single request the picture is mixed: on Strix Halo, llama.cpp was faster for Qwen3.6-35B-A3B in BF16 (22.0 against 17.1 tok/s), and on W7900 two-card BF16 it was faster for Qwen3.6-27B (11.9 against 7.2).",
+        "For a single request the picture is mixed: on Strix Halo, llama.cpp was faster for Qwen3.6-35B-A3B in BF16 (22.0 against 17.1 tok/s).",
         "Quantized vLLM formats did not always help on a single request. On R9700, Quark W8A8-INT8 for Qwen3.6-27B on two cards gave 11.8 tok/s against 20.8 for BF16 on two cards.",
     ],
     "llamacpp": [
@@ -708,7 +708,7 @@ ENGINE_NOTES = {
 ENGINE_NOTES_ZH = {
     "vllm": [
         "vLLM 的长处在并发。下表里每一组权重、设备、卡数都相同的对比中，vLLM 在 32 并发时的总吞吐都高于 llama.cpp，常常高出好几倍。",
-        "单请求则互有胜负：在 Strix Halo 上，Qwen3.6-35B-A3B 的 BF16 是 llama.cpp 更快（22.0 对 17.1 tok/s）；W7900 双卡 BF16 跑 Qwen3.6-27B 也是 llama.cpp 更快（11.9 对 7.2）。",
+        "单请求则互有胜负：在 Strix Halo 上，Qwen3.6-35B-A3B 的 BF16 是 llama.cpp 更快（22.0 对 17.1 tok/s）。",
         "vLLM 的量化格式不一定能提高单请求速度。在 R9700 上，Qwen3.6-27B 用 Quark W8A8-INT8 双卡是 11.8 tok/s，BF16 双卡是 20.8。",
     ],
     "llamacpp": [

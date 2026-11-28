@@ -58,31 +58,31 @@ STORIES = {
         hero=("strix", "llama.cpp", "Q4_K_M", 1),
         layout="tutorial",
         zh=dict(
-            title="在 AMD 迷你主机上跑 Qwen3-8B：Strix Halo 单请求 40.1 tok/s，W7900 72.8",
+            title="在 AMD 迷你主机上跑 Qwen3-8B：Strix Halo 单请求 40.1 tok/s，W7900 87.2",
             excerpt="8B 是本地助手最常见的尺寸。一台 Strix Halo 迷你主机就能跑到 40.1 tok/s，三步命令跑起来。",
             lead=[
                 "想要一个随时在线、数据不出门的本地助手，8B 模型是最常见的选择：够聪明，又不挑硬件。",
-                "我们在两台很不一样的机器上跑了 Qwen3-8B：一台是 Strix Halo 迷你主机（Radeon 8060S 集成显卡），一台是工作站显卡 Radeon PRO W7900。Q4_K_M 量化下，单请求分别是 40.1 和 72.8 tok/s。",
+                "我们在两台很不一样的机器上跑了 Qwen3-8B：一台是 Strix Halo 迷你主机（Radeon 8060S 集成显卡），一台是工作站显卡 Radeon PRO W7900。Q4_K_M 量化下，单请求分别是 40.1 和 87.2 tok/s。",
             ],
             sections=[
                 ("40.1 tok/s 是什么体验", [
                     "单请求 40.1 tok/s，意味着回答出字的速度明显快过人阅读的速度，日常对话、总结文档都不会觉得在等。",
-                    "Strix Halo 的显存来自系统内存，和 CPU 共用。它的优势是容量，不是带宽：同样的 Q4_K_M，W7900 快了 1.8 倍。如果你要的是一台安静、省电、装得下更大模型的盒子，Strix Halo 更合适；要的是 8B 级别的极致速度，独立显卡更快。",
+                    "Strix Halo 的显存来自系统内存，和 CPU 共用。它的优势是容量，不是带宽：同样的 Q4_K_M，W7900 快了 2.2 倍。如果你要的是一台安静、省电、装得下更大模型的盒子，Strix Halo 更合适；要的是 8B 级别的极致速度，独立显卡更快。",
                 ]),
             ],
             tips=["Strix Halo 上 BF16 只有 11.9 tok/s，8B 模型建议直接用 Q4_K_M 或 Q8_0（25.5 tok/s）。"],
         ),
         en=dict(
-            title="Run Qwen3-8B on an AMD mini PC: 40.1 tok/s on Strix Halo, 72.8 on W7900",
+            title="Run Qwen3-8B on an AMD mini PC: 40.1 tok/s on Strix Halo, 87.2 on W7900",
             excerpt="8B is the go-to size for a local assistant. A Strix Halo mini PC runs it at 40.1 tok/s; three commands get you there.",
             lead=[
                 "If you want an always-on assistant that keeps your data at home, an 8B model is the usual pick: capable, and easy on hardware.",
-                "We ran Qwen3-8B on two very different machines: a Strix Halo mini PC with its integrated Radeon 8060S, and a Radeon PRO W7900 workstation card. With Q4_K_M, a single request decodes at 40.1 and 72.8 tok/s.",
+                "We ran Qwen3-8B on two very different machines: a Strix Halo mini PC with its integrated Radeon 8060S, and a Radeon PRO W7900 workstation card. With Q4_K_M, a single request decodes at 40.1 and 87.2 tok/s.",
             ],
             sections=[
                 ("What 40.1 tok/s feels like", [
                     "At 40.1 tok/s the answer appears faster than you can read it. Chat and document summaries never feel like waiting.",
-                    "Strix Halo's graphics memory is system memory shared with the CPU. Its strength is capacity, not bandwidth: with the same Q4_K_M weights, W7900 is 1.8x faster. For a quiet, low-power box that can also hold larger models, pick Strix Halo; for top speed at 8B, a discrete card wins.",
+                    "Strix Halo's graphics memory is system memory shared with the CPU. Its strength is capacity, not bandwidth: with the same Q4_K_M weights, W7900 is 2.2x faster. For a quiet, low-power box that can also hold larger models, pick Strix Halo; for top speed at 8B, a discrete card wins.",
                 ]),
             ],
             tips=["BF16 on Strix Halo gives only 11.9 tok/s. For an 8B model use Q4_K_M, or Q8_0 at 25.5 tok/s."],
@@ -101,7 +101,7 @@ STORIES = {
             sections=[
                 ("为什么量化快这么多", [
                     "生成每个 token，都要把全部权重从显存里读一遍。BF16 每个参数 2 字节，Q8_0 大约 1 字节，Q4_K_M 大约半个字节，读的数据越少，出字越快。",
-                    "Strix Halo 的三个数字正好排成一条线：BF16 7.7，Q8_0 14.4，Q4_K_M 23.5 tok/s。W7900 上也是一样的规律：BF16 23.5，Q8_0 38.0，Q4_K_M 48.1。",
+                    "Strix Halo 的三个数字正好排成一条线：BF16 7.7，Q8_0 14.4，Q4_K_M 23.5 tok/s。W7900 上也是一样的规律：BF16 24.2，Q8_0 39.0，Q4_K_M 55.7。",
                     "质量上，Q4_K_M 有轻微损失，Q8_0 几乎无损。追求速度用 Q4_K_M，追求稳妥用 Q8_0，BF16 只在需要做对照实验时才用。",
                 ]),
             ],
@@ -117,7 +117,7 @@ STORIES = {
             sections=[
                 ("Why quantization is so much faster", [
                     "Every generated token reads all the weights from memory once. BF16 is 2 bytes per parameter, Q8_0 about 1, Q4_K_M about half a byte. Fewer bytes, faster tokens.",
-                    "The three Strix Halo numbers line up: BF16 7.7, Q8_0 14.4, Q4_K_M 23.5 tok/s. W7900 follows the same pattern: BF16 23.5, Q8_0 38.0, Q4_K_M 48.1.",
+                    "The three Strix Halo numbers line up: BF16 7.7, Q8_0 14.4, Q4_K_M 23.5 tok/s. W7900 follows the same pattern: BF16 24.2, Q8_0 39.0, Q4_K_M 55.7.",
                     "Q4_K_M loses a little quality; Q8_0 is close to lossless. Use Q4_K_M for speed, Q8_0 to play safe, and BF16 only as a reference.",
                 ]),
             ],
@@ -130,7 +130,7 @@ STORIES = {
         layout="compare",
         zh=dict(
             title="Qwen3-32B 本地部署：128GB 的迷你主机，还是 48GB 的专业卡？",
-            excerpt="32B 稠密模型对显存和带宽都有要求。Strix Halo 装得下 BF16，W7900 单卡跑 Q4_K_M 快一倍。实测数据和两套部署命令。",
+            excerpt="32B 稠密模型对显存和带宽都有要求。Strix Halo 装得下 BF16，W7900 单卡跑 Q4_K_M 快一倍多。实测数据和两套部署命令。",
             lead=[
                 "32B 是很多人心中“本地能跑的最强稠密模型”。它的权重在 BF16 下要占 60 GB 以上，一般的游戏卡装不下。",
                 "AMD 这边有两条路：Strix Halo 迷你主机最多 128GB 统一内存，BF16 也能装下；Radeon PRO W7900 有 48GB 显存，单卡装 Q8_0。我们把两条路都跑了一遍。",
@@ -138,15 +138,15 @@ STORIES = {
             sections=[
                 ("容量和速度，二选一", [
                     "Strix Halo 能单机跑 BF16，但只有 3.4 tok/s，更适合当质量对照。实用的是 Q4_K_M：10.8 tok/s，32 并发总吞吐 132 tok/s。",
-                    "W7900 单卡 Q4_K_M 单请求 22.8 tok/s，Q8_0 17.9 tok/s。要跑 BF16 得两张 W7900，单请求 10.8 tok/s。",
+                    "W7900 单卡 Q4_K_M 单请求 26.3 tok/s，Q8_0 18.5 tok/s。要跑 BF16 得两张 W7900，单请求 11.0 tok/s。",
                     "怎么选：一个人用、看重速度，选 W7900；想一台机器同时放下多个模型、或者需要 BF16 原版，选 Strix Halo。",
                 ]),
             ],
-            tips=["W7900 上 Q4_K_M 的首 token 时延是 1,081 ms，比小模型长，属于 32B 稠密模型的正常现象。"],
+            tips=["W7900 上 Q4_K_M 的首 token 时延是 851 ms，比小模型长，属于 32B 稠密模型的正常现象。"],
         ),
         en=dict(
             title="Qwen3-32B at home: a 128GB mini PC or a 48GB pro card?",
-            excerpt="A dense 32B model needs both memory and bandwidth. Strix Halo fits BF16; one W7900 runs Q4_K_M twice as fast. Measurements and both deployments.",
+            excerpt="A dense 32B model needs both memory and bandwidth. Strix Halo fits BF16; one W7900 runs Q4_K_M more than twice as fast. Measurements and both deployments.",
             lead=[
                 "32B is many people's idea of the strongest dense model you can run locally. In BF16 its weights take more than 60 GB, beyond most gaming cards.",
                 "AMD offers two routes: a Strix Halo mini PC with up to 128GB of unified memory, enough for BF16, and a Radeon PRO W7900 with 48GB, enough for Q8_0 on one card. We ran both.",
@@ -154,11 +154,11 @@ STORIES = {
             sections=[
                 ("Capacity or speed", [
                     "Strix Halo can hold BF16 on its own, but it decodes only 3.4 tok/s, so treat it as a quality reference. Q4_K_M is the practical choice: 10.8 tok/s, and 132 tok/s in total at 32 requests.",
-                    "One W7900 with Q4_K_M decodes 22.8 tok/s for one request, and Q8_0 17.9. BF16 needs two W7900 cards and gives 10.8 tok/s.",
+                    "One W7900 with Q4_K_M decodes 26.3 tok/s for one request, and Q8_0 18.5. BF16 needs two W7900 cards and gives 11.0 tok/s.",
                     "Pick W7900 for one fast user. Pick Strix Halo to keep several models loaded on one machine, or when you need the original BF16 weights.",
                 ]),
             ],
-            tips=["Time to first token for Q4_K_M on W7900 is 1,081 ms, longer than small models and normal for a dense 32B."],
+            tips=["Time to first token for Q4_K_M on W7900 is 851 ms, longer than small models and normal for a dense 32B."],
         ),
     ),
     "qwen3-30b-a3b": dict(
@@ -175,10 +175,10 @@ STORIES = {
                 ("为什么 MoE 适合 Strix Halo", [
                     "MoE 把模型拆成很多“专家”，每个 token 只走其中几个。显存里要放下全部 30B 参数，但每一步只读其中一小部分。",
                     "这正好对上 Strix Halo 的特点：内存容量大、带宽一般。容量负责装下整个模型，每步只读约 3B 参数，带宽也就够用了。",
-                    "W7900 上同样明显：Q4_K_M 单请求 85.2 tok/s。两张 W7900 跑 vLLM BF16，32 并发总吞吐 498 tok/s，是这个模型在榜单上的最高并发成绩。",
+                    "W7900 上同样明显：Q4_K_M 单请求 100.5 tok/s。两张 W7900 跑 vLLM BF16，32 并发总吞吐 749 tok/s，是这个模型在榜单上的最高并发成绩。",
                 ]),
                 ("YaRN 长上下文的代价", [
-                    "榜单里的 BF16+YaRN 是同一份权重，打开了 YaRN 长上下文缩放。在短提示词下它有代价：W7900 双卡 vLLM，单请求 69.0 对 75.5 tok/s，32 并发 308 对 498。不需要超长上下文就别开。",
+                    "榜单里的 BF16+YaRN 是同一份权重，打开了 YaRN 长上下文缩放。在短提示词下它有代价：W7900 双卡 vLLM，单请求 84.6 对 93.8 tok/s，32 并发 397 对 749。不需要超长上下文就别开。",
                 ]),
             ],
             tips=[],
@@ -194,10 +194,10 @@ STORIES = {
                 ("Why MoE suits Strix Halo", [
                     "An MoE model is split into many experts, and each token goes through a few of them. All 30B parameters must be in memory, but each step reads only a small part.",
                     "That matches Strix Halo: large memory, moderate bandwidth. Capacity holds the whole model; each step reads about 3B parameters, which the bandwidth can keep up with.",
-                    "W7900 shows the same: 85.2 tok/s for one request with Q4_K_M. Two W7900 cards with vLLM BF16 reach 498 tok/s at 32 requests, this model's highest concurrent result on the board.",
+                    "W7900 shows the same: 100.5 tok/s for one request with Q4_K_M. Two W7900 cards with vLLM BF16 reach 749 tok/s at 32 requests, this model's highest concurrent result on the board.",
                 ]),
                 ("The cost of YaRN long context", [
-                    "BF16+YaRN on the board is the same weights with YaRN scaling switched on. With short prompts it costs speed: on two W7900 cards with vLLM, 69.0 against 75.5 tok/s for one request, 308 against 498 at 32. Leave it off unless you need very long context.",
+                    "BF16+YaRN on the board is the same weights with YaRN scaling switched on. With short prompts it costs speed: on two W7900 cards with vLLM, 84.6 against 93.8 tok/s for one request, 397 against 749 at 32. Leave it off unless you need very long context.",
                 ]),
             ],
             tips=[],
@@ -222,7 +222,7 @@ STORIES = {
                 ]),
             ],
             tips=[
-                "W7900 上 llama.cpp 的 32 并发总吞吐只有 22 tok/s，和单请求差不多，说明这个配置并发上不去；要并发请用 vLLM（W7900 双卡 BF16 32 并发 194 tok/s）。",
+                "W7900 单卡 llama.cpp Q4_K_M 的 32 并发总吞吐是 84 tok/s；要更高并发请用 vLLM（W7900 双卡 BF16 32 并发 244 tok/s）。",
                 "Quark W8A8-INT8 在 R9700 双卡上单请求只有 11.8 tok/s，不如 BF16，不推荐。",
             ],
         ),
@@ -241,7 +241,7 @@ STORIES = {
                 ]),
             ],
             tips=[
-                "On W7900, llama.cpp reaches only 22 tok/s in total at 32 requests, about the same as one request. For concurrency use vLLM: two W7900 cards with BF16 give 194 tok/s at 32.",
+                "On one W7900, llama.cpp Q4_K_M reaches 84 tok/s in total at 32 requests. For more concurrency use vLLM: two W7900 cards with BF16 give 244 tok/s at 32.",
                 "Quark W8A8-INT8 on two R9700 cards gives 11.8 tok/s for one request, slower than BF16. Not recommended.",
             ],
         ),
@@ -261,7 +261,7 @@ STORIES = {
                 ("每张卡的最佳组合", [
                     "R9700 单卡：vLLM AWQ-4bit，69.7 tok/s，32 并发 384。四张卡跑 vLLM BF16，单请求 96.8 tok/s，32 并发 827，是这个模型的最高成绩。",
                     "Strix Halo：单人用选 llama.cpp UD-Q4_K_M，49.3 tok/s；要并发选 vLLM 的 Intel INT4 AutoRound，32 并发 189。",
-                    "W7900 单卡：vLLM Quark W8A8-INT8，单请求 72.9 tok/s，32 并发 421。8 比特量化在 W7900 上表现比 AWQ-4bit（38.1）还好，这一点和 R9700 正好相反。",
+                    "W7900 单卡：单人用选 llama.cpp UD-Q4_K_M，76.3 tok/s；要并发选 vLLM Quark W8A8-INT8，32 并发 444（AWQ-4bit 是 373）。两张卡跑 vLLM BF16，单请求 90.2 tok/s，32 并发 656。",
                 ]),
             ],
             tips=["AWQ 和 Quark 权重来自第三方量化，不是 Qwen 官方发布，下载前看一下模型卡。"],
@@ -277,7 +277,7 @@ STORIES = {
                 ("The best setup on each card", [
                     "One R9700: vLLM AWQ-4bit, 69.7 tok/s, 384 at 32. Four cards with vLLM BF16 reach 96.8 tok/s for one request and 827 at 32, the best result for this model.",
                     "Strix Halo: for one user, llama.cpp UD-Q4_K_M at 49.3 tok/s; for concurrency, vLLM with Intel's INT4 AutoRound, 189 at 32.",
-                    "One W7900: vLLM Quark W8A8-INT8, 72.9 tok/s for one request and 421 at 32. On W7900 the 8-bit build beats AWQ-4bit (38.1), the opposite of R9700.",
+                    "One W7900: for one user, llama.cpp UD-Q4_K_M at 76.3 tok/s; for concurrency, vLLM Quark W8A8-INT8 with 444 at 32 (AWQ-4bit gives 373). Two cards with vLLM BF16 reach 90.2 tok/s for one request and 656 at 32.",
                 ]),
             ],
             tips=["The AWQ and Quark weights are third-party quantizations, not official Qwen releases. Read the model card before downloading."],
@@ -296,8 +296,8 @@ STORIES = {
             ],
             sections=[
                 ("48GB 的单卡优势", [
-                    "R9700 有 32GB 显存，Q8_0 要两张卡，单请求 15.3 tok/s。W7900 一张卡就装下 Q8_0，单请求 20.1 tok/s，32 并发 86 tok/s。",
-                    "4 比特版本两张卡都只要一张：W7900 27.5 tok/s，R9700 23.0 tok/s。",
+                    "R9700 有 32GB 显存，Q8_0 要两张卡，单请求 15.3 tok/s。W7900 一张卡就装下 Q8_0，单请求 20.1 tok/s，32 并发 85 tok/s。",
+                    "4 比特版本两张卡都只要一张：W7900 27.6 tok/s，R9700 23.0 tok/s。",
                     "和上一代 Qwen3.6-27B 比，同一张 R9700 上 4 比特的速度基本持平（24.1 对 23.0），升级模型不需要换硬件。",
                 ]),
             ],
@@ -312,8 +312,8 @@ STORIES = {
             ],
             sections=[
                 ("The 48GB single-card advantage", [
-                    "R9700 has 32GB, so Q8_0 needs two cards and gives 15.3 tok/s. One W7900 holds Q8_0 and gives 20.1 tok/s for one request and 86 tok/s at 32.",
-                    "The 4-bit build fits on one card of either: 27.5 tok/s on W7900, 23.0 on R9700.",
+                    "R9700 has 32GB, so Q8_0 needs two cards and gives 15.3 tok/s. One W7900 holds Q8_0 and gives 20.1 tok/s for one request and 85 tok/s at 32.",
+                    "The 4-bit build fits on one card of either: 27.6 tok/s on W7900, 23.0 on R9700.",
                     "Against Qwen3.6-27B, 4-bit speed on the same R9700 is about the same (24.1 against 23.0). Upgrading the model does not mean upgrading the card.",
                 ]),
             ],
@@ -334,7 +334,7 @@ STORIES = {
             sections=[
                 ("一台盒子对四张卡", [
                     "单请求：R9700 四卡 30.4，W7900 四卡 30.3，Strix Halo 20.8 tok/s。",
-                    "并发：W7900 四卡 32 并发 114 tok/s，R9700 四卡 63，Strix Halo 48。要同时服务多人，W7900 四卡更稳。",
+                    "并发：W7900 四卡 32 并发 111 tok/s，R9700 四卡 63，Strix Halo 48。要同时服务多人，W7900 四卡更稳。",
                     "W7900 上还测了 UD-Q4_K_XL：单请求 29.0 tok/s，和 3 比特几乎一样。4 比特量化损失更小，显存够就选它。",
                 ]),
             ],
@@ -350,7 +350,7 @@ STORIES = {
             sections=[
                 ("One box against four cards", [
                     "One request: four R9700 30.4, four W7900 30.3, Strix Halo 20.8 tok/s.",
-                    "Concurrency: four W7900 cards give 114 tok/s at 32, four R9700 63, Strix Halo 48. For many users at once, four W7900 cards hold up best.",
+                    "Concurrency: four W7900 cards give 111 tok/s at 32, four R9700 63, Strix Halo 48. For many users at once, four W7900 cards hold up best.",
                     "W7900 also ran UD-Q4_K_XL: 29.0 tok/s for one request, almost the same as 3-bit. 4-bit loses less to quantization, so pick it if memory allows.",
                 ]),
             ],
@@ -365,7 +365,7 @@ STORIES = {
             excerpt="不是一个字一个字地生成，而是整块反复细化。DiffusionGemma 在 vLLM main 分支上跑通，首 token 慢、整体快，实测告诉你为什么。",
             lead=[
                 "大多数语言模型一个 token 接一个 token 地生成。DiffusionGemma 不一样：它每次对一整块 token 反复细化，像图像扩散模型去噪一样。",
-                "我们在 Strix Halo 和 W7900 上用 vLLM 的 main 分支跑通了它。W7900 上单请求 20.3 tok/s，但第一个 token 要等 6.3 秒。",
+                "我们在 Strix Halo 和 W7900 上用 vLLM 的 main 分支跑通了它。W7900 上单请求 31.2 tok/s，但第一个 token 要等 4.1 秒。",
             ],
             sections=[
                 ("为什么首 token 这么慢", [
@@ -373,7 +373,7 @@ STORIES = {
                     "适合的场景是一次生成一段完整内容，比如改写、摘要；不适合需要“秒回”的对话。",
                 ]),
                 ("并发为什么上不去", [
-                    "并发超过 4 之后，总吞吐几乎不再增长：W7900 上 32 并发只有 26 tok/s。W7900 的服务启动时最大序列数设成了 4，这是当前实现下的保守配置。",
+                    "并发超过 4 之后，总吞吐几乎不再增长：W7900 上 32 并发只有 35 tok/s。W7900 的服务启动时最大序列数设成了 4，这是当前实现下的保守配置。",
                 ]),
             ],
             tips=["需要 vLLM main 分支，正式版 vLLM 镜像跑不了。Strix Halo 用的镜像已经公开，见下方命令。"],
@@ -383,7 +383,7 @@ STORIES = {
             excerpt="It refines a whole block at a time instead of one token after another. DiffusionGemma runs on vLLM's main branch: slow first token, fine overall speed, and why.",
             lead=[
                 "Most language models emit one token after another. DiffusionGemma refines a whole block of tokens over several passes, much like an image diffusion model removes noise.",
-                "We ran it on Strix Halo and W7900 with vLLM's main branch. On W7900 a single request decodes 20.3 tok/s, but the first token takes 6.3 seconds.",
+                "We ran it on Strix Halo and W7900 with vLLM's main branch. On W7900 a single request decodes 31.2 tok/s, but the first token takes 4.1 seconds.",
             ],
             sections=[
                 ("Why the first token is slow", [
@@ -391,7 +391,7 @@ STORIES = {
                     "It suits generating a complete passage, such as rewriting or summarizing, not chat that must answer instantly.",
                 ]),
                 ("Why concurrency stalls", [
-                    "Beyond 4 concurrent requests, total throughput barely grows: 26 tok/s at 32 on W7900. The W7900 server was started with at most 4 sequences, a conservative setting for the current implementation.",
+                    "Beyond 4 concurrent requests, total throughput barely grows: 35 tok/s at 32 on W7900. The W7900 server was started with at most 4 sequences, a conservative setting for the current implementation.",
                 ]),
             ],
             tips=["It needs vLLM's main branch; release vLLM images cannot run it. The Strix Halo image is public; see the command below."],
@@ -412,7 +412,7 @@ STORIES = {
                 ("怎么选", [
                     "只给自己用：两个都行，llama.cpp 部署更简单，GGUF 文件一个就够。",
                     "要给几个人或者几个 Agent 同时用：选 vLLM，并发吞吐是 llama.cpp 的 2.1 倍。",
-                    "W7900 上差距更大：vLLM AWQ-4bit 单卡单请求 89.5 tok/s，32 并发 431；llama.cpp UD-Q4_K_M 是 58.4 和 109。",
+                    "W7900 上差距更大：vLLM AWQ-4bit 单卡单请求 96.5 tok/s，32 并发 454；llama.cpp UD-Q4_K_M 是 68.1 和 261。",
                 ]),
             ],
             tips=["vLLM 的配方用 --max-model-len 2304，只够测试用的 512 输入加 128 输出。日常使用请按需调大，显存会相应增加。"],
@@ -428,7 +428,7 @@ STORIES = {
                 ("Which to pick", [
                     "Just for you: either works, and llama.cpp is simpler, one GGUF file.",
                     "For several people or agents at once: vLLM, with 2.1x the concurrent throughput.",
-                    "The gap is wider on W7900: vLLM AWQ-4bit on one card gives 89.5 tok/s for one request and 431 at 32; llama.cpp UD-Q4_K_M gives 58.4 and 109.",
+                    "The gap is wider on W7900: vLLM AWQ-4bit on one card gives 96.5 tok/s for one request and 454 at 32; llama.cpp UD-Q4_K_M gives 68.1 and 261.",
                 ]),
             ],
             tips=["The vLLM recipe uses --max-model-len 2304, just enough for the 512-token prompt and 128 output tokens of the test. Raise it for real use; memory use grows with it."],
@@ -439,10 +439,10 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="Gemma 4 31B 稠密版：用 AMD Quark 8 比特量化，在 Radeon 上跑起来",
-            excerpt="Google Gemma 4 的 31B 稠密模型，用 AMD Quark W8A8-INT8 量化后在 vLLM 上运行。W7900 单卡 20.2 tok/s。",
+            excerpt="Google Gemma 4 的 31B 稠密模型，用 AMD Quark W8A8-INT8 量化后在 vLLM 上运行。W7900 单卡 12.9 tok/s。",
             lead=[
                 "Gemma 4 31B 是 Google 这一代的稠密旗舰。我们用的是 AMD Quark 工具量化的 W8A8-INT8 版本，权重和激活都是 8 比特，跑在 vLLM 上。",
-                "W7900 单卡单请求 20.2 tok/s，32 并发 71 tok/s；Strix Halo 单请求 6.3 tok/s，32 并发 78 tok/s。",
+                "W7900 单卡单请求 12.9 tok/s，32 并发 85 tok/s；Strix Halo 单请求 6.3 tok/s，32 并发 78 tok/s。",
             ],
             sections=[
                 ("Strix Halo 适合批处理", [
@@ -454,10 +454,10 @@ STORIES = {
         ),
         en=dict(
             title="Gemma 4 31B dense: running AMD Quark 8-bit weights on Radeon",
-            excerpt="Google's dense 31B Gemma 4, quantized with AMD Quark to W8A8-INT8 and served by vLLM. 20.2 tok/s on one W7900.",
+            excerpt="Google's dense 31B Gemma 4, quantized with AMD Quark to W8A8-INT8 and served by vLLM. 12.9 tok/s on one W7900.",
             lead=[
                 "Gemma 4 31B is the dense flagship of Google's current generation. We use a W8A8-INT8 build made with AMD's Quark tool, with 8-bit weights and activations, served by vLLM.",
-                "One W7900 decodes 20.2 tok/s for one request and 71 tok/s at 32; Strix Halo gives 6.3 tok/s for one request and 78 at 32.",
+                "One W7900 decodes 12.9 tok/s for one request and 85 tok/s at 32; Strix Halo gives 6.3 tok/s for one request and 78 at 32.",
             ],
             sections=[
                 ("Strix Halo suits batch work", [
@@ -473,10 +473,10 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="Llama 3.1 8B 在 AMD Radeon 上：用这个老基准，量一量新模型",
-            excerpt="Llama 3.1 8B 是本地部署的“标准尺”。Strix Halo 41.1 tok/s，W7900 78.8 tok/s，拿它和新一代 8B 模型对比一下。",
+            excerpt="Llama 3.1 8B 是本地部署的“标准尺”。Strix Halo 41.1 tok/s，W7900 92.5 tok/s，拿它和新一代 8B 模型对比一下。",
             lead=[
                 "Llama 3.1 8B 已经不新了，但它仍是最常被拿来比较的本地模型。几乎每个推理引擎、每块显卡的评测都会测它。",
-                "所以我们也测了它，当作一把尺子。Q4_K_M 下，Strix Halo 单请求 41.1 tok/s，W7900 78.8 tok/s。",
+                "所以我们也测了它，当作一把尺子。Q4_K_M 下，Strix Halo 单请求 41.1 tok/s，W7900 92.5 tok/s。",
             ],
             sections=[
                 ("用同一把尺子量新模型", [
@@ -488,10 +488,10 @@ STORIES = {
         ),
         en=dict(
             title="Llama 3.1 8B on AMD Radeon: an old benchmark to measure new models against",
-            excerpt="Llama 3.1 8B is the yardstick of local inference. 41.1 tok/s on Strix Halo, 78.8 on W7900, and how newer 8B models compare.",
+            excerpt="Llama 3.1 8B is the yardstick of local inference. 41.1 tok/s on Strix Halo, 92.5 on W7900, and how newer 8B models compare.",
             lead=[
                 "Llama 3.1 8B is no longer new, yet it is still the local model everyone compares against. Almost every engine and GPU review measures it.",
-                "So we measured it too, as a yardstick. With Q4_K_M, one request decodes 41.1 tok/s on Strix Halo and 78.8 on W7900.",
+                "So we measured it too, as a yardstick. With Q4_K_M, one request decodes 41.1 tok/s on Strix Halo and 92.5 on W7900.",
             ],
             sections=[
                 ("Measuring new models with the same stick", [
@@ -510,12 +510,12 @@ STORIES = {
             excerpt="IBM 的 Granite 4.2 8B，在一张 R9700 上 Q4_K_M 单请求 78.2 tok/s。三步部署，外加一个反常识的量化结果。",
             lead=[
                 "Granite 是 IBM 面向企业场景的开源模型系列，许可宽松，适合放进公司内网自己跑。",
-                "一张 R9700 跑 Granite 4.2 8B 的 Q4_K_M，单请求 78.2 tok/s，32 并发 351 tok/s。W7900 几乎一样快，76.7 tok/s。",
+                "一张 R9700 跑 Granite 4.2 8B 的 Q4_K_M，单请求 78.2 tok/s，32 并发 351 tok/s。W7900 几乎一样快，76.6 tok/s。",
             ],
             sections=[
                 ("一个反常识的数字", [
                     "在 R9700 上，Q8_0 的 32 并发总吞吐只有 185 tok/s，反而低于 BF16 的 303。首 token 时延也是 Q8_0 最长，550 ms。",
-                    "所以在这张卡上，要么用 Q4_K_M 追求速度，要么直接用 BF16，中间的 Q8_0 不划算。W7900 上没有这个现象，Q8_0 32 并发 292 tok/s。",
+                    "所以在这张卡上，要么用 Q4_K_M 追求速度，要么直接用 BF16，中间的 Q8_0 不划算。W7900 上没有这个现象，Q8_0 32 并发 295 tok/s。",
                 ]),
             ],
             tips=[],
@@ -525,12 +525,12 @@ STORIES = {
             excerpt="IBM's Granite 4.2 8B with Q4_K_M decodes 78.2 tok/s on one R9700. Three steps to deploy, plus one counter-intuitive quantization result.",
             lead=[
                 "Granite is IBM's open model family for enterprise use, with a permissive license that suits running inside a company network.",
-                "One R9700 runs Granite 4.2 8B Q4_K_M at 78.2 tok/s for one request and 351 tok/s at 32. W7900 is nearly as fast, at 76.7 tok/s.",
+                "One R9700 runs Granite 4.2 8B Q4_K_M at 78.2 tok/s for one request and 351 tok/s at 32. W7900 is nearly as fast, at 76.6 tok/s.",
             ],
             sections=[
                 ("A counter-intuitive number", [
                     "On R9700, Q8_0 reaches only 185 tok/s in total at 32 requests, below BF16's 303. Q8_0 also has the longest time to first token, 550 ms.",
-                    "On this card, use Q4_K_M for speed or BF16 outright; Q8_0 in between does not pay. W7900 does not show this: Q8_0 gives 292 tok/s at 32.",
+                    "On this card, use Q4_K_M for speed or BF16 outright; Q8_0 in between does not pay. W7900 does not show this: Q8_0 gives 295 tok/s at 32.",
                 ]),
             ],
             tips=[],
@@ -550,7 +550,7 @@ STORIES = {
                 ("为什么卡多反而慢", [
                     "llama.cpp 多卡是按层切分：模型被分成四段，每段放一张卡，一个 token 要依次经过四张卡。卡多解决的是“放得下”，不是“算得快”。",
                     "而单请求的速度主要取决于每个 token 要读多少权重。BF16 的权重是 Q4_K_M 的三到四倍，再多的卡也补不回来。",
-                    "W7900 上也一样：单卡 Q4_K_M 27.8 tok/s，两卡 BF16 12.1 tok/s。",
+                    "W7900 上也一样：单卡 Q4_K_M 27.7 tok/s，两卡 BF16 12.1 tok/s。",
                 ]),
             ],
             tips=["要多卡并且速度叠加，需要 vLLM 的张量并行；这个模型目前只测了 llama.cpp。"],
@@ -566,7 +566,7 @@ STORIES = {
                 ("Why more cards are slower here", [
                     "llama.cpp splits a model by layers: four slices on four cards, and each token passes through them in turn. More cards solve fitting, not speed.",
                     "Single-request speed depends on how many weight bytes each token reads. BF16 weights are three to four times the size of Q4_K_M, and extra cards cannot make that up.",
-                    "W7900 agrees: Q4_K_M on one card 27.8 tok/s, BF16 on two cards 12.1 tok/s.",
+                    "W7900 agrees: Q4_K_M on one card 27.7 tok/s, BF16 on two cards 12.1 tok/s.",
                 ]),
             ],
             tips=["To add cards and add speed, you need vLLM's tensor parallelism; this model has only been measured in llama.cpp so far."],
@@ -577,30 +577,30 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="LFM2.5-24B-A2B：24B 的模型，一张 R9700 跑出 132.3 tok/s",
-            excerpt="Liquid AI 的 MoE 模型每个 token 只激活约 2B 参数。R9700 单卡 132.3 tok/s，W7900 123.3，Strix Halo 77.0。",
+            excerpt="Liquid AI 的 MoE 模型每个 token 只激活约 2B 参数。R9700 单卡 132.3 tok/s，W7900 115.0，Strix Halo 77.0。",
             lead=[
                 "24B 的模型能跑多快？如果是 Liquid AI 的 LFM2.5-24B-A2B，答案是比很多 4B 模型还快。",
                 "它是 MoE 结构，每个 token 只激活约 2B 参数。一张 R9700 跑 UD-Q4_K_XL，单请求 132.3 tok/s，32 并发 475 tok/s，首 token 150 ms。",
             ],
             sections=[
                 ("三张卡都很快", [
-                    "W7900 单卡 123.3 tok/s，Strix Halo 77.0 tok/s。对 Strix Halo 来说，这是一个 24B 模型能跑出的很好成绩，日常用完全够快。",
-                    "Q8_0 也只慢一点：R9700 113.6、W7900 109.6 tok/s。显存够的话，用 Q8_0 换更好的质量很划算。",
+                    "W7900 单卡 115.0 tok/s，Strix Halo 77.0 tok/s。对 Strix Halo 来说，这是一个 24B 模型能跑出的很好成绩，日常用完全够快。",
+                    "Q8_0 也只慢一点：R9700 113.6、W7900 108.7 tok/s。显存够的话，用 Q8_0 换更好的质量很划算。",
                 ]),
             ],
             tips=[],
         ),
         en=dict(
             title="LFM2.5-24B-A2B: a 24B model at 132.3 tok/s on one R9700",
-            excerpt="Liquid AI's MoE model activates only about 2B parameters per token. 132.3 tok/s on one R9700, 123.3 on W7900, 77.0 on Strix Halo.",
+            excerpt="Liquid AI's MoE model activates only about 2B parameters per token. 132.3 tok/s on one R9700, 115.0 on W7900, 77.0 on Strix Halo.",
             lead=[
                 "How fast can a 24B model run? For Liquid AI's LFM2.5-24B-A2B, faster than many 4B models.",
                 "It is an MoE model that activates about 2B parameters per token. One R9700 with UD-Q4_K_XL decodes 132.3 tok/s for one request, 475 tok/s at 32, with a 150 ms first token.",
             ],
             sections=[
                 ("Fast on all three", [
-                    "One W7900 gives 123.3 tok/s and Strix Halo 77.0. For Strix Halo that is an excellent result for a 24B model, plenty for daily use.",
-                    "Q8_0 is only a little slower: 113.6 on R9700 and 109.6 tok/s on W7900. If memory allows, Q8_0 buys better quality cheaply.",
+                    "One W7900 gives 115.0 tok/s and Strix Halo 77.0. For Strix Halo that is an excellent result for a 24B model, plenty for daily use.",
+                    "Q8_0 is only a little slower: 113.6 on R9700 and 108.7 tok/s on W7900. If memory allows, Q8_0 buys better quality cheaply.",
                 ]),
             ],
             tips=[],
@@ -619,7 +619,7 @@ STORIES = {
             sections=[
                 ("一台小盒子，常驻一个快模型", [
                     "Strix Halo 跑这个模型，32 并发总吞吐 559 tok/s，足够同时支撑多个 Agent 调用。",
-                    "如果你有独立显卡：R9700 32 并发 756 tok/s，W7900 746 tok/s，首 token 分别是 57 和 70 ms。",
+                    "如果你有独立显卡：R9700 32 并发 756 tok/s，W7900 748 tok/s，首 token 分别是 57 和 69 ms。",
                 ]),
             ],
             tips=[],
@@ -634,7 +634,7 @@ STORIES = {
             sections=[
                 ("One small box, one fast resident model", [
                     "On Strix Halo this model delivers 559 tok/s in total at 32 requests, enough to serve several agents at once.",
-                    "With a discrete card: 756 tok/s at 32 on R9700 and 746 on W7900, with first tokens of 57 and 70 ms.",
+                    "With a discrete card: 756 tok/s at 32 on R9700 and 748 on W7900, with first tokens of 57 and 69 ms.",
                 ]),
             ],
             tips=[],
@@ -646,10 +646,10 @@ STORIES = {
         layout="data",
         zh=dict(
             title="Ling-3.0-flash：两张 W7900 比四张 R9700 还快",
-            excerpt="48GB 显存的好处：两张 W7900 放得下的模型，R9700 要四张。单请求 47.0 对 44.3 tok/s，32 并发 160 对 105。",
+            excerpt="48GB 显存的好处：两张 W7900 放得下的模型，R9700 要四张。单请求 47.0 对 44.3 tok/s，32 并发 157 对 105。",
             lead=[
                 "inclusionAI 的 Ling-3.0-flash 是一个大模型，4 比特量化后，R9700 要四张卡才放得下，W7900 两张就够。",
-                "结果是两张 W7900 跑得更快：单请求 47.0 对 44.3 tok/s，32 并发 160 对 105 tok/s。Strix Halo 单机也能跑，单请求 30.0 tok/s。",
+                "结果是两张 W7900 跑得更快：单请求 47.0 对 44.3 tok/s，32 并发 157 对 105 tok/s。Strix Halo 单机也能跑，单请求 30.0 tok/s。",
             ],
             sections=[
                 ("为什么卡少反而快", [
@@ -661,10 +661,10 @@ STORIES = {
         ),
         en=dict(
             title="Ling-3.0-flash: two W7900 cards beat four R9700 cards",
-            excerpt="The point of 48GB: a model that fits on two W7900 cards needs four R9700. 47.0 vs 44.3 tok/s for one request, 160 vs 105 at 32.",
+            excerpt="The point of 48GB: a model that fits on two W7900 cards needs four R9700. 47.0 vs 44.3 tok/s for one request, 157 vs 105 at 32.",
             lead=[
                 "inclusionAI's Ling-3.0-flash is a large model. At 4 bits it needs four R9700 cards, but only two W7900 cards.",
-                "And two W7900 cards are faster: 47.0 against 44.3 tok/s for one request, 160 against 105 tok/s at 32. Strix Halo runs it on one box too, at 30.0 tok/s.",
+                "And two W7900 cards are faster: 47.0 against 44.3 tok/s for one request, 157 against 105 tok/s at 32. Strix Halo runs it on one box too, at 30.0 tok/s.",
             ],
             sections=[
                 ("Why fewer cards are faster", [
@@ -688,7 +688,7 @@ STORIES = {
             sections=[
                 ("小模型上为什么差距小", [
                     "模型越小，每个 token 要读的权重越少，显存带宽不再是唯一瓶颈，调度和计算开销的占比变大。所以小模型上，各张卡的速度会靠拢。",
-                    "W7900 上是 127.9 tok/s，三张卡都在 100 tok/s 以上，选哪张都够用。",
+                    "W7900 上是 127.2 tok/s，三张卡都在 100 tok/s 以上，选哪张都够用。",
                 ]),
             ],
             tips=[],
@@ -703,7 +703,7 @@ STORIES = {
             sections=[
                 ("Why small models narrow the gap", [
                     "The smaller the model, the fewer weight bytes each token reads. Bandwidth stops being the only limit, and scheduling and compute overhead weigh more, so the cards converge.",
-                    "W7900 gives 127.9 tok/s. All three cards are above 100 tok/s; any of them will do.",
+                    "W7900 gives 127.2 tok/s. All three cards are above 100 tok/s; any of them will do.",
                 ]),
             ],
             tips=[],
@@ -714,14 +714,14 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="小米 MiMo-V2.6 蒸馏 9B：R9700 和 W7900 跑出几乎一样的 71 tok/s 档",
-            excerpt="小米把 MiMo-V2.6 蒸馏进 9B 的 Qwen 模型。R9700 单请求 71.7 tok/s，W7900 71.2，三步部署。",
+            excerpt="小米把 MiMo-V2.6 蒸馏进 9B 的 Qwen 模型。R9700 单请求 71.7 tok/s，W7900 71.5，三步部署。",
             lead=[
                 "小米把 MiMo-V2.6 的能力蒸馏进了一个 9B 的 Qwen 模型，体量刚好适合单张消费级或工作站显卡。",
-                "实测 Q4_K_M：R9700 单请求 71.7 tok/s，W7900 71.2 tok/s，两张卡几乎打平；Strix Halo 是 31.8 tok/s。",
+                "实测 Q4_K_M：R9700 单请求 71.7 tok/s，W7900 71.5 tok/s，两张卡几乎打平；Strix Halo 是 31.8 tok/s。",
             ],
             sections=[
                 ("新卡和老卡打平", [
-                    "R9700 是 RDNA 4 新卡，W7900 是 RDNA 3 工作站卡。在这个 9B 模型上，两者单请求是 71.7 对 71.2 tok/s，W7900 的 32 并发还略高（239 对 225）。",
+                    "R9700 是 RDNA 4 新卡，W7900 是 RDNA 3 工作站卡。在这个 9B 模型上，两者单请求是 71.7 对 71.5 tok/s，W7900 的 32 并发还略高（232 对 225）。",
                     "如果你手上已经有 W7900，不用为这个尺寸的模型换卡。",
                 ]),
             ],
@@ -729,14 +729,14 @@ STORIES = {
         ),
         en=dict(
             title="Xiaomi MiMo-V2.6 distilled 9B: R9700 and W7900 both land at about 71 tok/s",
-            excerpt="Xiaomi distilled MiMo-V2.6 into a 9B Qwen model. 71.7 tok/s on R9700, 71.2 on W7900, deployed in three steps.",
+            excerpt="Xiaomi distilled MiMo-V2.6 into a 9B Qwen model. 71.7 tok/s on R9700, 71.5 on W7900, deployed in three steps.",
             lead=[
                 "Xiaomi distilled MiMo-V2.6 into a 9B Qwen model, a size that fits a single consumer or workstation card.",
-                "With Q4_K_M, R9700 decodes 71.7 tok/s for one request and W7900 71.2, almost a tie; Strix Halo gives 31.8 tok/s.",
+                "With Q4_K_M, R9700 decodes 71.7 tok/s for one request and W7900 71.5, almost a tie; Strix Halo gives 31.8 tok/s.",
             ],
             sections=[
                 ("New card and old card, a tie", [
-                    "R9700 is a new RDNA 4 card; W7900 is an RDNA 3 workstation card. On this 9B model they decode 71.7 against 71.2 tok/s for one request, and W7900 is slightly ahead at 32 requests (239 against 225).",
+                    "R9700 is a new RDNA 4 card; W7900 is an RDNA 3 workstation card. On this 9B model they decode 71.7 against 71.5 tok/s for one request, and W7900 is slightly ahead at 32 requests (232 against 225).",
                     "If you already own a W7900, there is no need to change cards for a model this size.",
                 ]),
             ],
@@ -748,15 +748,15 @@ STORIES = {
         layout="data",
         zh=dict(
             title="把小米 MiMo-V2.6-Flash 塞进四张显卡：2 比特量化实测",
-            excerpt="超大模型本地跑，只能靠极限量化。IQ2_XS_M 下四张 W7900 单请求 24.4 tok/s，四张 R9700 16.4。",
+            excerpt="超大模型本地跑，只能靠极限量化。IQ2_XS_M 下四张 W7900 单请求 25.1 tok/s，四张 R9700 16.4。",
             lead=[
                 "MiMo-V2.6-Flash 是小米的大模型，原版权重远超单机显存。要在本地跑，只能把它压到 2 比特。",
-                "我们用 IQ2_XS_M 量化版，分别在四张 W7900 和四张 R9700 上跑通：单请求 24.4 和 16.4 tok/s。",
+                "我们用 IQ2_XS_M 量化版，分别在四张 W7900 和四张 R9700 上跑通：单请求 25.1 和 16.4 tok/s。",
             ],
             sections=[
                 ("能跑，但要接受代价", [
                     "2 比特量化会损失一部分质量，它的意义是“能在本地跑起来”，而不是“和原版一样好”。",
-                    "首 token 时延也长：W7900 2.7 秒，R9700 5.1 秒。适合不赶时间的长文本任务，不适合实时对话。",
+                    "首 token 时延也长：W7900 2.6 秒，R9700 5.1 秒。适合不赶时间的长文本任务，不适合实时对话。",
                     "W7900 四卡比 R9700 四卡快，原因是 4 × 48GB 的总显存更宽裕。",
                 ]),
             ],
@@ -764,15 +764,15 @@ STORIES = {
         ),
         en=dict(
             title="Squeezing Xiaomi MiMo-V2.6-Flash into four GPUs: 2-bit quantization measured",
-            excerpt="Running a giant model locally takes extreme quantization. With IQ2_XS_M, four W7900 cards decode 24.4 tok/s for one request, four R9700 cards 16.4.",
+            excerpt="Running a giant model locally takes extreme quantization. With IQ2_XS_M, four W7900 cards decode 25.1 tok/s for one request, four R9700 cards 16.4.",
             lead=[
                 "MiMo-V2.6-Flash is Xiaomi's large model, and its original weights are far beyond one machine's memory. Running it locally means squeezing it to 2 bits.",
-                "We ran the IQ2_XS_M build on four W7900 and four R9700 cards: 24.4 and 16.4 tok/s for one request.",
+                "We ran the IQ2_XS_M build on four W7900 and four R9700 cards: 25.1 and 16.4 tok/s for one request.",
             ],
             sections=[
                 ("It runs, at a price", [
                     "2-bit quantization costs some quality. The point is to run it locally at all, not to match the original.",
-                    "The first token is slow too: 2.7 seconds on W7900, 5.1 seconds on R9700. Fine for unhurried long-form tasks, not for live chat.",
+                    "The first token is slow too: 2.6 seconds on W7900, 5.1 seconds on R9700. Fine for unhurried long-form tasks, not for live chat.",
                     "Four W7900 cards beat four R9700 cards because 4 x 48GB leaves more headroom.",
                 ]),
             ],
@@ -818,10 +818,10 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="NVIDIA 的 Nemotron 3.5 Bolt，在 AMD Radeon 上跑多快？",
-            excerpt="NVIDIA 发布的开源小模型，在 AMD 显卡上照样能跑。R9700 单请求 86.2 tok/s，W7900 85.3，三步部署。",
+            excerpt="NVIDIA 发布的开源小模型，在 AMD 显卡上照样能跑。R9700 单请求 86.2 tok/s，W7900 84.9，三步部署。",
             lead=[
                 "Nemotron 是 NVIDIA 自己的开源模型系列。开源权重不挑硬件，用 llama.cpp 在 AMD 显卡上一样能跑。",
-                "Nemotron 3.5 Bolt E4B 的 UD-Q4_K_XL 版本，R9700 单请求 86.2 tok/s，W7900 85.3 tok/s，Strix Halo 46.5 tok/s。",
+                "Nemotron 3.5 Bolt E4B 的 UD-Q4_K_XL 版本，R9700 单请求 86.2 tok/s，W7900 84.9 tok/s，Strix Halo 46.5 tok/s。",
             ],
             sections=[
                 ("BF16 并发出乎意料地好", [
@@ -833,10 +833,10 @@ STORIES = {
         ),
         en=dict(
             title="How fast does NVIDIA's Nemotron 3.5 Bolt run on AMD Radeon?",
-            excerpt="NVIDIA's open small model runs on AMD GPUs just the same. 86.2 tok/s on R9700, 85.3 on W7900, deployed in three steps.",
+            excerpt="NVIDIA's open small model runs on AMD GPUs just the same. 86.2 tok/s on R9700, 84.9 on W7900, deployed in three steps.",
             lead=[
                 "Nemotron is NVIDIA's own open model family. Open weights do not care about the hardware, and llama.cpp runs them on AMD GPUs too.",
-                "Nemotron 3.5 Bolt E4B in UD-Q4_K_XL decodes 86.2 tok/s for one request on R9700, 85.3 on W7900 and 46.5 on Strix Halo.",
+                "Nemotron 3.5 Bolt E4B in UD-Q4_K_XL decodes 86.2 tok/s for one request on R9700, 84.9 on W7900 and 46.5 on Strix Halo.",
             ],
             sections=[
                 ("BF16 holds up under load", [
@@ -860,7 +860,7 @@ STORIES = {
             sections=[
                 ("两张卡就够", [
                     "UD-Q4_K_XL 在两张 R9700 上就能放下。Q8_0 要四张 R9700，单请求 29.8 tok/s，反而比 4 比特两卡慢。",
-                    "W7900 两张卡就能跑 Q8_0，单请求 35.3 tok/s，32 并发 118。",
+                    "W7900 两张卡就能跑 Q8_0，单请求 35.3 tok/s，32 并发 113。",
                 ]),
             ],
             tips=["两卡配置要让容器看到两张卡：HIP_VISIBLE_DEVICES=0,1。"],
@@ -875,7 +875,7 @@ STORIES = {
             sections=[
                 ("Two cards are enough", [
                     "UD-Q4_K_XL fits on two R9700 cards. Q8_0 needs four R9700 cards and gives 29.8 tok/s for one request, slower than 4-bit on two.",
-                    "Two W7900 cards can run Q8_0: 35.3 tok/s for one request, 118 at 32.",
+                    "Two W7900 cards can run Q8_0: 35.3 tok/s for one request, 113 at 32.",
                 ]),
             ],
             tips=["For the two-card setup the container must see both cards: HIP_VISIBLE_DEVICES=0,1."],
@@ -886,10 +886,10 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="Nemotron 3.5 Lightning 30B：一张 R9700 单请求 93.2 tok/s",
-            excerpt="NVIDIA 的 30B MoE 模型，每个 token 激活约 3B。R9700 单卡 93.2 tok/s，W7900 87.0，Strix Halo 50.3。",
+            excerpt="NVIDIA 的 30B MoE 模型，每个 token 激活约 3B。R9700 单卡 93.2 tok/s，W7900 90.4，Strix Halo 50.3。",
             lead=[
                 "Nemotron 3.5 Lightning 30B-A3B 是 NVIDIA 的 MoE 模型，和 Qwen3-30B-A3B 同一个量级。",
-                "一张 R9700 跑 Q4_0，单请求 93.2 tok/s；W7900 87.0 tok/s；Strix Halo 50.3 tok/s。",
+                "一张 R9700 跑 Q4_0，单请求 93.2 tok/s；W7900 90.4 tok/s；Strix Halo 50.3 tok/s。",
             ],
             sections=[
                 ("单人选一张卡，多人选两张", [
@@ -901,10 +901,10 @@ STORIES = {
         ),
         en=dict(
             title="Nemotron 3.5 Lightning 30B: 93.2 tok/s on one R9700",
-            excerpt="NVIDIA's 30B MoE model activates about 3B parameters per token. 93.2 tok/s on one R9700, 87.0 on W7900, 50.3 on Strix Halo.",
+            excerpt="NVIDIA's 30B MoE model activates about 3B parameters per token. 93.2 tok/s on one R9700, 90.4 on W7900, 50.3 on Strix Halo.",
             lead=[
                 "Nemotron 3.5 Lightning 30B-A3B is NVIDIA's MoE model, in the same class as Qwen3-30B-A3B.",
-                "One R9700 with Q4_0 decodes 93.2 tok/s for one request; W7900 87.0; Strix Halo 50.3.",
+                "One R9700 with Q4_0 decodes 93.2 tok/s for one request; W7900 90.4; Strix Halo 50.3.",
             ],
             sections=[
                 ("One card for one user, two for many", [
@@ -954,11 +954,11 @@ STORIES = {
         hero=("r9700", "llama.cpp", "Q4_K_M", 1),
         layout="tutorial",
         zh=dict(
-            title="MiniCPM-V 4.7 1B：单请求 211.5 tok/s，32 并发 912",
-            excerpt="OpenBMB 的 1B 视觉语言小模型，R9700 单请求 211.5 tok/s，W7900 32 并发 912 tok/s。三步部署。",
+            title="MiniCPM-V 4.7 1B：单请求 211.5 tok/s，32 并发 842",
+            excerpt="OpenBMB 的 1B 视觉语言小模型，R9700 单请求 211.5 tok/s，W7900 32 并发 842 tok/s。三步部署。",
             lead=[
                 "MiniCPM-V 4.7 1B 是 OpenBMB 的端侧视觉语言模型，只有 1B 参数。",
-                "它在 AMD 显卡上非常快：R9700 跑 Q4_K_M 单请求 211.5 tok/s；W7900 32 并发总吞吐 912 tok/s，是榜单上的最高值之一。",
+                "它在 AMD 显卡上非常快：R9700 跑 Q4_K_M 单请求 211.5 tok/s；W7900 32 并发总吞吐 842 tok/s，是榜单上的最高值之一。",
             ],
             sections=[
                 ("先说清楚测了什么", [
@@ -969,11 +969,11 @@ STORIES = {
             tips=[],
         ),
         en=dict(
-            title="MiniCPM-V 4.7 1B: 211.5 tok/s for one request, 912 for 32",
-            excerpt="OpenBMB's 1B vision-language model decodes 211.5 tok/s on R9700 and delivers 912 tok/s at 32 requests on W7900. Three steps to deploy.",
+            title="MiniCPM-V 4.7 1B: 211.5 tok/s for one request, 842 for 32",
+            excerpt="OpenBMB's 1B vision-language model decodes 211.5 tok/s on R9700 and delivers 842 tok/s at 32 requests on W7900. Three steps to deploy.",
             lead=[
                 "MiniCPM-V 4.7 1B is OpenBMB's on-device vision-language model, with just 1B parameters.",
-                "It is very fast on AMD GPUs: R9700 with Q4_K_M decodes 211.5 tok/s for one request, and W7900 reaches 912 tok/s in total at 32, among the highest on the board.",
+                "It is very fast on AMD GPUs: R9700 with Q4_K_M decodes 211.5 tok/s for one request, and W7900 reaches 842 tok/s in total at 32, among the highest on the board.",
             ],
             sections=[
                 ("What we did and did not test", [
@@ -989,30 +989,30 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="MiniCPM-V 4.7 35B-A3B：35B 视觉 MoE，一张 R9700 单请求 82.8 tok/s",
-            excerpt="OpenBMB 的 35B 视觉语言 MoE，每个 token 激活约 3B。R9700 单卡 82.8 tok/s，W7900 84.0，Strix Halo 52.4。",
+            excerpt="OpenBMB 的 35B 视觉语言 MoE，每个 token 激活约 3B。R9700 单卡 82.8 tok/s，W7900 80.2，Strix Halo 52.4。",
             lead=[
                 "MiniCPM-V 4.7 35B-A3B 是 OpenBMB 的大号视觉语言模型，MoE 结构，每个 token 激活约 3B。",
-                "4 比特下一张卡就能跑：R9700 单请求 82.8 tok/s，W7900 84.0 tok/s，Strix Halo 52.4 tok/s。",
+                "4 比特下一张卡就能跑：R9700 单请求 82.8 tok/s，W7900 80.2 tok/s，Strix Halo 52.4 tok/s。",
             ],
             sections=[
                 ("先说清楚测了什么", [
                     "测试只发了文本提示词，没有测图片输入。",
-                    "要更好的质量可以用 Q8_0：W7900 单卡就能放下，单请求 69.7 tok/s；R9700 需要两张卡，66.0 tok/s。",
+                    "要更好的质量可以用 Q8_0：W7900 单卡就能放下，单请求 69.6 tok/s；R9700 需要两张卡，66.0 tok/s。",
                 ]),
             ],
             tips=[],
         ),
         en=dict(
             title="MiniCPM-V 4.7 35B-A3B: a 35B vision MoE at 82.8 tok/s on one R9700",
-            excerpt="OpenBMB's 35B vision-language MoE activates about 3B parameters per token. 82.8 tok/s on one R9700, 84.0 on W7900, 52.4 on Strix Halo.",
+            excerpt="OpenBMB's 35B vision-language MoE activates about 3B parameters per token. 82.8 tok/s on one R9700, 80.2 on W7900, 52.4 on Strix Halo.",
             lead=[
                 "MiniCPM-V 4.7 35B-A3B is OpenBMB's larger vision-language model, an MoE with about 3B active per token.",
-                "At 4 bits it runs on one card: 82.8 tok/s for one request on R9700, 84.0 on W7900, 52.4 on Strix Halo.",
+                "At 4 bits it runs on one card: 82.8 tok/s for one request on R9700, 80.2 on W7900, 52.4 on Strix Halo.",
             ],
             sections=[
                 ("What we did and did not test", [
                     "The test sends text prompts only; image input was not measured.",
-                    "For better quality use Q8_0: it fits on one W7900 at 69.7 tok/s for one request; R9700 needs two cards and gives 66.0.",
+                    "For better quality use Q8_0: it fits on one W7900 at 69.6 tok/s for one request; R9700 needs two cards and gives 66.0.",
                 ]),
             ],
             tips=[],
@@ -1033,7 +1033,7 @@ STORIES = {
                 ("一个人用量化，一群人用原版", [
                     "单请求速度看每个 token 读多少权重，量化收益明显。",
                     "并发高时，瓶颈从读权重转到了计算和调度，量化的收益就小了。这时候用 F16 原版，质量没有损失，吞吐也只差一点。",
-                    "W7900 上同样：单请求 Q4_K_M 149.8 对 F16 98.4，32 并发 719 对 575。",
+                    "W7900 上同样：单请求 Q4_K_M 149.9 对 F16 98.1，32 并发 713 对 576。",
                 ]),
             ],
             tips=[],
@@ -1049,7 +1049,7 @@ STORIES = {
                 ("Quantize for one user, keep the original for many", [
                     "Single-request speed depends on weight bytes per token, so quantization pays off clearly.",
                     "Under heavy load the limit shifts from reading weights to compute and scheduling, and the gain shrinks. F16 then keeps full quality at nearly the same throughput.",
-                    "W7900 agrees: for one request Q4_K_M 149.8 against F16 98.4; at 32, 719 against 575.",
+                    "W7900 agrees: for one request Q4_K_M 149.9 against F16 98.1; at 32, 713 against 576.",
                 ]),
             ],
             tips=[],
@@ -1100,7 +1100,7 @@ STORIES = {
             ],
             sections=[
                 ("怎么选", [
-                    "四张 R9700：更快，并发更高，适合团队共用。四张 W7900 和它差不多，单请求 18.9 tok/s，32 并发 55。",
+                    "四张 R9700：更快，并发更高，适合团队共用。四张 W7900 和它差不多，单请求 18.9 tok/s，32 并发 54。",
                     "一台 Strix Halo：慢一些，首 token 2.5 秒左右，但只是一台迷你主机，功耗和体积小得多，适合个人体验和离线使用。",
                     "2 比特量化会损失一部分质量，这是把它放进本地硬件的代价。",
                 ]),
@@ -1116,7 +1116,7 @@ STORIES = {
             ],
             sections=[
                 ("Which to pick", [
-                    "Four R9700 cards: faster, more concurrency, good for a team. Four W7900 cards are similar, 18.9 tok/s for one request and 55 at 32.",
+                    "Four R9700 cards: faster, more concurrency, good for a team. Four W7900 cards are similar, 18.9 tok/s for one request and 54 at 32.",
                     "One Strix Halo: slower, with a first token around 2.5 seconds, but it is a single mini PC with far lower power draw and size, good for personal and offline use.",
                     "2-bit quantization costs some quality; that is the price of fitting it on local hardware.",
                 ]),
@@ -1129,10 +1129,10 @@ STORIES = {
         layout="tutorial",
         zh=dict(
             title="GLM-5.3-Flash 本地跑：四张 R9700 单请求 21.9 tok/s",
-            excerpt="智谱 GLM-5.3-Flash 的 2 比特量化版，四张 R9700 单请求 21.9 tok/s，四张 W7900 21.6。完整部署命令。",
+            excerpt="智谱 GLM-5.3-Flash 的 2 比特量化版，四张 R9700 单请求 21.9 tok/s，四张 W7900 21.7。完整部署命令。",
             lead=[
                 "GLM-5.3-Flash 是智谱 Z.ai 的大型模型。用 UD-IQ2_XXS 量化后，四张显卡就能放下。",
-                "四张 R9700 单请求 21.9 tok/s，32 并发 58；四张 W7900 21.6 tok/s，32 并发 70。",
+                "四张 R9700 单请求 21.9 tok/s，32 并发 58；四张 W7900 21.7 tok/s，32 并发 67。",
             ],
             sections=[
                 ("两种四卡方案差不多", [
@@ -1144,10 +1144,10 @@ STORIES = {
         ),
         en=dict(
             title="GLM-5.3-Flash at home: 21.9 tok/s on four R9700 cards",
-            excerpt="Z.ai's GLM-5.3-Flash at 2 bits decodes 21.9 tok/s on four R9700 cards and 21.6 on four W7900 cards. Full deployment commands.",
+            excerpt="Z.ai's GLM-5.3-Flash at 2 bits decodes 21.9 tok/s on four R9700 cards and 21.7 on four W7900 cards. Full deployment commands.",
             lead=[
                 "GLM-5.3-Flash is Z.ai's large model. Quantized to UD-IQ2_XXS, it fits on four GPUs.",
-                "Four R9700 cards decode 21.9 tok/s for one request and 58 at 32; four W7900 cards 21.6 tok/s and 70 at 32.",
+                "Four R9700 cards decode 21.9 tok/s for one request and 58 at 32; four W7900 cards 21.7 tok/s and 67 at 32.",
             ],
             sections=[
                 ("Two four-card setups, much the same", [
