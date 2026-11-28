@@ -316,7 +316,7 @@ def recipe_links(devs, zh=False):
 
 # ---------------------------------------------------------------- deployment commands
 
-PUBLIC_IMAGE_PREFIXES = ("ghcr.io/inferstation/", "ghcr.io/radeon-arena/halo-")
+PUBLIC_IMAGE_PREFIXES = ("ghcr.io/inferstation/",)
 LLAMA_REPO = "https://github.com/ggml-org/llama.cpp"
 GFX = {"w7900": "gfx1100", "r9700": "gfx1201", "strix": "gfx1151"}
 
