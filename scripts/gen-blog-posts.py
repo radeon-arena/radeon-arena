@@ -21,7 +21,7 @@ import re
 import shlex
 import sys
 
-POST_DATE = "2026-11-26"
+POST_DATE = "2026-11-28"
 
 DEVICES = ["r9700", "strix", "w7900"]  # site tab order
 DEV = {"strix": "Strix Halo", "r9700": "R9700", "w7900": "W7900"}

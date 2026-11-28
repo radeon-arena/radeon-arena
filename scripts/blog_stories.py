@@ -376,7 +376,7 @@ STORIES = {
                     "并发超过 4 之后，总吞吐几乎不再增长：W7900 上 32 并发只有 35 tok/s。W7900 的服务启动时最大序列数设成了 4，这是当前实现下的保守配置。",
                 ]),
             ],
-            tips=["需要 vLLM main 分支，正式版 vLLM 镜像跑不了。Strix Halo 用的镜像已经公开，见下方命令。"],
+            tips=["需要 vLLM main 分支，正式版 vLLM 镜像跑不了。两台设备测试用的镜像都已在 InferStation 公开，下方命令用的就是测试时的镜像。"],
         ),
         en=dict(
             title="Running a diffusion language model on AMD Radeon: DiffusionGemma measured and deployed",
@@ -394,7 +394,7 @@ STORIES = {
                     "Beyond 4 concurrent requests, total throughput barely grows: 35 tok/s at 32 on W7900. The W7900 server was started with at most 4 sequences, a conservative setting for the current implementation.",
                 ]),
             ],
-            tips=["It needs vLLM's main branch; release vLLM images cannot run it. The Strix Halo image is public; see the command below."],
+            tips=["It needs vLLM's main branch; release vLLM images cannot run it. The images we measured on both devices are public on InferStation; the command below uses the exact image we tested."],
         ),
     ),
     "gemma-4-26b-a4b": dict(
